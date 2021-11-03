@@ -61,8 +61,6 @@ public abstract class BaseSpawnerMixin {
         BlockPos blockPos = this.getPos();
 
         int bound = this.spawnRange * 16;
-        //        int side = 2 * bound + 1;
-        //        int vol = side * side * 3;
 
         double success = 0;
         double maxSize = 0;
@@ -107,14 +105,21 @@ public abstract class BaseSpawnerMixin {
                                 blockPos.getY(),
                                 blockPos.getZ());
 
+        StringBuilder messageString = new StringBuilder();
+
+        for (int i = 1; i <= 4; i++) {
+            messageString
+                    .append(i)
+                    .append(": ")
+                    .append(String.format("%.2f", Math.pow(percentage, i) * 100D))
+                    .append("% ");
+        }
+
         if (player != null) {
             if (player.isAlive()) {
                 player.displayClientMessage(
-                        new TextComponent(
-                                        "Spawn chance: "
-                                                + String.format("%.2f", percentage * 100D)
-                                                + "%")
-                                .withStyle(ChatFormatting.RED),
+                        new TextComponent("Chance to spawn # blazes: " + messageString)
+                                .withStyle(ChatFormatting.GREEN),
                         true);
             }
         }
