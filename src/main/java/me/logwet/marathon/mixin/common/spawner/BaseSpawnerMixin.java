@@ -1,8 +1,10 @@
 package me.logwet.marathon.mixin.common.spawner;
 
+import me.logwet.marathon.Marathon;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,6 +34,7 @@ public abstract class BaseSpawnerMixin {
     @Shadow private int requiredPlayerRange;
     @Shadow private int spawnDelay;
     @Unique private boolean doneCalculations = true;
+    @Shadow private int spawnCount;
 
     @Shadow
     public abstract Level getLevel();
@@ -120,7 +124,9 @@ public abstract class BaseSpawnerMixin {
 
         double percentage = success / maxSize;
 
-        System.out.println("Spawner: " + success + " / " + maxSize + " = " + percentage * 100D);
+        Marathon.log(
+                org.apache.logging.log4j.Level.INFO,
+                "Spawner: " + success + " / " + maxSize + " = " + percentage * 100D);
 
         Player player =
                 this.getLevel()
@@ -132,7 +138,7 @@ public abstract class BaseSpawnerMixin {
 
         StringBuilder messageString = new StringBuilder();
 
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= this.spawnCount; i++) {
             messageString
                     .append(i)
                     .append(": ")
@@ -144,13 +150,15 @@ public abstract class BaseSpawnerMixin {
             if (player.isAlive()) {
                 Component text =
                         new TextComponent(
-                                        "Spawner at "
+                                        StringUtils.capitalize(
+                                                        Registry.ENTITY_TYPE
+                                                                .getKey(entityType)
+                                                                .getPath())
+                                                + " spawner at "
                                                 + blockPos.toShortString()
-                                                + ", chance to spawn number of blazes: "
+                                                + " chance to spawn # of mobs: "
                                                 + messageString)
                                 .withStyle(ChatFormatting.GREEN);
-
-                //                player.displayClientMessage(text, true);
                 player.sendMessage(text, Util.NIL_UUID);
             }
         }
