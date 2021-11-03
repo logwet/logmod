@@ -1,8 +1,10 @@
 package me.logwet.marathon.mixin.common.spawner;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,6 +28,8 @@ public abstract class BaseSpawnerMixin {
     @Shadow private SpawnData nextSpawnData;
     @Shadow private int spawnRange;
     @Shadow private int requiredPlayerRange;
+    @Shadow private int spawnDelay;
+    private boolean doneCalculations = true;
 
     @Shadow
     public abstract Level getLevel();
@@ -44,11 +49,30 @@ public abstract class BaseSpawnerMixin {
             method = "tick",
             at =
                     @At(
+                            value = "FIELD",
+                            target = "Lnet/minecraft/world/level/BaseSpawner;spawnDelay:I",
+                            opcode = Opcodes.PUTFIELD,
+                            shift = At.Shift.AFTER))
+    private void onDeincrementSpawnDelay(CallbackInfo ci) {
+        if (!this.getLevel().isClientSide) {
+            if (this.spawnDelay == 0) {
+                this.doneCalculations = false;
+            }
+        }
+    }
+
+    @Inject(
+            method = "tick",
+            at =
+                    @At(
                             value = "INVOKE",
                             target =
-                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;",
-                            shift = At.Shift.AFTER))
-    private void onSpawnAttemptFinish(CallbackInfo ci) {
+                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;"))
+    private void onSpawnAttemptStart(CallbackInfo ci) {
+        if (this.doneCalculations) {
+            return;
+        }
+
         CompoundTag spawnerTag = this.nextSpawnData.getTag();
 
         Optional<EntityType<?>> entityOptional = EntityType.by(spawnerTag);
@@ -117,11 +141,19 @@ public abstract class BaseSpawnerMixin {
 
         if (player != null) {
             if (player.isAlive()) {
-                player.displayClientMessage(
-                        new TextComponent("Chance to spawn # blazes: " + messageString)
-                                .withStyle(ChatFormatting.GREEN),
-                        true);
+                Component text =
+                        new TextComponent(
+                                        "Spawner at "
+                                                + blockPos.toShortString()
+                                                + ", chance to spawn number of blazes: "
+                                                + messageString)
+                                .withStyle(ChatFormatting.GREEN);
+
+                //                player.displayClientMessage(text, true);
+                player.sendMessage(text, Util.NIL_UUID);
             }
         }
+
+        this.doneCalculations = true;
     }
 }
