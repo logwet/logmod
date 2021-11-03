@@ -4,7 +4,7 @@
   "package": "me.logwet.marathon.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-
+    "common.spawner.BaseSpawnerMixin"
   ],
   "client": [
     "client.DebugHudMixin"
