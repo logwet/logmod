@@ -1,5 +1,15 @@
 # Marathon
 
+Misc utilities mod for 1.16 speedrunners.
+
+## Utilities
+
+### Spawner info
+
+![spawner_info](assets/spawner_info.png)
+
+_This is useful for testing and evaluating different blaze bedding/mining techniques._
+
 ## Setup
 
 Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not require `Fabric API`. This mod is

@@ -17,6 +17,7 @@ import net.minecraft.world.level.SpawnData;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -29,7 +30,7 @@ public abstract class BaseSpawnerMixin {
     @Shadow private int spawnRange;
     @Shadow private int requiredPlayerRange;
     @Shadow private int spawnDelay;
-    private boolean doneCalculations = true;
+    @Unique private boolean doneCalculations = true;
 
     @Shadow
     public abstract Level getLevel();
