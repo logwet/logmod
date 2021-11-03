@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "marathon",
+  "version": "${version}",
+  "accessWidener": "marathon.accesswidener",
+
+  "name": "Marathon",
+  "description": "Misc practice mod for 1.16 speedrunners.",
+  "authors": [
+    "logwet"
+  ],
+  "contact": {
+    "homepage": "https://github.com/logwet",
+    "sources": "https://github.com/logwet/marathon"
+  },
+
+  "license": "GPL-3.0",
+  "icon": "assets/marathon/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.logwet.marathon.Marathon"
+    ],
+    "client": [
+      "me.logwet.marathon.MarathonClient"
+    ],
+    "server": [
+      "me.logwet.marathon.MarathonServer"
+    ]
+  },
+  "mixins": [
+    "marathon.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "minecraft": "1.16.x"
+  }
+}

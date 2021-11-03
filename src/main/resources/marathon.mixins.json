@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.logwet.marathon.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+
+  ],
+  "client": [
+    "client.DebugHudMixin"
+  ],
+  "server": [
+    "server.MinecraftDedicatedServerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
