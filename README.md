@@ -8,7 +8,13 @@ Misc utilities mod for 1.16 speedrunners.
 
 ![spawner_info](assets/spawner_info.png)
 
-_This is useful for testing and evaluating different blaze bedding/mining techniques._
+This is useful for testing and evaluating different blaze bedding/mining techniques. The info is calculated and
+displayed just _before_ a spawn attempt is made, and is done on a pixel (1/16th of a block) resolution.  
+The green text displays the chance of spawning x number of blazes and the average number of blazes that will spawn based
+on the configuration of blocks around the spawner. The gold text is this including the impact of existing blazes within
+the spawner bounding box and collisions with the hitboxes of any entities and fluids.  
+Look at the green info to determine how well your blaze bedding/block breaking is working, look at the gold info to get
+a more accurate idea of what exactly happening.
 
 ## Setup
 

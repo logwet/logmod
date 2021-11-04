@@ -8,12 +8,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.objectweb.asm.Opcodes;
@@ -26,6 +28,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
 
+import static org.apache.logging.log4j.Level.INFO;
+
 @Mixin(BaseSpawner.class)
 public abstract class BaseSpawnerMixin {
     @Shadow private SpawnData nextSpawnData;
@@ -34,6 +38,7 @@ public abstract class BaseSpawnerMixin {
     @Shadow private int spawnDelay;
     @Unique private boolean finished = true;
     @Shadow private int spawnCount;
+    @Shadow private int maxNearbyEntities;
 
     @Shadow
     public abstract Level getLevel();
@@ -84,11 +89,14 @@ public abstract class BaseSpawnerMixin {
                     @At(
                             value = "INVOKE",
                             target =
-                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;"))
+                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;",
+                            shift = At.Shift.AFTER))
     private void onSpawnAttemptStart(CallbackInfo ci) {
         if (this.finished) {
             return;
         }
+
+        long startTime = System.currentTimeMillis();
 
         Level level = this.getLevel();
         BlockPos blockPos = this.getPos();
@@ -105,6 +113,19 @@ public abstract class BaseSpawnerMixin {
         if (entity == null) {
             return;
         }
+
+        int numEntitiesInVicinity =
+                level.getEntitiesOfClass(
+                                entity.getClass(),
+                                (new AABB(
+                                                blockPos.getX(),
+                                                blockPos.getY(),
+                                                blockPos.getZ(),
+                                                blockPos.getX() + 1,
+                                                blockPos.getY() + 1,
+                                                blockPos.getZ() + 1))
+                                        .inflate(this.spawnRange))
+                        .size();
 
         int bound = this.spawnRange * 16;
 
@@ -150,22 +171,21 @@ public abstract class BaseSpawnerMixin {
             }
         }
 
+        entity.remove();
+
         maxSuccess *= ySpawnRange;
 
         double blockProbability = blockSuccess / maxSuccess;
         double entityProbability = entitySuccess / maxSuccess;
 
-        Marathon.log(
-                org.apache.logging.log4j.Level.INFO,
-                "Spawner: block/entity = "
-                        + blockProbability * 100D
-                        + " / "
-                        + entityProbability * 100D);
-
         Player player =
                 this.getLevel()
                         .getNearestPlayer(
-                                (new TargetingConditions()).range(this.requiredPlayerRange),
+                                (new TargetingConditions())
+                                        .range(this.requiredPlayerRange * 1.5D)
+                                        .allowInvulnerable()
+                                        .allowUnseeable()
+                                        .ignoreInvisibilityTesting(),
                                 blockPos.getX(),
                                 blockPos.getY(),
                                 blockPos.getZ());
@@ -173,8 +193,14 @@ public abstract class BaseSpawnerMixin {
         StringBuilder blockMessageString = new StringBuilder();
         StringBuilder entityMessageString = new StringBuilder();
 
-        BinomialDistribution blockBinomial = new BinomialDistribution(4, blockProbability);
-        BinomialDistribution entityBinomial = new BinomialDistribution(4, entityProbability);
+        BinomialDistribution blockBinomial =
+                new BinomialDistribution(this.spawnCount, blockProbability);
+
+        BinomialDistribution entityBinomial =
+                new BinomialDistribution(
+                        Mth.clamp(
+                                this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount),
+                        entityProbability);
 
         blockMessageString
                 .append("Avg: ")
@@ -186,7 +212,7 @@ public abstract class BaseSpawnerMixin {
                 .append(String.format("%.2f", entityBinomial.getNumericalMean()))
                 .append(" Prob: ");
 
-        for (int i = 1; i <= this.spawnCount; i++) {
+        for (int i = 0; i <= this.spawnCount; i++) {
             blockMessageString
                     .append(i)
                     .append(": ")
@@ -217,6 +243,19 @@ public abstract class BaseSpawnerMixin {
                         Util.NIL_UUID);
             }
         }
+
+        long endTime = System.currentTimeMillis();
+        Marathon.log(
+                INFO,
+                "Spawner "
+                        + blockPos.toShortString()
+                        + ": block: "
+                        + blockProbability * 100D
+                        + "% entity: "
+                        + entityProbability * 100D
+                        + "% in "
+                        + (endTime - startTime)
+                        + "ms");
 
         this.finished = true;
     }
