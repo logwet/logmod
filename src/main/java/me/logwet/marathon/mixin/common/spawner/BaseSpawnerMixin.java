@@ -8,15 +8,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,7 +32,7 @@ public abstract class BaseSpawnerMixin {
     @Shadow private int spawnRange;
     @Shadow private int requiredPlayerRange;
     @Shadow private int spawnDelay;
-    @Unique private boolean doneCalculations = true;
+    @Unique private boolean finished = true;
     @Shadow private int spawnCount;
 
     @Shadow
@@ -42,12 +41,25 @@ public abstract class BaseSpawnerMixin {
     @Shadow
     public abstract BlockPos getPos();
 
-    private double transformPosToProb(double pos, double range) {
+    @Unique
+    private double triangleDistribution(double pos, double range) {
         return (range - Math.abs(-pos)) / (range * range);
     }
 
-    private double bivariatePosProb(double x, double z, double range) {
-        return transformPosToProb(x, range) * transformPosToProb(z, range);
+    @Unique
+    private double bivariateTriangleDistribution(double x, double z, double range) {
+        return triangleDistribution(x, range) * triangleDistribution(z, range);
+    }
+
+    private Component createMessage(
+            EntityType<?> entityType, BlockPos blockPos, String message, ChatFormatting style) {
+        return new TextComponent(
+                        StringUtils.capitalize(Registry.ENTITY_TYPE.getKey(entityType).getPath())
+                                + " spawner at "
+                                + blockPos.toShortString()
+                                + ", statistics: "
+                                + message)
+                .withStyle(style);
     }
 
     @Inject(
@@ -61,7 +73,7 @@ public abstract class BaseSpawnerMixin {
     private void onDeincrementSpawnDelay(CallbackInfo ci) {
         if (!this.getLevel().isClientSide) {
             if (this.spawnDelay == 0) {
-                this.doneCalculations = false;
+                this.finished = false;
             }
         }
     }
@@ -74,9 +86,12 @@ public abstract class BaseSpawnerMixin {
                             target =
                                     "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;"))
     private void onSpawnAttemptStart(CallbackInfo ci) {
-        if (this.doneCalculations) {
+        if (this.finished) {
             return;
         }
+
+        Level level = this.getLevel();
+        BlockPos blockPos = this.getPos();
 
         CompoundTag spawnerTag = this.nextSpawnData.getTag();
 
@@ -86,13 +101,18 @@ public abstract class BaseSpawnerMixin {
         }
         EntityType<?> entityType = entityOptional.get();
 
-        Level level = this.getLevel();
-        BlockPos blockPos = this.getPos();
+        Entity entity = EntityType.loadEntityRecursive(spawnerTag, level, (entityx) -> entityx);
+        if (entity == null) {
+            return;
+        }
 
         int bound = this.spawnRange * 16;
 
-        double success = 0;
-        double maxSize = 0;
+        final int ySpawnRange = 3;
+
+        double blockSuccess = 0;
+        double entitySuccess = 0;
+        double maxSuccess = 0;
 
         for (int x0 = -bound; x0 <= bound; x0++) {
             double x1 = ((double) x0 / (double) bound) * (double) this.spawnRange;
@@ -102,12 +122,12 @@ public abstract class BaseSpawnerMixin {
                 double z1 = ((double) z0 / (double) bound) * (double) this.spawnRange;
                 double z = (double) blockPos.getZ() + z1 + 0.5D;
 
-                double prob = bivariatePosProb(x1, z1, this.spawnRange);
+                double prob = bivariateTriangleDistribution(x1, z1, this.spawnRange);
 
-                for (int y0 = -1; y0 <= 1; y0++) {
-                    double y = (double) blockPos.getY() + y0;
+                maxSuccess += prob;
 
-                    maxSize += prob;
+                for (int y0 = 0; y0 < ySpawnRange; y0++) {
+                    double y = (double) blockPos.getY() + y0 - 1;
 
                     if (level.noCollision(entityType.getAABB(x, y, z))
                             && SpawnPlacements.checkSpawnRules(
@@ -116,17 +136,31 @@ public abstract class BaseSpawnerMixin {
                                     MobSpawnType.SPAWNER,
                                     new BlockPos(x, y, z),
                                     level.getRandom())) {
-                        success += prob;
+                        if (entity instanceof Mob) {
+                            Mob mob = (Mob) entity;
+                            mob.moveTo(x, y, z, 0.0F, 0.0F);
+                            if (mob.checkSpawnRules(level, MobSpawnType.SPAWNER)
+                                    && mob.checkSpawnObstruction(level)) {
+                                entitySuccess += prob;
+                            }
+                        }
+                        blockSuccess += prob;
                     }
                 }
             }
         }
 
-        double percentage = success / maxSize;
+        maxSuccess *= ySpawnRange;
+
+        double blockProbability = blockSuccess / maxSuccess;
+        double entityProbability = entitySuccess / maxSuccess;
 
         Marathon.log(
                 org.apache.logging.log4j.Level.INFO,
-                "Spawner: " + success + " / " + maxSize + " = " + percentage * 100D);
+                "Spawner: block/entity = "
+                        + blockProbability * 100D
+                        + " / "
+                        + entityProbability * 100D);
 
         Player player =
                 this.getLevel()
@@ -136,33 +170,54 @@ public abstract class BaseSpawnerMixin {
                                 blockPos.getY(),
                                 blockPos.getZ());
 
-        StringBuilder messageString = new StringBuilder();
+        StringBuilder blockMessageString = new StringBuilder();
+        StringBuilder entityMessageString = new StringBuilder();
+
+        BinomialDistribution blockBinomial = new BinomialDistribution(4, blockProbability);
+        BinomialDistribution entityBinomial = new BinomialDistribution(4, entityProbability);
+
+        blockMessageString
+                .append("Avg: ")
+                .append(String.format("%.2f", blockBinomial.getNumericalMean()))
+                .append(" Prob: ");
+
+        entityMessageString
+                .append("Avg: ")
+                .append(String.format("%.2f", entityBinomial.getNumericalMean()))
+                .append(" Prob: ");
 
         for (int i = 1; i <= this.spawnCount; i++) {
-            messageString
+            blockMessageString
                     .append(i)
                     .append(": ")
-                    .append(String.format("%.2f", Math.pow(percentage, i) * 100D))
+                    .append(String.format("%.2f", blockBinomial.probability(i) * 100D))
+                    .append("% ");
+            entityMessageString
+                    .append(i)
+                    .append(": ")
+                    .append(String.format("%.2f", entityBinomial.probability(i) * 100D))
                     .append("% ");
         }
 
         if (player != null) {
             if (player.isAlive()) {
-                Component text =
-                        new TextComponent(
-                                        StringUtils.capitalize(
-                                                        Registry.ENTITY_TYPE
-                                                                .getKey(entityType)
-                                                                .getPath())
-                                                + " spawner at "
-                                                + blockPos.toShortString()
-                                                + " chance to spawn # of mobs: "
-                                                + messageString)
-                                .withStyle(ChatFormatting.GREEN);
-                player.sendMessage(text, Util.NIL_UUID);
+                player.sendMessage(
+                        createMessage(
+                                entityType,
+                                blockPos,
+                                blockMessageString.toString(),
+                                ChatFormatting.GREEN),
+                        Util.NIL_UUID);
+                player.sendMessage(
+                        createMessage(
+                                entityType,
+                                blockPos,
+                                entityMessageString.toString(),
+                                ChatFormatting.GOLD),
+                        Util.NIL_UUID);
             }
         }
 
-        this.doneCalculations = true;
+        this.finished = true;
     }
 }
