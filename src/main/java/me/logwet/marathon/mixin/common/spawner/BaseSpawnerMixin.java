@@ -216,16 +216,19 @@ public abstract class BaseSpawnerMixin {
 
         double unblockedSum = success;
 
-        double[] probabilities = new double[this.spawnCount];
+        int numTrials =
+                Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
 
-        for (int i = 0; i < this.spawnCount; i++) {
+        double[] probabilities = new double[numTrials];
+
+        for (int i = 0; i < numTrials; i++) {
             if (i > 0) {
                 for (int mx = 0; mx < matrixWidth; mx++) {
                     for (int my = 0; my < matrixHeight; my++) {
                         for (int mz = 0; mz < matrixWidth; mz++) {
                             double original;
-
                             if ((original = unblockedProbMatrix[mx][my][mz]) > 0D) {
+
                                 AABB neighbours =
                                         getNeighboursAABB(mx, my, mz, matrixWidth, matrixHeight);
 
@@ -267,18 +270,14 @@ public abstract class BaseSpawnerMixin {
 
         StringBuilder messageString = new StringBuilder();
 
-        PoissonBinomialDistribution PBD =
-                new PoissonBinomialDistribution(
-                        Mth.clamp(
-                                this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount),
-                        probabilities);
+        PoissonBinomialDistribution PBD = new PoissonBinomialDistribution(numTrials, probabilities);
 
         messageString
                 .append("Avg: ")
                 .append(String.format("%.2f", PBD.getNumericalMean()))
                 .append(" Prob: ");
 
-        for (int i = 0; i <= this.spawnCount; i++) {
+        for (int i = 0; i <= Mth.clamp(numTrials + 1, 0, this.spawnCount); i++) {
             messageString
                     .append(i)
                     .append(": ")
