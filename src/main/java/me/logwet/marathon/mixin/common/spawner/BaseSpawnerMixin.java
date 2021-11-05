@@ -28,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.DoubleStream;
 
 import static org.apache.logging.log4j.Level.INFO;
 
@@ -90,19 +89,6 @@ public abstract class BaseSpawnerMixin {
             }
         }
         return r;
-    }
-
-    private DoubleStream flattenMatrixToStream(double[][][] matrix) {
-        return Arrays.stream(matrix)
-                .flatMapToDouble(x -> Arrays.stream(x).flatMapToDouble(Arrays::stream));
-    }
-
-    private double sumStream(DoubleStream stream) {
-        return stream.reduce(Double::sum).getAsDouble();
-    }
-
-    private double sumMatrix(double[][][] matrix) {
-        return sumStream(flattenMatrixToStream(matrix));
     }
 
     @Inject(
@@ -172,10 +158,10 @@ public abstract class BaseSpawnerMixin {
         int matrixWidth = bound * 2 + 1;
         int matrixHeight = ySpawnRange;
 
-        double[][][] unblockedProbMatrix = new double[matrixWidth][matrixHeight][matrixWidth];
+        double[][][] probMatrix = new double[matrixWidth][matrixHeight][matrixWidth];
 
-        double success = 0;
-        double maxSuccess = 0;
+        double matrixSum = 0;
+        double matrixMaxSum = 0;
 
         for (int x0 = -bound; x0 <= bound; x0++) {
             double x1 = ((double) x0 / (double) bound) * (double) this.spawnRange;
@@ -187,7 +173,7 @@ public abstract class BaseSpawnerMixin {
 
                 double prob = bivariateTriangleDistribution(x1, z1, this.spawnRange);
 
-                maxSuccess += prob;
+                matrixMaxSum += prob;
 
                 for (int y0 = 0; y0 < ySpawnRange; y0++) {
                     double y = (double) blockPos.getY() + y0 - 1;
@@ -204,25 +190,23 @@ public abstract class BaseSpawnerMixin {
                             mob.moveTo(x, y, z, 0.0F, 0.0F);
                             if (mob.checkSpawnRules(level, MobSpawnType.SPAWNER)
                                     && mob.checkSpawnObstruction(level)) {
-                                success += prob;
-                                unblockedProbMatrix[x0 + bound][y0][z0 + bound] = prob;
+                                matrixSum += prob;
+                                probMatrix[x0 + bound][y0][z0 + bound] = prob;
                             }
                         } else {
-                            success += prob;
-                            unblockedProbMatrix[x0 + bound][y0][z0 + bound] = prob;
+                            matrixSum += prob;
+                            probMatrix[x0 + bound][y0][z0 + bound] = prob;
                         }
                     }
                 }
             }
         }
-        maxSuccess *= ySpawnRange;
-
-        double unblockedSum = success;
+        matrixMaxSum *= ySpawnRange;
 
         int numTrials =
                 Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
 
-        double[] probabilities = new double[numTrials];
+        double[] successProbabilities = new double[numTrials];
 
         for (int i = 0; i < numTrials; i++) {
             if (i > 0) {
@@ -230,31 +214,25 @@ public abstract class BaseSpawnerMixin {
                     for (int my = 0; my < matrixHeight; my++) {
                         for (int mz = 0; mz < matrixWidth; mz++) {
                             double original;
-                            if ((original = unblockedProbMatrix[mx][my][mz]) > 0D) {
+                            if ((original = probMatrix[mx][my][mz]) > 0D) {
 
                                 AABB neighbours =
                                         getNeighboursAABB(mx, my, mz, matrixWidth, matrixHeight);
 
                                 double changed =
-                                        unblockedProbMatrix[mx][my][mz] *=
+                                        probMatrix[mx][my][mz] *=
                                                 (1
                                                         - getBlockedProbFromNeighbours(
-                                                                unblockedProbMatrix,
-                                                                neighbours,
-                                                                unblockedSum));
+                                                                probMatrix, neighbours, matrixSum));
 
-                                unblockedSum += (changed - original);
+                                matrixSum += (changed - original);
                             }
                         }
                     }
                 }
             }
 
-            double prob = unblockedSum / maxSuccess;
-            probabilities[i] = prob;
-
-            System.out.println(
-                    "Spawn Attempt " + (i + 1) + ": " + String.format("%.2f", prob * 100D) + "%");
+            successProbabilities[i] = matrixSum / matrixMaxSum;
         }
 
         entity.remove();
@@ -273,7 +251,8 @@ public abstract class BaseSpawnerMixin {
 
         StringBuilder messageString = new StringBuilder();
 
-        PoissonBinomialDistribution PBD = new PoissonBinomialDistribution(numTrials, probabilities);
+        PoissonBinomialDistribution PBD =
+                new PoissonBinomialDistribution(numTrials, successProbabilities);
 
         messageString
                 .append("Avg: ")
@@ -306,7 +285,7 @@ public abstract class BaseSpawnerMixin {
                 "Spawner "
                         + blockPos.toShortString()
                         + ", Probabilities: "
-                        + Arrays.toString(probabilities)
+                        + Arrays.toString(successProbabilities)
                         + " in "
                         + (endTime - startTime)
                         + "ms");
