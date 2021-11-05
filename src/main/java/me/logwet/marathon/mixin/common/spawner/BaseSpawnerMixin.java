@@ -207,6 +207,9 @@ public abstract class BaseSpawnerMixin {
                                 success += prob;
                                 unblockedProbMatrix[x0 + bound][y0][z0 + bound] = prob;
                             }
+                        } else {
+                            success += prob;
+                            unblockedProbMatrix[x0 + bound][y0][z0 + bound] = prob;
                         }
                     }
                 }
