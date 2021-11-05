@@ -58,10 +58,12 @@ public abstract class BaseSpawnerMixin {
         return triangleDistribution(x, range) * triangleDistribution(z, range);
     }
 
+    @Unique
     private Component createMessageComponent(String message, ChatFormatting style) {
         return new TextComponent(message).withStyle(style);
     }
 
+    @Unique
     private String createMessageString(
             EntityType<?> entityType, BlockPos blockPos, String message) {
         return StringUtils.capitalize(Registry.ENTITY_TYPE.getKey(entityType).getPath())
@@ -71,26 +73,22 @@ public abstract class BaseSpawnerMixin {
                 + message;
     }
 
+    @Unique
     private AABB getNeighboursAABB(
-            int x,
-            int y,
-            int z,
-            int matrixWidth,
-            int matrixHeight,
-            float entityWidth,
-            int resolution) {
-        int shift = Math.round(entityWidth * (float) resolution);
+            int x, int y, int z, int matrixWidth, int matrixHeight, int hShift, int vShift) {
         return new AABB(
-                Mth.clamp(x - shift, 0, matrixWidth - 1),
-                Mth.clamp(y, 0, matrixHeight - 1),
-                Mth.clamp(z - shift, 0, matrixWidth - 1),
-                Mth.clamp(x + shift, 0, matrixWidth - 1),
-                Mth.clamp(y + 1, 0, matrixHeight - 1),
-                Mth.clamp(z + shift, 0, matrixWidth - 1));
+                Mth.clamp(x - hShift, 0, matrixWidth - 1),
+                Mth.clamp(y - vShift, 0, matrixHeight - 1),
+                Mth.clamp(z - hShift, 0, matrixWidth - 1),
+                Mth.clamp(x + hShift, 0, matrixWidth - 1),
+                Mth.clamp(y + vShift, 0, matrixHeight - 1),
+                Mth.clamp(z + hShift, 0, matrixWidth - 1));
     }
 
+    @Unique
     private double getBlockedProbFromNeighbours(double[][][] matrix, AABB neighbours, double sum) {
         double r = 0D;
+
         for (int x = (int) neighbours.minX; x <= neighbours.maxX; x++) {
             for (int y = (int) neighbours.minY; y <= neighbours.maxY; y++) {
                 for (int z = (int) neighbours.minZ; z <= neighbours.maxZ; z++) {
@@ -98,6 +96,7 @@ public abstract class BaseSpawnerMixin {
                 }
             }
         }
+
         return r;
     }
 
@@ -165,31 +164,34 @@ public abstract class BaseSpawnerMixin {
                 Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
 
         int resolution = 16;
-        int bound = this.spawnRange * resolution;
+        int hBound = this.spawnRange * resolution;
+        int vBound = 3;
 
-        int ySpawnRange = 3;
-
-        int matrixWidth = bound * 2 + 1;
-        int matrixHeight = ySpawnRange;
+        int matrixWidth = hBound * 2 + 1;
+        int matrixHeight = vBound;
 
         double[][][] probMatrix = new double[matrixWidth][matrixHeight][matrixWidth];
 
         double matrixSum = 0;
         double matrixMaxSum = 0;
 
-        for (int x0 = -bound; x0 <= bound; x0++) {
-            double x1 = ((double) x0 / (double) bound) * (double) this.spawnRange;
+        int hNShift =
+                Mth.clamp(Math.round(entity.getBbWidth() * (float) resolution), 0, matrixWidth);
+        int vNShift = Mth.clamp(Mth.ceil(entity.getBbHeight()) - 1, 0, matrixHeight);
+
+        for (int x0 = -hBound; x0 <= hBound; x0++) {
+            double x1 = ((double) x0 / (double) hBound) * (double) this.spawnRange;
             double x = (double) blockPos.getX() + x1 + 0.5D;
 
-            for (int z0 = -bound; z0 <= bound; z0++) {
-                double z1 = ((double) z0 / (double) bound) * (double) this.spawnRange;
+            for (int z0 = -hBound; z0 <= hBound; z0++) {
+                double z1 = ((double) z0 / (double) hBound) * (double) this.spawnRange;
                 double z = (double) blockPos.getZ() + z1 + 0.5D;
 
                 double prob = bivariateTriangleDistribution(x1, z1, this.spawnRange);
 
                 matrixMaxSum += prob;
 
-                for (int y0 = 0; y0 < ySpawnRange; y0++) {
+                for (int y0 = 0; y0 < vBound; y0++) {
                     double y = (double) blockPos.getY() + y0 - 1;
 
                     if (level.noCollision(entityType.getAABB(x, y, z))
@@ -205,17 +207,17 @@ public abstract class BaseSpawnerMixin {
                             if (mob.checkSpawnRules(level, MobSpawnType.SPAWNER)
                                     && mob.checkSpawnObstruction(level)) {
                                 matrixSum += prob;
-                                probMatrix[x0 + bound][y0][z0 + bound] = prob;
+                                probMatrix[x0 + hBound][y0][z0 + hBound] = prob;
                             }
                         } else {
                             matrixSum += prob;
-                            probMatrix[x0 + bound][y0][z0 + bound] = prob;
+                            probMatrix[x0 + hBound][y0][z0 + hBound] = prob;
                         }
                     }
                 }
             }
         }
-        matrixMaxSum *= ySpawnRange;
+        matrixMaxSum *= vBound;
 
         double[] successProbabilities = new double[numTrials];
 
@@ -234,8 +236,8 @@ public abstract class BaseSpawnerMixin {
                                                 mz,
                                                 matrixWidth,
                                                 matrixHeight,
-                                                entity.getBbWidth(),
-                                                resolution);
+                                                hNShift,
+                                                vNShift);
 
                                 double changed =
                                         probMatrix[mx][my][mz] *=
@@ -254,18 +256,6 @@ public abstract class BaseSpawnerMixin {
         }
 
         entity.remove();
-
-        Player player =
-                this.getLevel()
-                        .getNearestPlayer(
-                                (new TargetingConditions())
-                                        .range(this.requiredPlayerRange * 1.5D)
-                                        .allowInvulnerable()
-                                        .allowUnseeable()
-                                        .ignoreInvisibilityTesting(),
-                                blockPos.getX(),
-                                blockPos.getY(),
-                                blockPos.getZ());
 
         StringBuilder messageSuffix = new StringBuilder();
 
@@ -288,6 +278,18 @@ public abstract class BaseSpawnerMixin {
         String messageString = createMessageString(entityType, blockPos, messageSuffix.toString());
 
         Marathon.log(INFO, messageString);
+
+        Player player =
+                this.getLevel()
+                        .getNearestPlayer(
+                                (new TargetingConditions())
+                                        .range(this.requiredPlayerRange * 1.5D)
+                                        .allowInvulnerable()
+                                        .allowUnseeable()
+                                        .ignoreInvisibilityTesting(),
+                                blockPos.getX(),
+                                blockPos.getY(),
+                                blockPos.getZ());
 
         if (player != null) {
             if (player.isAlive()) {
