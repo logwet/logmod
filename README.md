@@ -4,17 +4,21 @@ Misc utilities mod for 1.16 speedrunners.
 
 ## Utilities
 
-### Spawner info
+### Spawner Simulation
 
 ![spawner_info](assets/spawner_info.png)
 
+A near completely accurate simulation of in game spawner behaviour and spawn statistics.
+
 This is useful for testing and evaluating different blaze bedding/mining techniques. The info is calculated and
-displayed just _before_ a spawn attempt is made, and is done on a pixel (1/16th of a block) resolution.  
+displayed just _before_ a spawn attempt is made, and simulations are done on a pixel (1/16th of a block) resolution.
+
 The green text displays the chance of spawning x number of blazes and the average number of blazes that will spawn based
-on the configuration of blocks around the spawner. The gold text is this including the impact of existing blazes within
-the spawner bounding box and collisions with the hitboxes of any entities and fluids.  
-Look at the green info to determine how well your blaze bedding/block breaking is working, look at the gold info to get
-a more accurate idea of what exactly happening.
+on the configuration of blocks, entities, fluid and lighting around the spawner.
+
+Note that this accounts for everything, including the hitboxes of entities (including the player's hitbox) and the
+presence of nearby blazes preventing spawn attempts. It also accounts for the impact of multiple spawns in one cycle
+taking away potential spawning spaces thanks to a clever forecasting algorithm by Sharpieman20.
 
 ## Setup
 
