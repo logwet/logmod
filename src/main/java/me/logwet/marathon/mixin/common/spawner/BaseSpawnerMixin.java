@@ -58,15 +58,17 @@ public abstract class BaseSpawnerMixin {
         return triangleDistribution(x, range) * triangleDistribution(z, range);
     }
 
-    private Component createMessage(
-            EntityType<?> entityType, BlockPos blockPos, String message, ChatFormatting style) {
-        return new TextComponent(
-                        StringUtils.capitalize(Registry.ENTITY_TYPE.getKey(entityType).getPath())
-                                + " spawner at "
-                                + blockPos.toShortString()
-                                + ", statistics: "
-                                + message)
-                .withStyle(style);
+    private Component createMessageComponent(String message, ChatFormatting style) {
+        return new TextComponent(message).withStyle(style);
+    }
+
+    private String createMessageString(
+            EntityType<?> entityType, BlockPos blockPos, String message) {
+        return StringUtils.capitalize(Registry.ENTITY_TYPE.getKey(entityType).getPath())
+                + " spawner at "
+                + blockPos.toShortString()
+                + ", statistics: "
+                + message;
     }
 
     private AABB getNeighboursAABB(
@@ -159,10 +161,13 @@ public abstract class BaseSpawnerMixin {
                                         .inflate(this.spawnRange))
                         .size();
 
+        int numTrials =
+                Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
+
         int resolution = 16;
         int bound = this.spawnRange * resolution;
 
-        final int ySpawnRange = 3;
+        int ySpawnRange = 3;
 
         int matrixWidth = bound * 2 + 1;
         int matrixHeight = ySpawnRange;
@@ -211,9 +216,6 @@ public abstract class BaseSpawnerMixin {
             }
         }
         matrixMaxSum *= ySpawnRange;
-
-        int numTrials =
-                Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
 
         double[] successProbabilities = new double[numTrials];
 
@@ -265,42 +267,39 @@ public abstract class BaseSpawnerMixin {
                                 blockPos.getY(),
                                 blockPos.getZ());
 
-        StringBuilder messageString = new StringBuilder();
+        StringBuilder messageSuffix = new StringBuilder();
 
         PoissonBinomialDistribution PBD =
                 new PoissonBinomialDistribution(numTrials, successProbabilities);
 
-        messageString
+        messageSuffix
                 .append("Avg: ")
                 .append(String.format("%.2f", PBD.getNumericalMean()))
                 .append(" Prob: ");
 
         for (int i = 0; i <= Mth.clamp(numTrials + 1, 0, this.spawnCount); i++) {
-            messageString
+            messageSuffix
                     .append(i)
                     .append(": ")
                     .append(String.format("%.2f", PBD.getProbability(i) * 100D))
                     .append("% ");
         }
 
+        String messageString = createMessageString(entityType, blockPos, messageSuffix.toString());
+
+        Marathon.log(INFO, messageString);
+
         if (player != null) {
             if (player.isAlive()) {
                 player.sendMessage(
-                        createMessage(
-                                entityType,
-                                blockPos,
-                                messageString.toString(),
-                                ChatFormatting.GREEN),
-                        Util.NIL_UUID);
+                        createMessageComponent(messageString, ChatFormatting.GREEN), Util.NIL_UUID);
             }
         }
 
         long endTime = System.currentTimeMillis();
         Marathon.log(
                 INFO,
-                "Spawner "
-                        + blockPos.toShortString()
-                        + ", Probabilities: "
+                "Success Probabilities: "
                         + Arrays.toString(successProbabilities)
                         + " in "
                         + (endTime - startTime)
