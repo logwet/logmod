@@ -1,7 +1,7 @@
 package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
-import me.logwet.marathon.util.VariableBinomialDistribution;
+import me.logwet.marathon.util.PoissonBinomialDistribution;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -216,8 +216,7 @@ public abstract class BaseSpawnerMixin {
 
         double unblockedSum = success;
 
-        double[] probabilities = new double[this.spawnCount + 1];
-        probabilities[0] = unblockedSum / maxSuccess;
+        double[] probabilities = new double[this.spawnCount];
 
         for (int i = 0; i < this.spawnCount; i++) {
             if (i > 0) {
@@ -246,7 +245,7 @@ public abstract class BaseSpawnerMixin {
             }
 
             double prob = unblockedSum / maxSuccess;
-            probabilities[i + 1] = prob;
+            probabilities[i] = prob;
 
             System.out.println(
                     "Spawn Attempt " + (i + 1) + ": " + String.format("%.2f", prob * 100D) + "%");
@@ -268,26 +267,22 @@ public abstract class BaseSpawnerMixin {
 
         StringBuilder messageString = new StringBuilder();
 
-        VariableBinomialDistribution variableBinomial =
-                new VariableBinomialDistribution(
+        PoissonBinomialDistribution PBD =
+                new PoissonBinomialDistribution(
                         Mth.clamp(
-                                this.maxNearbyEntities - numEntitiesInVicinity,
-                                0,
-                                this.spawnCount));
+                                this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount),
+                        probabilities);
 
         messageString
                 .append("Avg: ")
-                .append(String.format("%.2f", variableBinomial.getNumericalMean(probabilities)))
+                .append(String.format("%.2f", PBD.getNumericalMean()))
                 .append(" Prob: ");
 
         for (int i = 0; i <= this.spawnCount; i++) {
             messageString
                     .append(i)
                     .append(": ")
-                    .append(
-                            String.format(
-                                    "%.2f",
-                                    variableBinomial.probability(i, probabilities[i]) * 100D))
+                    .append(String.format("%.2f", PBD.getProbability(i) * 100D))
                     .append("% ");
         }
 
