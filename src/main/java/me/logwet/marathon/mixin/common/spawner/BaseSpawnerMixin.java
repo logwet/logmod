@@ -69,14 +69,22 @@ public abstract class BaseSpawnerMixin {
                 .withStyle(style);
     }
 
-    private AABB getNeighboursAABB(int x, int y, int z, int matrixWidth, int matrixHeight) {
+    private AABB getNeighboursAABB(
+            int x,
+            int y,
+            int z,
+            int matrixWidth,
+            int matrixHeight,
+            float entityWidth,
+            int resolution) {
+        int shift = Math.round(entityWidth * (float) resolution);
         return new AABB(
-                Mth.clamp(x - 11, 0, matrixWidth - 1),
+                Mth.clamp(x - shift, 0, matrixWidth - 1),
                 Mth.clamp(y, 0, matrixHeight - 1),
-                Mth.clamp(z - 11, 0, matrixWidth - 1),
-                Mth.clamp(x + 11, 0, matrixWidth - 1),
+                Mth.clamp(z - shift, 0, matrixWidth - 1),
+                Mth.clamp(x + shift, 0, matrixWidth - 1),
                 Mth.clamp(y + 1, 0, matrixHeight - 1),
-                Mth.clamp(z + 11, 0, matrixWidth - 1));
+                Mth.clamp(z + shift, 0, matrixWidth - 1));
     }
 
     private double getBlockedProbFromNeighbours(double[][][] matrix, AABB neighbours, double sum) {
@@ -151,7 +159,8 @@ public abstract class BaseSpawnerMixin {
                                         .inflate(this.spawnRange))
                         .size();
 
-        int bound = this.spawnRange * 16;
+        int resolution = 16;
+        int bound = this.spawnRange * resolution;
 
         final int ySpawnRange = 3;
 
@@ -217,7 +226,14 @@ public abstract class BaseSpawnerMixin {
                             if ((original = probMatrix[mx][my][mz]) > 0D) {
 
                                 AABB neighbours =
-                                        getNeighboursAABB(mx, my, mz, matrixWidth, matrixHeight);
+                                        getNeighboursAABB(
+                                                mx,
+                                                my,
+                                                mz,
+                                                matrixWidth,
+                                                matrixHeight,
+                                                entity.getBbWidth(),
+                                                resolution);
 
                                 double changed =
                                         probMatrix[mx][my][mz] *=
