@@ -19,6 +19,7 @@ repositories {
 		name = 'ParchmentMC'
 		url = 'https://maven.parchmentmc.org'
 	}
+	mavenCentral()
 }
 
 loom {
@@ -37,8 +38,8 @@ dependencies {
 		parchment("org.parchmentmc.data:${project.parchment_mappings}")
 	}
 
-	// Apache Commons Math 3.0
-	implementation 'org.apache.commons:commons-math3:3.0'
+	// Apache Commons Math 3
+	implementation 'org.apache.commons:commons-math3:3.6.1'
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
