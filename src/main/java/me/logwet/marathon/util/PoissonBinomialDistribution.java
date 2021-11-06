@@ -1,12 +1,10 @@
 package me.logwet.marathon.util;
 
+import org.apache.commons.math3.complex.Complex;
+
 /**
- * Algorithm translated from mathematical notation to pseudocode by al, and implemented in Java by
- * logwet.
- *
  * @see <a href="https://en.wikipedia.org/wiki/Poisson_binomial_distribution">Poisson binomial
  *     distribution - Wikipedia</a>
- * @author logwet & al
  */
 public class PoissonBinomialDistribution {
     private final int numberOfTrials;
@@ -23,53 +21,33 @@ public class PoissonBinomialDistribution {
         probabilities = buildProbabilities();
     }
 
-    private double T(double i) {
-        double r = 0D;
-
-        for (int j = 1; j <= numberOfTrials; j++) {
-            r += Math.pow((successProbabilities[j - 1] / (1 - successProbabilities[j - 1])), i);
-        }
-
-        return r;
-    }
-
-    /**
-     * Implementation of the recursive formula but past values are cached so it isn't actually
-     * recursive. This fails if any of the success probabilities is equal to 1, so I may switch to
-     * the discrete Fourier transform implementation at some point.
-     */
+    /** Discrete Fourier Transform based algorithm. */
     private double[] buildProbabilities() {
-        for (int i = 0; i < numberOfTrials; i++) {
-            assert successProbabilities[i] < 1D;
-        }
-
         double[] rArray = new double[numberOfTrials + 1];
+        final Complex C = Complex.I.multiply(2 * Math.PI).divide(numberOfTrials + 1).exp();
 
-        double[] tArray = new double[numberOfTrials];
-        for (int h = 1; h <= numberOfTrials; h++) {
-            tArray[h - 1] = T(h);
+        Complex[] productCache = new Complex[numberOfTrials + 1];
+
+        Complex r;
+
+        for (int l = 0; l <= numberOfTrials; l++) {
+            r = Complex.ONE;
+
+            for (int m = 1; m <= numberOfTrials; m++) {
+                r = r.multiply(C.pow(l).subtract(1).multiply(successProbabilities[m - 1]).add(1));
+            }
+
+            productCache[l] = r;
         }
-
-        double r;
 
         for (int k = 0; k <= numberOfTrials; k++) {
-            if (k == 0) {
-                r = 1D;
+            r = Complex.ZERO;
 
-                for (int i = 1; i <= numberOfTrials; i++) {
-                    r *= (1 - successProbabilities[i - 1]);
-                }
-
-                rArray[k] = r;
-            } else {
-                r = 0D;
-
-                for (int i = 1; i <= k; i++) {
-                    r += Math.pow(-1, i - 1) * rArray[k - i] * tArray[i - 1];
-                }
-
-                rArray[k] = r / k;
+            for (int l = 0; l <= numberOfTrials; l++) {
+                r = r.add(productCache[l].multiply(C.pow(-l * k)));
             }
+
+            rArray[k] = r.divide(numberOfTrials + 1).getReal();
         }
 
         return rArray;
