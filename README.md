@@ -4,7 +4,7 @@ Misc utilities mod for 1.16 speedrunners.
 
 ## Utilities
 
-### Spawner Simulation
+### Spawner Statistics
 
 ![spawner_info](assets/spawner_info.png)
 
