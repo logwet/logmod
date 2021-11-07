@@ -313,7 +313,7 @@ public abstract class BaseSpawnerMixin {
 
         Marathon.addSpawnerInfo(
                 blockPos,
-                new SpawnerInfo(numTrials, successProbabilities, avg, PBD.getProbabilities()));
+                new SpawnerInfo(blockPos, this.spawnRange, numTrials, successProbabilities, avg, PBD.getProbabilities(), probMatrix));
 
         long endTime = System.currentTimeMillis();
         Marathon.log(
