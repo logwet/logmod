@@ -101,9 +101,9 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     d -> d > 0.0D,
                     d -> {
                         double d2 = d / spawnerInfo.getMaxPossibleProb();
-                        float r = (float) (1D - d2);
+                        float r = 0.0F;
                         float g = (float) d2;
-                        float b = 0.0F;
+                        float b = (float) (1D - d2);
 
                         return new float[] {r, g, b};
                     });
