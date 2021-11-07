@@ -92,6 +92,21 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     spawnerInfo.getBoundingBox(),
                     d -> d == 0.0D,
                     d -> new float[] {1.0F, 0.0F, 0.0F});
+
+            MatrixPointCloudRenderer.renderEntityMatrix(
+                    poseStack,
+                    multiBufferSource,
+                    spawnerInfo.getProbMatrix(),
+                    spawnerInfo.getBoundingBox(),
+                    d -> d > 0.0D,
+                    d -> {
+                        d = (d / spawnerInfo.getMaxPossibleProb()) * 2.0D - 1.0D;
+                        float r = d < 0.0D ? (float) (d * -1.0D) : (float) (1 + d);
+                        float g = d >= 0.0D ? (float) (1 - d) : d.floatValue();
+                        float b = 0.0F;
+
+                        return new float[] {r, g, b};
+                    });
         }
     }
 }

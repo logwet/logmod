@@ -327,7 +327,8 @@ public abstract class BaseSpawnerMixin {
                         successProbabilities,
                         avg,
                         PBD.getProbabilities(),
-                        originalProbMatrix));
+                        originalProbMatrix,
+                        bivariateTriangleDistribution(0, 0, this.spawnRange)));
 
         long endTime = System.currentTimeMillis();
         Marathon.log(

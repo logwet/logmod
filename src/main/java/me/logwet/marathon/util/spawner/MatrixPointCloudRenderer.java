@@ -3,6 +3,7 @@ package me.logwet.marathon.util.spawner;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.AABB;
@@ -49,6 +50,20 @@ public class MatrixPointCloudRenderer {
                     }
                 }
             }
+        }
+    }
+
+    public static void renderEntityMatrix(
+            PoseStack poseStack,
+            MultiBufferSource multiBufferSource,
+            double[][][] matrix,
+            AABB boundingBox,
+            Predicate<Double> predicate,
+            Function<Double, float[]> colorSupplier) {
+        if (Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes()
+                && !Minecraft.getInstance().showOnlyReducedInfo()) {
+            renderMatrix(
+                    poseStack, multiBufferSource, matrix, boundingBox, predicate, colorSupplier);
         }
     }
 }
