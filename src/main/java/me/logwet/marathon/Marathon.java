@@ -2,7 +2,7 @@ package me.logwet.marathon;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import me.logwet.marathon.util.SpawnerInfo;
+import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
@@ -44,7 +44,10 @@ public class Marathon implements ModInitializer {
     }
 
     public static boolean inSinglePlayer() {
-        return Minecraft.getInstance().hasSingleplayerServer();
+        if (IS_CLIENT) {
+            return Minecraft.getInstance().hasSingleplayerServer();
+        }
+        return false;
     }
 
     private static Cache<Long, SpawnerInfo> getSpawnerInfoMap() {

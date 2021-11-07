@@ -4,12 +4,12 @@
   "package": "me.logwet.marathon.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "client.IntegratedServerMixin",
-    "client.spawner.SpawnerRendererMixin",
     "common.spawner.BaseSpawnerMixin"
   ],
   "client": [
-    "client.DebugHudMixin"
+    "client.DebugHudMixin",
+    "client.IntegratedServerMixin",
+    "client.spawner.SpawnerRendererMixin"
   ],
   "server": [
     "server.DedicatedServerMixin"

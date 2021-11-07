@@ -2,8 +2,10 @@ package me.logwet.marathon.mixin.client.spawner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.logwet.marathon.Marathon;
-import me.logwet.marathon.util.HoloTextRenderer;
-import me.logwet.marathon.util.SpawnerInfo;
+import me.logwet.marathon.util.spawner.HoloTextRenderer;
+import me.logwet.marathon.util.spawner.SpawnerInfo;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
@@ -18,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@Environment(EnvType.CLIENT)
 @Mixin(SpawnerRenderer.class)
 public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBlockEntity> {
     public SpawnerRendererMixin(BlockEntityRenderDispatcher blockEntityRenderDispatcher) {

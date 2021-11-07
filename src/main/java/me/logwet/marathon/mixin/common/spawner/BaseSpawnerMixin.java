@@ -1,8 +1,8 @@
 package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
-import me.logwet.marathon.util.PoissonBinomialDistribution;
-import me.logwet.marathon.util.SpawnerInfo;
+import me.logwet.marathon.util.spawner.PoissonBinomialDistribution;
+import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -313,7 +313,14 @@ public abstract class BaseSpawnerMixin {
 
         Marathon.addSpawnerInfo(
                 blockPos,
-                new SpawnerInfo(blockPos, this.spawnRange, numTrials, successProbabilities, avg, PBD.getProbabilities(), probMatrix));
+                new SpawnerInfo(
+                        blockPos,
+                        this.spawnRange,
+                        numTrials,
+                        successProbabilities,
+                        avg,
+                        PBD.getProbabilities(),
+                        probMatrix));
 
         long endTime = System.currentTimeMillis();
         Marathon.log(

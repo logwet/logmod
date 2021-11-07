@@ -1,4 +1,4 @@
-package me.logwet.marathon.util;
+package me.logwet.marathon.util.spawner;
 
 import org.apache.commons.math3.complex.Complex;
 
