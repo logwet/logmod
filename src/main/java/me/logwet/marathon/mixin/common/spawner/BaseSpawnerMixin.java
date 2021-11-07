@@ -233,6 +233,8 @@ public abstract class BaseSpawnerMixin {
 
         double[] successProbabilities = new double[numTrials];
 
+        double[][][] originalProbMatrix = cloneMatrix(probMatrix);
+
         double[][][] tempProbMatrix;
 
         for (int i = 0; i < numTrials; i++) {
@@ -325,7 +327,7 @@ public abstract class BaseSpawnerMixin {
                         successProbabilities,
                         avg,
                         PBD.getProbabilities(),
-                        probMatrix));
+                        originalProbMatrix));
 
         long endTime = System.currentTimeMillis();
         Marathon.log(

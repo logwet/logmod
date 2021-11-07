@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.util.BoxRenderer;
 import me.logwet.marathon.util.spawner.HoloTextRenderer;
+import me.logwet.marathon.util.spawner.MatrixPointCloudRenderer;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -83,6 +84,14 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
 
             BoxRenderer.renderBox(
                     poseStack, multiBufferSource, spawnerInfo.getBoundingBox(), 1.0F, 1.0F, 1.0F);
+
+            MatrixPointCloudRenderer.renderMatrix(
+                    poseStack,
+                    multiBufferSource,
+                    spawnerInfo.getProbMatrix(),
+                    spawnerInfo.getBoundingBox(),
+                    d -> d == 0.0D,
+                    d -> new float[] {1.0F, 0.0F, 0.0F});
         }
     }
 }
