@@ -74,6 +74,12 @@ public abstract class BaseSpawnerMixin {
                 + message;
     }
 
+    private double[][][] cloneMatrix(double[][][] matrix) {
+        return Arrays.stream(matrix)
+                .map(m -> Arrays.stream(m).map(double[]::clone).toArray(double[][]::new))
+                .toArray(double[][][]::new);
+    }
+
     @Unique
     private AABB getNeighboursAABB(
             int x, int y, int z, int matrixWidth, int matrixHeight, int hShift, int vShift) {
@@ -222,8 +228,12 @@ public abstract class BaseSpawnerMixin {
 
         double[] successProbabilities = new double[numTrials];
 
+        double[][][] tempProbMatrix;
+
         for (int i = 0; i < numTrials; i++) {
             if (i > 0) {
+                tempProbMatrix = cloneMatrix(probMatrix);
+
                 for (int mx = 0; mx < matrixWidth; mx++) {
                     for (int my = 0; my < matrixHeight; my++) {
                         for (int mz = 0; mz < matrixWidth; mz++) {
@@ -241,7 +251,7 @@ public abstract class BaseSpawnerMixin {
                                                 vNShift);
 
                                 double changed =
-                                        probMatrix[mx][my][mz] *=
+                                        tempProbMatrix[mx][my][mz] *=
                                                 (1
                                                         - getBlockedProbFromNeighbours(
                                                                 probMatrix, neighbours, matrixSum));
@@ -250,6 +260,9 @@ public abstract class BaseSpawnerMixin {
                             }
                         }
                     }
+                }
+                if (i < numTrials - 1) {
+                    probMatrix = tempProbMatrix;
                 }
             }
 
