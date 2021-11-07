@@ -27,7 +27,7 @@ public class Marathon implements ModInitializer {
     public static final boolean IS_CLIENT =
             FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
     public static final Logger LOGGER = LogManager.getLogger(MODID);
-    private static final Cache<BlockPos, SpawnerInfo> spawnerInfoMap =
+    private static final Cache<Long, SpawnerInfo> spawnerInfoMap =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static MinecraftServer MS;
 
@@ -47,22 +47,22 @@ public class Marathon implements ModInitializer {
         return Minecraft.getInstance().hasSingleplayerServer();
     }
 
-    private static Cache<BlockPos, SpawnerInfo> getSpawnerInfoMap() {
+    private static Cache<Long, SpawnerInfo> getSpawnerInfoMap() {
         return spawnerInfoMap;
     }
 
     @Environment(EnvType.CLIENT)
     @Nullable
     public static SpawnerInfo getSpawnerInfo(BlockPos blockPos) {
-        return getSpawnerInfoMap().getIfPresent(blockPos);
+        return getSpawnerInfoMap().getIfPresent(blockPos.asLong());
     }
 
     public static void addSpawnerInfo(BlockPos blockPos, SpawnerInfo spawnerInfo) {
-        getSpawnerInfoMap().put(blockPos, spawnerInfo);
+        getSpawnerInfoMap().put(blockPos.asLong(), spawnerInfo);
     }
 
     public static void removeSpawnerInfo(BlockPos blockPos) {
-        getSpawnerInfoMap().invalidate(blockPos);
+        getSpawnerInfoMap().invalidate(blockPos.asLong());
     }
 
     public static void onServerInit(MinecraftServer ms) {
