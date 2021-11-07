@@ -2,6 +2,7 @@ package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.util.PoissonBinomialDistribution;
+import me.logwet.marathon.util.SpawnerInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -262,10 +263,9 @@ public abstract class BaseSpawnerMixin {
         PoissonBinomialDistribution PBD =
                 new PoissonBinomialDistribution(numTrials, successProbabilities);
 
-        messageSuffix
-                .append("Avg: ")
-                .append(String.format("%.2f", PBD.getNumericalMean()))
-                .append(" Prob: ");
+        double avg = PBD.getNumericalMean();
+
+        messageSuffix.append("Avg: ").append(String.format("%.2f", avg)).append(" Prob: ");
 
         for (int i = 0; i <= Mth.clamp(numTrials + 1, 0, this.spawnCount); i++) {
             messageSuffix
@@ -297,6 +297,10 @@ public abstract class BaseSpawnerMixin {
                         createMessageComponent(messageString, ChatFormatting.GREEN), Util.NIL_UUID);
             }
         }
+
+        Marathon.addSpawnerInfo(
+                blockPos,
+                new SpawnerInfo(numTrials, successProbabilities, avg, PBD.getProbabilities()));
 
         long endTime = System.currentTimeMillis();
         Marathon.log(
