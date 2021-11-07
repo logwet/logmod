@@ -41,9 +41,6 @@ dependencies {
 	// Apache Commons Math 3
 	implementation 'org.apache.commons:commons-math3:3.6.1'
 
-	// Caffeine Caching Libary
-	implementation 'com.github.ben-manes.caffeine:caffeine:3.0.4'
-
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	// modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 

@@ -1,7 +1,7 @@
 package me.logwet.marathon;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import me.logwet.marathon.util.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -28,7 +28,7 @@ public class Marathon implements ModInitializer {
             FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
     public static final Logger LOGGER = LogManager.getLogger(MODID);
     private static final Cache<BlockPos, SpawnerInfo> spawnerInfoMap =
-            Caffeine.newBuilder().maximumSize(64).build();
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static MinecraftServer MS;
 
     public static void log(Level level, String message) {
