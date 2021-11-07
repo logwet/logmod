@@ -6,7 +6,7 @@ Misc utilities mod for 1.16 speedrunners.
 
 ### Spawner Statistics
 
-![spawner_info](assets/spawner_info.png)
+![spawner_info](assets/spawner/info.png)
 
 A near completely accurate simulation of in game spawner behaviour and spawn statistics.
 
@@ -20,11 +20,11 @@ Note that this accounts for everything, including the hitboxes of entities (incl
 presence of nearby blazes preventing spawn attempts. It also accounts for the impact of multiple spawns in one cycle
 taking away potential spawning spaces thanks to a clever forecasting algorithm by Sharpieman20.
 
-![blocked_spawner_point_cloud](assets/blocked_spawner_point_cloud.png)
+![blocked_spawner_point_cloud](assets/spawner/blocked_point_cloud.png)
 
 The mod will render every spawn position blocked by a block, liquid, entity hitbox, light etc. with a red dot.
 
-![full_spawner_point_cloud](assets/full_spawner_point_cloud.png)
+![full_spawner_point_cloud](assets/spawner/full_point_cloud.png)
 
 If you enable entity hitboxes (F3 + B) you will see a full point cloud. Green represents the highest likelihood of
 spawning a blaze, blue the lowest. (Note that at the darkest blue at the edge of the point cloud is functionally
