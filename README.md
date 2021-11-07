@@ -20,6 +20,16 @@ Note that this accounts for everything, including the hitboxes of entities (incl
 presence of nearby blazes preventing spawn attempts. It also accounts for the impact of multiple spawns in one cycle
 taking away potential spawning spaces thanks to a clever forecasting algorithm by Sharpieman20.
 
+![blocked_spawner_point_cloud](assets/blocked_spawner_point_cloud.png)
+
+The mod will render every spawn position blocked by a block, liquid, entity hitbox, light etc. with a red dot.
+
+![full_spawner_point_cloud](assets/full_spawner_point_cloud.png)
+
+If you enable entity hitboxes (F3 + B) you will see a full point cloud. Green represents the highest likelihood of
+spawning a blaze, blue the lowest. (Note that at the darkest blue at the edge of the point cloud is functionally
+identical to red in terms of spawn chance (ie. none), but is coloured differently nonetheless.)
+
 ## Setup
 
 Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not require `Fabric API`. This mod is
