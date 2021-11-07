@@ -18,6 +18,7 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -174,6 +175,14 @@ public abstract class BaseSpawnerMixin {
         int hBound = this.spawnRange * resolution;
         int vBound = 3;
 
+        Vec3 bbScaleFactor =
+                new Vec3(this.spawnRange, Mth.floor((float) vBound / 2F), this.spawnRange)
+                        .subtract(0.5D, 0.5D, 0.5D);
+        AABB boundingBox =
+                new AABB(blockPos)
+                        .expandTowards(bbScaleFactor.scale(-1.0D))
+                        .expandTowards(bbScaleFactor);
+
         int matrixWidth = hBound * 2 + 1;
         int matrixHeight = vBound;
 
@@ -315,7 +324,7 @@ public abstract class BaseSpawnerMixin {
                 blockPos,
                 new SpawnerInfo(
                         blockPos,
-                        this.spawnRange,
+                        boundingBox,
                         numTrials,
                         successProbabilities,
                         avg,
