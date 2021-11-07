@@ -2,6 +2,7 @@ package me.logwet.marathon.mixin.client.spawner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.logwet.marathon.Marathon;
+import me.logwet.marathon.util.BoxRenderer;
 import me.logwet.marathon.util.spawner.HoloTextRenderer;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
@@ -79,6 +80,9 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     i,
                     new Vec3(0.0D, 0.5D, 0.0D),
                     components);
+
+            BoxRenderer.renderBox(
+                    poseStack, multiBufferSource, spawnerInfo.getBoundingBox(), 1.0F, 1.0F, 1.0F);
         }
     }
 }

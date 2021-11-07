@@ -175,13 +175,9 @@ public abstract class BaseSpawnerMixin {
         int hBound = this.spawnRange * resolution;
         int vBound = 3;
 
-        Vec3 bbScaleFactor =
-                new Vec3(this.spawnRange, Mth.floor((float) vBound / 2F), this.spawnRange)
-                        .subtract(0.5D, 0.5D, 0.5D);
+        Vec3 bbScaleFactor = new Vec3(this.spawnRange, (double) vBound / 2D, this.spawnRange);
         AABB boundingBox =
-                new AABB(blockPos)
-                        .expandTowards(bbScaleFactor.scale(-1.0D))
-                        .expandTowards(bbScaleFactor);
+                new AABB(bbScaleFactor.scale(-1.0D), bbScaleFactor).move(0.5D, 0.5D, 0.5D);
 
         int matrixWidth = hBound * 2 + 1;
         int matrixHeight = vBound;

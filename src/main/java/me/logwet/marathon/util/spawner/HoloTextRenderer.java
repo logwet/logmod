@@ -7,7 +7,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.phys.Vec3;
 
 public class HoloTextRenderer {
@@ -30,31 +29,12 @@ public class HoloTextRenderer {
 
         float g = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
         int k = (int) (g * 255.0F) << 24;
-        float h = (float) (-font.width((FormattedText) component) / 2);
+        float h = (float) (-font.width(component) / 2);
 
         font.drawInBatch(
-                (FormattedText) component,
-                h,
-                v,
-                553648127,
-                false,
-                matrix4f,
-                multiBufferSource,
-                true,
-                k,
-                i);
+                component, h, v, 553648127, false, matrix4f, multiBufferSource, true, k, i);
 
-        font.drawInBatch(
-                (FormattedText) component,
-                h,
-                v,
-                -1,
-                false,
-                matrix4f,
-                multiBufferSource,
-                false,
-                0,
-                i);
+        font.drawInBatch(component, h, v, -1, false, matrix4f, multiBufferSource, false, 0, i);
 
         poseStack.popPose();
     }
