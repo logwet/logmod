@@ -43,9 +43,12 @@ public class MatrixPointCloudRenderer {
                         float g = colorArray[1];
                         float b = colorArray[2];
 
-                        float x = hBound * ((float) x0 / matrixWidth) - (hBound / 2F) + 0.5F;
-                        float y = vBound * ((float) y0 / matrixHeight) - (vBound / 2F) + 1.0F;
-                        float z = hBound * ((float) z0 / matrixWidth) - (hBound / 2F) + 0.5F;
+                        float x = hBound * ((float) x0 / (matrixWidth - 1)) - (hBound / 2F) + 0.5F;
+                        float y =
+                                (vBound - 1F) * ((float) y0 / (matrixHeight - 1))
+                                        - ((vBound - 1F) / 2F)
+                                        + 0.5F;
+                        float z = hBound * ((float) z0 / (matrixWidth - 1)) - (hBound / 2F) + 0.5F;
 
                         vertexConsumer
                                 .vertex(matrix4f, x - pointSize, y, z)
