@@ -30,7 +30,7 @@ public class HoloTextRenderer {
 
         Matrix4f matrix4f = poseStack.last().pose();
 
-        float g = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
+        float g = Minecraft.getInstance().options.getBackgroundOpacity(0.75F);
         int k = (int) (g * 255.0F) << 24;
         float h = (float) (-font.width(component) / 2);
 
