@@ -272,6 +272,15 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         String messageString = createMessageString(entityType, blockPos, messageSuffix.toString());
 
+        RodStatistics rodStatistics =
+                entityType == EntityType.BLAZE
+                        ? new RodStatistics(
+                                avg,
+                                (double) this.minSpawnDelay / 20.0D,
+                                (double) this.maxSpawnDelay / 20.0D,
+                                PBD.getCumulativeProbabilities())
+                        : new RodStatistics();
+
         Marathon.log(INFO, messageString);
 
         Player player =
@@ -305,13 +314,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                         PBD.getProbabilities(),
                         probMatrix,
                         bivariateTriangleDistribution(0, 0, this.spawnRange),
-                        entityType == EntityType.BLAZE
-                                ? new RodStatistics(
-                                        avg,
-                                        (double) this.minSpawnDelay / 20.0D,
-                                        (double) this.maxSpawnDelay / 20.0D,
-                                        PBD.getCumulativeProbabilities())
-                                : new RodStatistics()));
+                        rodStatistics));
 
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;

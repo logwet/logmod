@@ -61,8 +61,17 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                         new TextComponent("Avg #: ")
                                 .withStyle(ChatFormatting.GREEN)
                                 .append(
+                                        new TextComponent(Double.toString(spawnerInfo.getAvg()))
+                                                .withStyle(ChatFormatting.AQUA))
+                                .append(
+                                        new TextComponent(" ◴ 6 rods: ")
+                                                .withStyle(ChatFormatting.GREEN))
+                                .append(
                                         new TextComponent(
-                                                        String.format("%.2f", spawnerInfo.getAvg()))
+                                                        spawnerInfo
+                                                                        .getRodStatistics()
+                                                                        .getAvgTimeToSixRods()
+                                                                + "s")
                                                 .withStyle(ChatFormatting.AQUA)),
                         new TextComponent("#: ")
                                 .withStyle(ChatFormatting.GREEN)

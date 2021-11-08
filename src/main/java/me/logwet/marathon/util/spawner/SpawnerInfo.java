@@ -41,6 +41,10 @@ public class SpawnerInfo {
         this.rodStatistics = rodStatistics;
     }
 
+    private static double round(double value) {
+        return Math.round(value * 100.0D) / 100.0D;
+    }
+
     public BlockPos getBlockPos() {
         return blockPos;
     }
@@ -62,7 +66,7 @@ public class SpawnerInfo {
     }
 
     public double getAvg() {
-        return avg;
+        return round(avg);
     }
 
     public double[] getProbabilities() {

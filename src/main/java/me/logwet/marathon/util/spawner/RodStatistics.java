@@ -7,6 +7,7 @@ public class RodStatistics {
     private double avgRodsPerCycle;
     private double avgCyclesForSixRods;
     private double avgTimeToSixRods;
+    private double avgRodsPerMin;
     private double chanceOfSixRodsInMin;
 
     public RodStatistics() {
@@ -20,14 +21,19 @@ public class RodStatistics {
             double[] cumulativeProbabilities) {
         this.enabled = true;
 
-        this.avgRodsPerCycle = avgBlazesPerCycle * 0.5D;
-        this.avgCyclesForSixRods = 6.0D / this.avgRodsPerCycle;
-
         UniformRealDistribution cycleTimeDistribution =
                 new UniformRealDistribution(lbCycleTime, ubCycleTime);
 
-        this.avgTimeToSixRods =
-                6.0D * 60.0D * this.avgRodsPerCycle / cycleTimeDistribution.getNumericalMean();
+        this.avgRodsPerCycle = avgBlazesPerCycle * 0.5D;
+
+        this.avgCyclesForSixRods = 6.0D / this.avgRodsPerCycle;
+
+        this.avgTimeToSixRods = this.avgCyclesForSixRods * cycleTimeDistribution.getNumericalMean();
+
+        this.avgRodsPerMin =
+                60.0D * this.avgRodsPerCycle / cycleTimeDistribution.getNumericalMean();
+
+        this.chanceOfSixRodsInMin = 0.0D;
     }
 
     private static double round(double value) {
@@ -48,6 +54,10 @@ public class RodStatistics {
 
     public double getAvgTimeToSixRods() {
         return round(avgTimeToSixRods);
+    }
+
+    public double getAvgRodsPerMin() {
+        return avgRodsPerMin;
     }
 
     public double getChanceOfSixRodsInMin() {
