@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.blockentity.SpawnerRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -89,6 +90,27 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     spawnerInfo.getBoundingBox(),
                     d -> d == 0.0D,
                     d -> new float[] {1.0F, 0.0F, 0.0F});
+
+            Vec3 bbExpansionFactor =
+                    new Vec3(
+                            spawnerInfo.getEntityBoundingBox().getXsize() / 2D,
+                            0.0D,
+                            spawnerInfo.getEntityBoundingBox().getZsize() / 2D);
+
+            AABB blockBoundingBox =
+                    spawnerInfo
+                            .getBoundingBox()
+                            .expandTowards(bbExpansionFactor)
+                            .expandTowards(bbExpansionFactor.scale(-1.0D))
+                            .expandTowards(
+                                    0.0D,
+                                    Math.max(
+                                            spawnerInfo.getEntityBoundingBox().getYsize() - 1,
+                                            0.0D),
+                                    0.0D);
+
+            BoxRenderer.renderBox(
+                    poseStack, multiBufferSource, blockBoundingBox, 1.0F, 0.65F, 0.0F);
 
             if (Marathon.shouldRenderOptional()) {
                 BoxRenderer.renderBox(
