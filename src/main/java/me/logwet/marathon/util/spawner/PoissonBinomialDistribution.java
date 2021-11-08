@@ -10,6 +10,7 @@ public class PoissonBinomialDistribution {
     private final int numberOfTrials;
     private final double[] successProbabilities;
     private final double[] probabilities;
+    private final double[] cumulativeProbabilities;
 
     public PoissonBinomialDistribution(int n, double[] p) {
         assert n >= 0;
@@ -19,6 +20,7 @@ public class PoissonBinomialDistribution {
         successProbabilities = p;
 
         probabilities = buildProbabilities();
+        cumulativeProbabilities = buildCumulativeProbabilities(probabilities);
     }
 
     /** Discrete Fourier Transform based algorithm. */
@@ -53,8 +55,20 @@ public class PoissonBinomialDistribution {
         return rArray;
     }
 
+    private double[] buildCumulativeProbabilities(double[] probabilities) {
+        double[] rArray = new double[probabilities.length];
+        double r = 0.0D;
+
+        for (int k = 0; k < probabilities.length; k++) {
+            r += probabilities[k];
+            rArray[k] = r;
+        }
+
+        return rArray;
+    }
+
     public double getNumericalMean() {
-        double r = 0D;
+        double r = 0.0D;
 
         for (int i = 1; i <= this.numberOfTrials; i++) {
             r += successProbabilities[i - 1];
@@ -65,12 +79,27 @@ public class PoissonBinomialDistribution {
 
     public double getProbability(int k) {
         if (k < 0 || k > numberOfTrials) {
-            return 0D;
+            return 0.0D;
         }
         return probabilities[k];
     }
 
+    public double getCumulativeProbability(int k) {
+        if (k < 0 || k > numberOfTrials) {
+            return 0.0D;
+        }
+        return cumulativeProbabilities[k];
+    }
+
+    public double getCumulativeProbability(int k0, int k1) {
+        return getCumulativeProbability(k1) - getCumulativeProbability(k0);
+    }
+
     public double[] getProbabilities() {
         return probabilities;
+    }
+
+    public double[] getCumulativeProbabilities() {
+        return cumulativeProbabilities;
     }
 }

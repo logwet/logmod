@@ -13,7 +13,11 @@ public class RodStatistics {
         this.enabled = false;
     }
 
-    public RodStatistics(double avgBlazesPerCycle, double lbCycleTime, double ubCycleTime) {
+    public RodStatistics(
+            double avgBlazesPerCycle,
+            double lbCycleTime,
+            double ubCycleTime,
+            double[] cumulativeProbabilities) {
         this.enabled = true;
 
         this.avgRodsPerCycle = avgBlazesPerCycle * 0.5D;

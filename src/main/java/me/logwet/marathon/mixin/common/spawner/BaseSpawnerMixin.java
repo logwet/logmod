@@ -309,7 +309,8 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                                 ? new RodStatistics(
                                         avg,
                                         (double) this.minSpawnDelay / 20.0D,
-                                        (double) this.maxSpawnDelay / 20.0D)
+                                        (double) this.maxSpawnDelay / 20.0D,
+                                        PBD.getCumulativeProbabilities())
                                 : new RodStatistics()));
 
         long endTime = System.currentTimeMillis();
