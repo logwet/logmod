@@ -1,6 +1,7 @@
 package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
+import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import me.logwet.marathon.util.spawner.PoissonBinomialDistribution;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.minecraft.ChatFormatting;
@@ -35,7 +36,7 @@ import static org.apache.logging.log4j.Level.INFO;
 
 /** @author logwet & Sharpieman20 */
 @Mixin(BaseSpawner.class)
-public abstract class BaseSpawnerMixin {
+public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     @Shadow private SpawnData nextSpawnData;
     @Shadow private int spawnRange;
     @Shadow private int requiredPlayerRange;
@@ -109,7 +110,7 @@ public abstract class BaseSpawnerMixin {
         return r;
     }
 
-    public void analyse() {
+    public long analyse() {
         long startTime = System.currentTimeMillis();
 
         Level level = this.getLevel();
@@ -119,13 +120,13 @@ public abstract class BaseSpawnerMixin {
 
         Optional<EntityType<?>> entityOptional = EntityType.by(spawnerTag);
         if (!entityOptional.isPresent()) {
-            return;
+            return -1;
         }
         EntityType<?> entityType = entityOptional.get();
 
         Entity entity = EntityType.loadEntityRecursive(spawnerTag, level, (entityx) -> entityx);
         if (entity == null) {
-            return;
+            return -1;
         }
 
         int numEntitiesInVicinity =
@@ -303,13 +304,16 @@ public abstract class BaseSpawnerMixin {
                         bivariateTriangleDistribution(0, 0, this.spawnRange)));
 
         long endTime = System.currentTimeMillis();
+        long runTime = endTime - startTime;
         Marathon.log(
                 INFO,
                 "Success Probabilities: "
                         + Arrays.toString(successProbabilities)
                         + " in "
-                        + (endTime - startTime)
+                        + runTime
                         + "ms");
+
+        return runTime;
     }
 
     @Inject(
