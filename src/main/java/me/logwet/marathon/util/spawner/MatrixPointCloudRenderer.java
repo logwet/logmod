@@ -21,6 +21,8 @@ public class MatrixPointCloudRenderer {
             AABB boundingBox,
             Predicate<Double> predicate,
             Function<Double, float[]> colorSupplier) {
+        final float pointSize = 0.003F;
+
         VertexConsumer vertexConsumer = multiBufferSource.getBuffer(RenderType.lines());
         Matrix4f matrix4f = poseStack.last().pose();
 
@@ -44,9 +46,29 @@ public class MatrixPointCloudRenderer {
                         float x = hBound * ((float) x0 / matrixWidth) - (hBound / 2F) + 0.5F;
                         float y = vBound * ((float) y0 / matrixHeight) - (vBound / 2F) + 1.0F;
                         float z = hBound * ((float) z0 / matrixWidth) - (hBound / 2F) + 0.5F;
-                        vertexConsumer.vertex(matrix4f, x, y, z).color(r, g, b, 1.0F).endVertex();
+
                         vertexConsumer
-                                .vertex(matrix4f, x - 0.01F, y, z)
+                                .vertex(matrix4f, x - pointSize, y, z)
+                                .color(r, g, b, 1.0F)
+                                .endVertex();
+                        vertexConsumer
+                                .vertex(matrix4f, x + pointSize, y, z)
+                                .color(r, g, b, 1.0F)
+                                .endVertex();
+                        vertexConsumer
+                                .vertex(matrix4f, x, y - pointSize, z)
+                                .color(r, g, b, 1.0F)
+                                .endVertex();
+                        vertexConsumer
+                                .vertex(matrix4f, x, y + pointSize, z)
+                                .color(r, g, b, 1.0F)
+                                .endVertex();
+                        vertexConsumer
+                                .vertex(matrix4f, x, y, z - pointSize)
+                                .color(r, g, b, 1.0F)
+                                .endVertex();
+                        vertexConsumer
+                                .vertex(matrix4f, x, y, z + pointSize)
                                 .color(r, g, b, 1.0F)
                                 .endVertex();
                     }
