@@ -187,6 +187,7 @@ public abstract class BaseSpawnerMixin {
         double matrixSum = 0;
         double matrixMaxSum = 0;
 
+        AABB entityBoundingBox = entity.getBoundingBox();
         int hNShift =
                 Mth.clamp(Math.round(entity.getBbWidth() * (float) resolution), 0, matrixWidth);
         int vNShift = Mth.clamp(Mth.ceil(entity.getBbHeight()) - 1, 0, matrixHeight);
@@ -320,6 +321,7 @@ public abstract class BaseSpawnerMixin {
                 new SpawnerInfo(
                         blockPos,
                         boundingBox,
+                        entityBoundingBox,
                         numTrials,
                         successProbabilities,
                         avg,

@@ -6,6 +6,7 @@ import net.minecraft.world.phys.AABB;
 public class SpawnerInfo {
     private final BlockPos blockPos;
     private final AABB boundingBox;
+    private final AABB entityBoundingBox;
     private final int numTrials;
     private final double[] successProbabilities;
     private final double avg;
@@ -16,6 +17,7 @@ public class SpawnerInfo {
     public SpawnerInfo(
             BlockPos blockPos,
             AABB boundingBox,
+            AABB entityBoundingBox,
             int numTrials,
             double[] successProbabilities,
             double avg,
@@ -24,6 +26,7 @@ public class SpawnerInfo {
             double maxPossibleProb) {
         this.blockPos = blockPos;
         this.boundingBox = boundingBox;
+        this.entityBoundingBox = entityBoundingBox;
         this.numTrials = numTrials;
         this.successProbabilities = successProbabilities;
         this.avg = avg;
@@ -38,6 +41,10 @@ public class SpawnerInfo {
 
     public AABB getBoundingBox() {
         return boundingBox;
+    }
+
+    public AABB getEntityBoundingBox() {
+        return entityBoundingBox;
     }
 
     public int getNumTrials() {
