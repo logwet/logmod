@@ -7,12 +7,16 @@ public class SpawnerInfo {
     private final BlockPos blockPos;
     private final AABB boundingBox;
     private final AABB entityBoundingBox;
+
     private final int numTrials;
     private final double[] successProbabilities;
     private final double avg;
+
     private final double[] probabilities;
     private final double[][][] probMatrix;
     private final double maxPossibleProb;
+
+    private final RodStatistics rodStatistics;
 
     public SpawnerInfo(
             BlockPos blockPos,
@@ -23,7 +27,8 @@ public class SpawnerInfo {
             double avg,
             double[] probabilities,
             double[][][] probMatrix,
-            double maxPossibleProb) {
+            double maxPossibleProb,
+            RodStatistics rodStatistics) {
         this.blockPos = blockPos;
         this.boundingBox = boundingBox;
         this.entityBoundingBox = entityBoundingBox;
@@ -33,6 +38,7 @@ public class SpawnerInfo {
         this.probabilities = probabilities;
         this.probMatrix = probMatrix;
         this.maxPossibleProb = maxPossibleProb;
+        this.rodStatistics = rodStatistics;
     }
 
     public BlockPos getBlockPos() {
@@ -69,5 +75,9 @@ public class SpawnerInfo {
 
     public double getMaxPossibleProb() {
         return maxPossibleProb;
+    }
+
+    public RodStatistics getRodStatistics() {
+        return rodStatistics;
     }
 }

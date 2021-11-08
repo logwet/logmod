@@ -3,6 +3,7 @@ package me.logwet.marathon.mixin.common.spawner;
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import me.logwet.marathon.util.spawner.PoissonBinomialDistribution;
+import me.logwet.marathon.util.spawner.RodStatistics;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -44,6 +45,8 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     @Unique private boolean finished = true;
     @Shadow private int spawnCount;
     @Shadow private int maxNearbyEntities;
+    @Shadow private int maxSpawnDelay;
+    @Shadow private int minSpawnDelay;
 
     @Shadow
     public abstract Level getLevel();
@@ -301,7 +304,13 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                         avg,
                         PBD.getProbabilities(),
                         probMatrix,
-                        bivariateTriangleDistribution(0, 0, this.spawnRange)));
+                        bivariateTriangleDistribution(0, 0, this.spawnRange),
+                        entityType == EntityType.BLAZE
+                                ? new RodStatistics(
+                                        avg,
+                                        (double) this.minSpawnDelay / 20.0D,
+                                        (double) this.maxSpawnDelay / 20.0D)
+                                : new RodStatistics()));
 
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;
