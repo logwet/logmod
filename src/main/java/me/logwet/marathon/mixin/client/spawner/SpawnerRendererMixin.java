@@ -39,7 +39,7 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
             int j,
             CallbackInfo ci) {
         SpawnerInfo spawnerInfo = Marathon.getSpawnerInfo(spawnerBlockEntity.getBlockPos());
-        if (Marathon.inSinglePlayer() && spawnerInfo != null) {
+        if (Marathon.shouldRender() && spawnerInfo != null) {
             StringBuilder numText = new StringBuilder();
             StringBuilder probText = new StringBuilder();
 
@@ -82,9 +82,6 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     new Vec3(0.0D, 0.5D, 0.0D),
                     components);
 
-            BoxRenderer.renderBox(
-                    poseStack, multiBufferSource, spawnerInfo.getBoundingBox(), 1.0F, 1.0F, 1.0F);
-
             MatrixPointCloudRenderer.renderMatrix(
                     poseStack,
                     multiBufferSource,
@@ -93,20 +90,30 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                     d -> d == 0.0D,
                     d -> new float[] {1.0F, 0.0F, 0.0F});
 
-            MatrixPointCloudRenderer.renderEntityMatrix(
-                    poseStack,
-                    multiBufferSource,
-                    spawnerInfo.getProbMatrix(),
-                    spawnerInfo.getBoundingBox(),
-                    d -> d > 0.0D,
-                    d -> {
-                        double d2 = d / spawnerInfo.getMaxPossibleProb();
-                        float r = 0.0F;
-                        float g = (float) d2;
-                        float b = (float) (1D - d2);
+            if (Marathon.shouldRenderOptional()) {
+                BoxRenderer.renderBox(
+                        poseStack,
+                        multiBufferSource,
+                        spawnerInfo.getBoundingBox(),
+                        1.0F,
+                        1.0F,
+                        1.0F);
 
-                        return new float[] {r, g, b};
-                    });
+                MatrixPointCloudRenderer.renderMatrix(
+                        poseStack,
+                        multiBufferSource,
+                        spawnerInfo.getProbMatrix(),
+                        spawnerInfo.getBoundingBox(),
+                        d -> d > 0.0D,
+                        d -> {
+                            double d2 = d / spawnerInfo.getMaxPossibleProb();
+                            float r = 0.0F;
+                            float g = (float) d2;
+                            float b = (float) (1D - d2);
+
+                            return new float[] {r, g, b};
+                        });
+            }
         }
     }
 }

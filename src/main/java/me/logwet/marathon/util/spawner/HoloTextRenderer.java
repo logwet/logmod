@@ -3,12 +3,15 @@ package me.logwet.marathon.util.spawner;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec3;
 
+@Environment(EnvType.CLIENT)
 public class HoloTextRenderer {
     public static void renderText(
             PoseStack poseStack,

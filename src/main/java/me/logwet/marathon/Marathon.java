@@ -43,11 +43,21 @@ public class Marathon implements ModInitializer {
         Marathon.MS = MS;
     }
 
-    public static boolean inSinglePlayer() {
+    public static boolean isInSingleplayer() {
         if (IS_CLIENT) {
             return Minecraft.getInstance().hasSingleplayerServer();
         }
         return false;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static boolean shouldRender() {
+        return isInSingleplayer() && !Minecraft.getInstance().showOnlyReducedInfo();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static boolean shouldRenderOptional() {
+        return Minecraft.getInstance().getEntityRenderDispatcher().shouldRenderHitBoxes();
     }
 
     private static Cache<Long, SpawnerInfo> getSpawnerInfoMap() {
