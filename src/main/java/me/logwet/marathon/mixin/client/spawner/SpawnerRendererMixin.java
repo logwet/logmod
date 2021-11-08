@@ -39,8 +39,10 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
             int i,
             int j,
             CallbackInfo ci) {
-        SpawnerInfo spawnerInfo = Marathon.getSpawnerInfo(spawnerBlockEntity.getBlockPos());
-        if (Marathon.shouldRender() && spawnerInfo != null) {
+        SpawnerInfo spawnerInfo;
+        if (Marathon.shouldRender()
+                && (spawnerInfo = Marathon.getSpawnerInfo(spawnerBlockEntity.getBlockPos()))
+                        != null) {
             StringBuilder numText = new StringBuilder();
             StringBuilder probText = new StringBuilder();
 

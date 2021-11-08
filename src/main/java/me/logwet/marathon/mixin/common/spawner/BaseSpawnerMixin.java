@@ -75,6 +75,7 @@ public abstract class BaseSpawnerMixin {
                 + message;
     }
 
+    @Unique
     private double[][][] cloneMatrix(double[][][] matrix) {
         return Arrays.stream(matrix)
                 .map(m -> Arrays.stream(m).map(double[]::clone).toArray(double[][]::new))
@@ -108,35 +109,7 @@ public abstract class BaseSpawnerMixin {
         return r;
     }
 
-    @Inject(
-            method = "tick",
-            at =
-                    @At(
-                            value = "FIELD",
-                            target = "Lnet/minecraft/world/level/BaseSpawner;spawnDelay:I",
-                            opcode = Opcodes.PUTFIELD,
-                            shift = At.Shift.AFTER))
-    private void onDeincrementSpawnDelay(CallbackInfo ci) {
-        if (!this.getLevel().isClientSide) {
-            if (this.spawnDelay == 0) {
-                this.finished = false;
-            }
-        }
-    }
-
-    @Inject(
-            method = "tick",
-            at =
-                    @At(
-                            value = "INVOKE",
-                            target =
-                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;",
-                            shift = At.Shift.AFTER))
-    private void onSpawnAttemptStart(CallbackInfo ci) {
-        if (this.finished) {
-            return;
-        }
-
+    public void analyse() {
         long startTime = System.currentTimeMillis();
 
         Level level = this.getLevel();
@@ -337,7 +310,37 @@ public abstract class BaseSpawnerMixin {
                         + " in "
                         + (endTime - startTime)
                         + "ms");
+    }
 
-        this.finished = true;
+    @Inject(
+            method = "tick",
+            at =
+                    @At(
+                            value = "FIELD",
+                            target = "Lnet/minecraft/world/level/BaseSpawner;spawnDelay:I",
+                            opcode = Opcodes.PUTFIELD,
+                            shift = At.Shift.AFTER))
+    private void onDeincrementSpawnDelay(CallbackInfo ci) {
+        if (!this.getLevel().isClientSide) {
+            if (this.spawnDelay == 0) {
+                this.finished = false;
+            }
+        }
+    }
+
+    @Inject(
+            method = "tick",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;",
+                            shift = At.Shift.AFTER))
+    private void onSpawnAttemptStart(CallbackInfo ci) {
+        if (!this.finished) {
+            analyse();
+
+            this.finished = true;
+        }
     }
 }
