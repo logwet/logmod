@@ -22,6 +22,7 @@ import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.math3.distribution.TriangularDistribution;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,13 +56,19 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     public abstract BlockPos getPos();
 
     @Unique
-    private double triangleDistribution(double pos, double range) {
-        return (range - Math.abs(-pos)) / (range * range);
-    }
+    private double bivariateTriangleDistribution(
+            TriangularDistribution triangularDistribution,
+            double x,
+            double z,
+            double invResolution) {
+        double factor = invResolution / 2.0D;
+        double lb = triangularDistribution.getSupportLowerBound();
+        double ub = triangularDistribution.getSupportUpperBound();
 
-    @Unique
-    private double bivariateTriangleDistribution(double x, double z, double range) {
-        return triangleDistribution(x, range) * triangleDistribution(z, range);
+        return triangularDistribution.probability(
+                        Math.max(x - factor, lb), Math.min(x + factor, ub))
+                * triangularDistribution.probability(
+                        Math.max(z - factor, lb), Math.min(z + factor, ub));
     }
 
     @Unique
@@ -149,8 +156,12 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                 Mth.clamp(this.maxNearbyEntities - numEntitiesInVicinity, 0, this.spawnCount);
 
         int resolution = 16;
+        double invResolution = 1D / (double) resolution;
         int hBound = this.spawnRange * resolution;
         int vBound = 3;
+
+        TriangularDistribution triangularDistribution =
+                new TriangularDistribution(-this.spawnRange, 0, this.spawnRange);
 
         Vec3 bbScaleFactor = new Vec3(this.spawnRange, (double) vBound / 2D, this.spawnRange);
         AABB boundingBox =
@@ -177,7 +188,9 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                 double z1 = ((double) z0 / (double) hBound) * (double) this.spawnRange;
                 double z = (double) blockPos.getZ() + z1 + 0.5D;
 
-                double prob = bivariateTriangleDistribution(x1, z1, this.spawnRange);
+                double prob =
+                        bivariateTriangleDistribution(
+                                triangularDistribution, x1, z1, invResolution);
 
                 matrixMaxSum += prob;
 
@@ -313,7 +326,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                         avg,
                         PBD.getProbabilities(),
                         probMatrix,
-                        bivariateTriangleDistribution(0, 0, this.spawnRange),
+                        bivariateTriangleDistribution(triangularDistribution, 0, 0, invResolution),
                         rodStatistics));
 
         long endTime = System.currentTimeMillis();
