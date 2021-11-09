@@ -124,6 +124,8 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
         long startTime = System.currentTimeMillis();
 
         Level level = this.getLevel();
+        level.getProfiler().push("Analysis");
+
         BlockPos blockPos = this.getPos();
 
         CompoundTag spawnerTag = this.nextSpawnData.getTag();
@@ -271,7 +273,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
         PoissonBinomialDistribution PBD =
                 new PoissonBinomialDistribution(numTrials, successProbabilities);
 
-        double avg = PBD.getNumericalMean();
+        double avg = PBD.getMean();
 
         messageSuffix.append("Avg: ").append(String.format("%.2f", avg)).append(" Prob: ");
 
@@ -291,7 +293,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                                 avg,
                                 (double) this.minSpawnDelay / 20.0D,
                                 (double) this.maxSpawnDelay / 20.0D,
-                                PBD.getCumulativeProbabilities())
+                                PBD)
                         : new RodStatistics();
 
         Marathon.log(INFO, messageString);
@@ -321,16 +323,16 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                         blockPos,
                         boundingBox,
                         entityBoundingBox,
-                        numTrials,
-                        successProbabilities,
-                        avg,
-                        PBD.getProbabilities(),
+                        PBD,
                         probMatrix,
                         bivariateTriangleDistribution(triangularDistribution, 0, 0, invResolution),
                         rodStatistics));
 
         long endTime = System.currentTimeMillis();
         long runTime = endTime - startTime;
+
+        level.getProfiler().pop();
+
         Marathon.log(
                 INFO,
                 "Success Probabilities: "

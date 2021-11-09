@@ -8,11 +8,8 @@ public class SpawnerInfo {
     private final AABB boundingBox;
     private final AABB entityBoundingBox;
 
-    private final int numTrials;
-    private final double[] successProbabilities;
-    private final double avg;
+    private final PoissonBinomialDistribution PBD;
 
-    private final double[] probabilities;
     private final double[][][] probMatrix;
     private final double maxPossibleProb;
 
@@ -22,27 +19,17 @@ public class SpawnerInfo {
             BlockPos blockPos,
             AABB boundingBox,
             AABB entityBoundingBox,
-            int numTrials,
-            double[] successProbabilities,
-            double avg,
-            double[] probabilities,
+            PoissonBinomialDistribution PBD,
             double[][][] probMatrix,
             double maxPossibleProb,
             RodStatistics rodStatistics) {
         this.blockPos = blockPos;
         this.boundingBox = boundingBox;
         this.entityBoundingBox = entityBoundingBox;
-        this.numTrials = numTrials;
-        this.successProbabilities = successProbabilities;
-        this.avg = avg;
-        this.probabilities = probabilities;
+        this.PBD = PBD;
         this.probMatrix = probMatrix;
         this.maxPossibleProb = maxPossibleProb;
         this.rodStatistics = rodStatistics;
-    }
-
-    private static double round(double value) {
-        return Math.round(value * 100.0D) / 100.0D;
     }
 
     public BlockPos getBlockPos() {
@@ -57,20 +44,8 @@ public class SpawnerInfo {
         return entityBoundingBox;
     }
 
-    public int getNumTrials() {
-        return numTrials;
-    }
-
-    public double[] getSuccessProbabilities() {
-        return successProbabilities;
-    }
-
-    public double getAvg() {
-        return round(avg);
-    }
-
-    public double[] getProbabilities() {
-        return probabilities;
+    public PoissonBinomialDistribution getPBD() {
+        return PBD;
     }
 
     public double[][][] getProbMatrix() {

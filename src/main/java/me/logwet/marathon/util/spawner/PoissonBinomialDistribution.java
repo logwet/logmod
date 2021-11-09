@@ -1,80 +1,91 @@
 package me.logwet.marathon.util.spawner;
 
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
+
+import java.util.stream.IntStream;
 
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Poisson_binomial_distribution">Poisson binomial
  *     distribution - Wikipedia</a>
  */
-public class PoissonBinomialDistribution {
-    private final int numberOfTrials;
-    private final double[] successProbabilities;
-    private final double[] probabilities;
-    private final double[] cumulativeProbabilities;
+public class PoissonBinomialDistribution extends EnumeratedIntegerDistribution {
+    private int numberOfTrials;
+
+    private double[] successProbabilities;
+
+    private double[] probabilities;
+    private double[] cumulativeProbabilities;
+
+    private double numericalMean;
+    private double variance;
+
+    public PoissonBinomialDistribution(int[] n, double[] p) {
+        super(n, p);
+    }
 
     public PoissonBinomialDistribution(int n, double[] p) {
+        this(IntStream.range(0, n + 1).toArray(), buildProbabilities(n, p));
+
         assert n >= 0;
         assert p.length >= n;
 
         numberOfTrials = n;
         successProbabilities = p;
 
-        probabilities = buildProbabilities();
-        cumulativeProbabilities = buildCumulativeProbabilities(probabilities);
+        probabilities = new double[n + 1];
+        cumulativeProbabilities = new double[n + 1];
+        for (int i = 0; i <= n; i++) {
+            probabilities[i] = this.probability(i);
+            cumulativeProbabilities[i] = this.cumulativeProbability(i);
+        }
+
+        numericalMean = this.getNumericalMean();
+        variance = this.getNumericalVariance();
     }
 
     /** Discrete Fourier Transform based algorithm. */
-    private double[] buildProbabilities() {
-        double[] rArray = new double[numberOfTrials + 1];
-        final Complex C = Complex.I.multiply(2 * Math.PI).divide(numberOfTrials + 1).exp();
+    private static double[] buildProbabilities(int n, double[] successProbabilities) {
+        final Complex C = Complex.I.multiply(2 * Math.PI).divide(n + 1).exp();
 
-        Complex[] productCache = new Complex[numberOfTrials + 1];
+        double[] rArray = new double[n + 1];
+        Complex[] productCache = new Complex[n + 1];
 
         Complex r;
 
-        for (int l = 0; l <= numberOfTrials; l++) {
+        for (int l = 0; l <= n; l++) {
             r = Complex.ONE;
 
-            for (int m = 1; m <= numberOfTrials; m++) {
+            for (int m = 1; m <= n; m++) {
                 r = r.multiply(C.pow(l).subtract(1).multiply(successProbabilities[m - 1]).add(1));
             }
 
             productCache[l] = r;
         }
 
-        for (int k = 0; k <= numberOfTrials; k++) {
+        for (int k = 0; k <= n; k++) {
             r = Complex.ZERO;
 
-            for (int l = 0; l <= numberOfTrials; l++) {
+            for (int l = 0; l <= n; l++) {
                 r = r.add(productCache[l].multiply(C.pow(-l * k)));
             }
 
-            rArray[k] = r.divide(numberOfTrials + 1).getReal();
+            rArray[k] = r.divide(n + 1).getReal();
         }
 
         return rArray;
     }
 
-    private double[] buildCumulativeProbabilities(double[] probabilities) {
-        double[] rArray = new double[probabilities.length];
-        double r = 0.0D;
-
-        for (int k = 0; k < probabilities.length; k++) {
-            r += probabilities[k];
-            rArray[k] = r;
-        }
-
-        return rArray;
+    public int getNumTrials() {
+        return numberOfTrials;
     }
 
-    public double getNumericalMean() {
-        double r = 0.0D;
+    public double getMean() {
+        return numericalMean;
+    }
 
-        for (int i = 1; i <= this.numberOfTrials; i++) {
-            r += successProbabilities[i - 1];
-        }
-
-        return r;
+    public double getVariance() {
+        return variance;
     }
 
     public double getProbability(int k) {
@@ -85,14 +96,13 @@ public class PoissonBinomialDistribution {
     }
 
     public double getCumulativeProbability(int k) {
-        if (k < 0 || k > numberOfTrials) {
+        if (k < 0) {
             return 0.0D;
         }
+        if (k > numberOfTrials) {
+            return 1.0D;
+        }
         return cumulativeProbabilities[k];
-    }
-
-    public double getCumulativeProbability(int k0, int k1) {
-        return getCumulativeProbability(k1) - getCumulativeProbability(k0);
     }
 
     public double[] getProbabilities() {
@@ -101,5 +111,9 @@ public class PoissonBinomialDistribution {
 
     public double[] getCumulativeProbabilities() {
         return cumulativeProbabilities;
+    }
+
+    public double[] getSuccessProbabilities() {
+        return successProbabilities;
     }
 }

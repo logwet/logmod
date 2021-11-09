@@ -5,6 +5,7 @@ import me.logwet.marathon.Marathon;
 import me.logwet.marathon.util.BoxRenderer;
 import me.logwet.marathon.util.spawner.HoloTextRenderer;
 import me.logwet.marathon.util.spawner.MatrixPointCloudRenderer;
+import me.logwet.marathon.util.spawner.PoissonBinomialDistribution;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,6 +23,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static me.logwet.marathon.Marathon.roundToString;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SpawnerRenderer.class)
@@ -43,14 +46,16 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
         if (Marathon.shouldRender()
                 && (spawnerInfo = Marathon.getSpawnerInfo(spawnerBlockEntity.getBlockPos()))
                         != null) {
+            PoissonBinomialDistribution PBD = spawnerInfo.getPBD();
+
             StringBuilder numText = new StringBuilder();
             StringBuilder probText = new StringBuilder();
 
-            for (int k = 0; k <= spawnerInfo.getNumTrials(); k++) {
+            for (int k = 0; k <= PBD.getNumTrials(); k++) {
                 numText.append(k);
-                probText.append(String.format("%.2f", spawnerInfo.getProbabilities()[k] * 100D));
+                probText.append(roundToString(PBD.getProbability(k) * 100D));
 
-                if (k < spawnerInfo.getNumTrials()) {
+                if (k < PBD.getNumTrials()) {
                     numText.append("      ");
                     probText.append(" ");
                 }
@@ -61,16 +66,17 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                         new TextComponent("Avg #: ")
                                 .withStyle(ChatFormatting.GREEN)
                                 .append(
-                                        new TextComponent(Double.toString(spawnerInfo.getAvg()))
+                                        new TextComponent(roundToString(PBD.getMean()))
                                                 .withStyle(ChatFormatting.AQUA))
                                 .append(
                                         new TextComponent(" ◴ 6 rods: ")
                                                 .withStyle(ChatFormatting.GREEN))
                                 .append(
                                         new TextComponent(
-                                                        spawnerInfo
-                                                                        .getRodStatistics()
-                                                                        .getAvgTimeToSixRods()
+                                                        roundToString(
+                                                                        spawnerInfo
+                                                                                .getRodStatistics()
+                                                                                .getAvgTimeToSixRods())
                                                                 + "s")
                                                 .withStyle(ChatFormatting.AQUA)),
                         new TextComponent("#: ")

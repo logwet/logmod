@@ -4,6 +4,9 @@ import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 public class RodStatistics {
     private final boolean enabled;
+
+    private PoissonBinomialDistribution PBD;
+
     private double avgRodsPerCycle;
     private double avgCyclesForSixRods;
     private double avgTimeToSixRods;
@@ -18,13 +21,19 @@ public class RodStatistics {
             double avgBlazesPerCycle,
             double lbCycleTime,
             double ubCycleTime,
-            double[] cumulativeProbabilities) {
+            PoissonBinomialDistribution poissonBinomialDistribution) {
         this.enabled = true;
+
+        this.PBD = poissonBinomialDistribution;
 
         UniformRealDistribution cycleTimeDistribution =
                 new UniformRealDistribution(lbCycleTime, ubCycleTime);
 
-        this.avgRodsPerCycle = avgBlazesPerCycle * 0.5D;
+        double avgRodsPerBlaze = 0.5D;
+
+        double avgBlazesForSixRods = 6.0D / avgRodsPerBlaze;
+
+        this.avgRodsPerCycle = avgBlazesPerCycle * avgRodsPerBlaze;
 
         this.avgCyclesForSixRods = 6.0D / this.avgRodsPerCycle;
 
@@ -36,24 +45,20 @@ public class RodStatistics {
         this.chanceOfSixRodsInMin = 0.0D;
     }
 
-    private static double round(double value) {
-        return Math.round(value * 100.0D) / 100.0D;
-    }
-
     public boolean isEnabled() {
         return enabled;
     }
 
     public double getAvgRodsPerCycle() {
-        return round(avgRodsPerCycle);
+        return avgRodsPerCycle;
     }
 
     public double getAvgCyclesForSixRods() {
-        return round(avgCyclesForSixRods);
+        return avgCyclesForSixRods;
     }
 
     public double getAvgTimeToSixRods() {
-        return round(avgTimeToSixRods);
+        return avgTimeToSixRods;
     }
 
     public double getAvgRodsPerMin() {
@@ -61,6 +66,6 @@ public class RodStatistics {
     }
 
     public double getChanceOfSixRodsInMin() {
-        return round(chanceOfSixRodsInMin);
+        return chanceOfSixRodsInMin;
     }
 }

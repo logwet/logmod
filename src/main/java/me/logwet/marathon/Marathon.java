@@ -78,6 +78,14 @@ public class Marathon implements ModInitializer {
         getSpawnerInfoMap().invalidate(blockPos.asLong());
     }
 
+    public static String roundToString(double value) {
+        return roundToString(value, 2);
+    }
+
+    public static String roundToString(double value, int places) {
+        return String.format("%." + places + "f", value);
+    }
+
     public static void onServerInit(MinecraftServer ms) {
         setMS(ms);
         getSpawnerInfoMap().invalidateAll();
