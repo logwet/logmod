@@ -34,9 +34,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static me.logwet.marathon.Marathon.roundToString;
 import static org.apache.logging.log4j.Level.INFO;
 
-/** @author logwet & Sharpieman20 */
 @Mixin(BaseSpawner.class)
 public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     @Shadow private SpawnData nextSpawnData;
@@ -97,12 +97,12 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     private AABB getNeighboursAABB(
             int x, int y, int z, int matrixWidth, int matrixHeight, int hShift, int vShift) {
         return new AABB(
-                Mth.clamp(x - hShift, 0, matrixWidth - 1),
-                Mth.clamp(y - vShift, 0, matrixHeight - 1),
-                Mth.clamp(z - hShift, 0, matrixWidth - 1),
-                Mth.clamp(x + hShift, 0, matrixWidth - 1),
-                Mth.clamp(y + vShift, 0, matrixHeight - 1),
-                Mth.clamp(z + hShift, 0, matrixWidth - 1));
+                Math.max(x - hShift, 0),
+                Math.max(y - vShift, 0),
+                Math.max(z - hShift, 0),
+                Math.min(x + hShift, matrixWidth - 1),
+                Math.min(y + vShift, matrixHeight - 1),
+                Math.min(z + hShift, matrixWidth - 1));
     }
 
     @Unique
@@ -228,6 +228,10 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         double[][][] tempProbMatrix;
 
+        /**
+         * The following for loop contains the algorithm that forecasts for the impact of the
+         * hitboxes of prospective blaze spawns. It was designed by Sharpieman20.
+         */
         for (int i = 0; i < numTrials; i++) {
             if (i > 0) {
                 tempProbMatrix = cloneMatrix(probMatrix);
@@ -267,15 +271,14 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
         }
 
         entity.remove();
-
-        StringBuilder messageSuffix = new StringBuilder();
+        tempProbMatrix = null;
 
         PoissonBinomialDistribution PBD =
                 new PoissonBinomialDistribution(numTrials, successProbabilities);
 
-        double avg = PBD.getMean();
+        StringBuilder messageSuffix = new StringBuilder();
 
-        messageSuffix.append("Avg: ").append(String.format("%.2f", avg)).append(" Prob: ");
+        messageSuffix.append("Avg: ").append(roundToString(PBD.getMean())).append(" Prob: ");
 
         for (int i = 0; i <= Mth.clamp(numTrials + 1, 0, this.spawnCount); i++) {
             messageSuffix
@@ -290,10 +293,9 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
         RodStatistics rodStatistics =
                 entityType == EntityType.BLAZE
                         ? new RodStatistics(
-                                avg,
+                                PBD,
                                 (double) this.minSpawnDelay / 20.0D,
-                                (double) this.maxSpawnDelay / 20.0D,
-                                PBD)
+                                (double) this.maxSpawnDelay / 20.0D)
                         : new RodStatistics();
 
         Marathon.log(INFO, messageString);

@@ -18,16 +18,17 @@ public class RodStatistics {
     }
 
     public RodStatistics(
-            double avgBlazesPerCycle,
+            PoissonBinomialDistribution poissonBinomialDistribution,
             double lbCycleTime,
-            double ubCycleTime,
-            PoissonBinomialDistribution poissonBinomialDistribution) {
+            double ubCycleTime) {
         this.enabled = true;
 
         this.PBD = poissonBinomialDistribution;
 
         UniformRealDistribution cycleTimeDistribution =
                 new UniformRealDistribution(lbCycleTime, ubCycleTime);
+
+        double avgBlazesPerCycle = this.PBD.getMean();
 
         double avgRodsPerBlaze = 0.5D;
 
