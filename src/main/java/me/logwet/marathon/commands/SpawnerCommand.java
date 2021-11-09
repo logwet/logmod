@@ -2,6 +2,7 @@ package me.logwet.marathon.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import me.logwet.marathon.Marathon;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -59,5 +60,41 @@ public class SpawnerCommand {
                                     "Unable to find spawner in range to force analysis of."));
             return -1;
         }
+    }
+
+    public static int toggleSpawning(CommandContext<CommandSourceStack> context) {
+        boolean status = Marathon.toggleSpawnersEnabled();
+
+        context.getSource()
+                .sendSuccess(
+                        new TextComponent("All spawners have been ")
+                                .withStyle(ChatFormatting.LIGHT_PURPLE)
+                                .append(
+                                        new TextComponent(status ? "enabled" : "disabled")
+                                                .withStyle(
+                                                        status
+                                                                ? ChatFormatting.GREEN
+                                                                : ChatFormatting.RED)),
+                        true);
+
+        return 1;
+    }
+
+    public static int toggleAnalysis(CommandContext<CommandSourceStack> context) {
+        boolean status = Marathon.toggleSpawnerAnalysis();
+
+        context.getSource()
+                .sendSuccess(
+                        new TextComponent("Automatic periodic spawner analysis has been ")
+                                .withStyle(ChatFormatting.LIGHT_PURPLE)
+                                .append(
+                                        new TextComponent(status ? "enabled" : "disabled")
+                                                .withStyle(
+                                                        status
+                                                                ? ChatFormatting.GREEN
+                                                                : ChatFormatting.RED)),
+                        true);
+
+        return 1;
     }
 }

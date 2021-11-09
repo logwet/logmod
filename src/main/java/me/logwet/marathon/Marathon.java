@@ -30,6 +30,8 @@ public class Marathon implements ModInitializer {
     private static final Cache<Long, SpawnerInfo> spawnerInfoMap =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static MinecraftServer MS;
+    private static boolean spawnersEnabled = true;
+    private static boolean spawnerAnalysisEnabled = true;
 
     public static void log(Level level, String message) {
         LOGGER.log(level, "[" + MODID + " v" + VERSION + "] " + message);
@@ -76,6 +78,24 @@ public class Marathon implements ModInitializer {
 
     public static void removeSpawnerInfo(BlockPos blockPos) {
         getSpawnerInfoMap().invalidate(blockPos.asLong());
+    }
+
+    public static boolean toggleSpawnersEnabled() {
+        spawnersEnabled = !spawnersEnabled;
+        return spawnersEnabled;
+    }
+
+    public static boolean isSpawnersEnabled() {
+        return spawnersEnabled;
+    }
+
+    public static boolean toggleSpawnerAnalysis() {
+        spawnerAnalysisEnabled = !spawnerAnalysisEnabled;
+        return spawnerAnalysisEnabled;
+    }
+
+    public static boolean isSpawnerAnalysisEnabled() {
+        return spawnerAnalysisEnabled;
     }
 
     public static String roundToString(double value) {

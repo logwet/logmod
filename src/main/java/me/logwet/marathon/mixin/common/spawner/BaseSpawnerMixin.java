@@ -55,6 +55,9 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
     @Shadow
     public abstract BlockPos getPos();
 
+    @Shadow
+    protected abstract void delay();
+
     @Unique
     private double bivariateTriangleDistribution(
             TriangularDistribution triangularDistribution,
@@ -369,12 +372,17 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                             value = "INVOKE",
                             target =
                                     "Lnet/minecraft/nbt/CompoundTag;getList(Ljava/lang/String;I)Lnet/minecraft/nbt/ListTag;",
-                            shift = At.Shift.AFTER))
+                            shift = At.Shift.AFTER),
+            cancellable = true)
     private void onSpawnAttemptStart(CallbackInfo ci) {
-        if (!this.finished) {
+        if (Marathon.isSpawnerAnalysisEnabled() && !this.finished) {
             analyse();
-
             this.finished = true;
+        }
+
+        if (!Marathon.isSpawnersEnabled()) {
+            this.delay();
+            ci.cancel();
         }
     }
 }
