@@ -31,3 +31,6 @@ bin/
 # fabric
 
 run/
+
+# scratches
+src/main/java/scratches/
