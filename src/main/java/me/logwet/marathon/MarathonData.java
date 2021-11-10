@@ -2,6 +2,7 @@ package me.logwet.marathon;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import me.logwet.marathon.util.hud.PlayerAttribute;
 import me.logwet.marathon.util.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -10,10 +11,13 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MarathonData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean spawnerAnalysisEnabled = new AtomicBoolean(true);
@@ -26,6 +30,29 @@ public class MarathonData {
 
     private static void setMS(MinecraftServer MS) {
         MarathonData.MS = MS;
+    }
+
+    private static Cache<UUID, PlayerAttribute> getPlayerAttributeCache() {
+        return playerAttributeCache;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    public static PlayerAttribute getPlayerAttribute(UUID uuid) {
+        return getPlayerAttributeCache().getIfPresent(uuid);
+    }
+
+    public static void addPlayerAttribute(UUID uuid, PlayerAttribute playerAttribute) {
+        getPlayerAttributeCache().put(uuid, playerAttribute);
+    }
+
+    public static void removePlayerAttribute(UUID uuid) {
+        getPlayerAttributeCache().invalidate(uuid);
+    }
+
+    private static void resetPlayerAttributes() {
+        getPlayerAttributeCache().invalidateAll();
+        getPlayerAttributeCache().cleanUp();
     }
 
     private static Cache<Long, SpawnerInfo> getSpawnerInfoCache() {
@@ -44,6 +71,11 @@ public class MarathonData {
 
     public static void removeSpawnerInfo(BlockPos blockPos) {
         getSpawnerInfoCache().invalidate(blockPos.asLong());
+    }
+
+    private static void resetSpawnerInfo() {
+        getSpawnerInfoCache().invalidateAll();
+        getSpawnerInfoCache().cleanUp();
     }
 
     public static boolean toggleSpawnersEnabled() {
@@ -73,8 +105,8 @@ public class MarathonData {
 
     public static void onServerInit(MinecraftServer ms) {
         setMS(ms);
-        getSpawnerInfoCache().invalidateAll();
-        getSpawnerInfoCache().cleanUp();
+        resetPlayerAttributes();
+        resetSpawnerInfo();
         Marathon.log(Level.INFO, "Server object initialized!");
     }
 }

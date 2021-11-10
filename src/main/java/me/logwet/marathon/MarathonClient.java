@@ -1,6 +1,7 @@
 package me.logwet.marathon;
 
 import me.logwet.marathon.commands.RootCommand;
+import me.logwet.marathon.util.hud.AttributeRenderer;
 import me.logwet.marathon.util.hud.HudRenderer;
 import me.logwet.marathon.util.hud.SpeedRenderer;
 import net.fabricmc.api.ClientModInitializer;
@@ -14,6 +15,7 @@ public class MarathonClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         HudRenderer.registerRenderer(new SpeedRenderer());
+        HudRenderer.registerRenderer(new AttributeRenderer());
         RootCommand.registerClient(ClientCommandManager.DISPATCHER);
 
         Marathon.log(Level.INFO, "Client class initialized!");
