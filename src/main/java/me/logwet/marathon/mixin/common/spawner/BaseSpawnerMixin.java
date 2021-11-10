@@ -1,6 +1,7 @@
 package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
+import me.logwet.marathon.MarathonData;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import me.logwet.marathon.util.spawner.PoissonBinomialDistribution;
 import me.logwet.marathon.util.spawner.RodStatistics;
@@ -322,7 +323,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                                 (double) this.maxSpawnDelay / 20.0D)
                         : new RodStatistics();
 
-        Marathon.addSpawnerInfo(
+        MarathonData.addSpawnerInfo(
                 blockPos,
                 new SpawnerInfo(
                         blockPos,
@@ -375,12 +376,12 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                             shift = At.Shift.AFTER),
             cancellable = true)
     private void onSpawnAttemptStart(CallbackInfo ci) {
-        if (Marathon.isSpawnerAnalysisEnabled() && !this.finished) {
+        if (MarathonData.isSpawnerAnalysisEnabled() && !this.finished) {
             analyse();
             this.finished = true;
         }
 
-        if (!Marathon.isSpawnersEnabled()) {
+        if (!MarathonData.isSpawnersEnabled()) {
             this.delay();
             ci.cancel();
         }

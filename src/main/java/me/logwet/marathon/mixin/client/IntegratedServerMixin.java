@@ -1,6 +1,6 @@
 package me.logwet.marathon.mixin.client;
 
-import me.logwet.marathon.Marathon;
+import me.logwet.marathon.MarathonData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.server.IntegratedServer;
@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class IntegratedServerMixin {
     @Inject(method = "initServer", at = @At("HEAD"))
     private void onInitServer(CallbackInfoReturnable<Boolean> cir) {
-        Marathon.onServerInit((MinecraftServer) (Object) this);
+        MarathonData.onServerInit((MinecraftServer) (Object) this);
     }
 }

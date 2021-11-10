@@ -13,9 +13,9 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public abstract class AbstractTextRenderer implements IRenderOverlay {
+    private final HudAlignment hudAlignment;
     protected List<String> lines = new ArrayList<>();
     private long infoUpdateTime;
-    private final HudAlignment hudAlignment;
 
     public AbstractTextRenderer(HudAlignment hudAlignment) {
         this.hudAlignment = hudAlignment;

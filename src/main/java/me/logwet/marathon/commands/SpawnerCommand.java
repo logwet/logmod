@@ -2,7 +2,7 @@ package me.logwet.marathon.commands;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.logwet.marathon.Marathon;
+import me.logwet.marathon.MarathonData;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -63,7 +63,7 @@ public class SpawnerCommand {
     }
 
     public static int toggleSpawning(CommandContext<CommandSourceStack> context) {
-        boolean status = Marathon.toggleSpawnersEnabled();
+        boolean status = MarathonData.toggleSpawnersEnabled();
 
         context.getSource()
                 .sendSuccess(
@@ -81,7 +81,7 @@ public class SpawnerCommand {
     }
 
     public static int toggleAnalysis(CommandContext<CommandSourceStack> context) {
-        boolean status = Marathon.toggleSpawnerAnalysis();
+        boolean status = MarathonData.toggleSpawnerAnalysis();
 
         context.getSource()
                 .sendSuccess(
