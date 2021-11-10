@@ -1,8 +1,10 @@
 package me.logwet.marathon;
 
+import me.logwet.marathon.commands.MarathonCommand;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import org.apache.logging.log4j.Level;
@@ -54,6 +56,7 @@ public class Marathon implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        CommandRegistrationCallback.EVENT.register(MarathonCommand::register);
         log(Level.INFO, "Main class initialized!");
     }
 }

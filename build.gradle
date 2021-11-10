@@ -51,10 +51,13 @@ dependencies {
 
     // Malilib
     modImplementation(include(files("libs/malilib-fabric-${project.minecraft_version}-${project.malilib_version}.jar")))
-    modImplementation(include(files("libs/fabric-resource-loader-v0-${project.fabric_resource_loader_version}.jar")))
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     // modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation(include("net.fabricmc.fabric-api:fabric-api-base:${project.fabric_api_base_version}"))
+    modImplementation(include("net.fabricmc.fabric-api:fabric-resource-loader-v0:${project.fabric_resource_loader_version}"))
+    modImplementation(include("net.fabricmc.fabric-api:fabric-command-api-v1:${project.fabric_command_api_version}"))
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
