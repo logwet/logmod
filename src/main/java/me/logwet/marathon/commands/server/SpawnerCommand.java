@@ -4,7 +4,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.logwet.marathon.MarathonData;
-import me.logwet.marathon.commands.CommandDefinition;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 
-public class SpawnerCommand implements CommandDefinition {
+public class SpawnerCommand implements ServerCommand {
     public static final SpawnerCommand INSTANCE = new SpawnerCommand();
 
     private static int analyse(CommandContext<CommandSourceStack> context)

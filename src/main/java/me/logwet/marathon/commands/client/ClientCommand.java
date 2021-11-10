@@ -1,11 +1,11 @@
-package me.logwet.marathon.commands;
+package me.logwet.marathon.commands.client;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
-import net.minecraft.commands.CommandSourceStack;
 
-public interface CommandDefinition {
-    LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated);
-
+@Environment(EnvType.CLIENT)
+public interface ClientCommand {
     LiteralArgumentBuilder<FabricClientCommandSource> getCommandBuilder();
 }

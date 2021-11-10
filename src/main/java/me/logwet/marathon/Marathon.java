@@ -1,6 +1,7 @@
 package me.logwet.marathon;
 
-import me.logwet.marathon.commands.RootCommand;
+import me.logwet.marathon.commands.MarathonCommand;
+import me.logwet.marathon.commands.server.SpawnerCommand;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
@@ -56,7 +57,9 @@ public class Marathon implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CommandRegistrationCallback.EVENT.register(RootCommand::registerServer);
+        MarathonCommand.registerServerCommand(SpawnerCommand.INSTANCE);
+        CommandRegistrationCallback.EVENT.register(MarathonCommand::registerServer);
+
         log(Level.INFO, "Main class initialized!");
     }
 }

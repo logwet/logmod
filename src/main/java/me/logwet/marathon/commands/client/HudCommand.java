@@ -3,7 +3,6 @@ package me.logwet.marathon.commands.client;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.logwet.marathon.MarathonData;
-import me.logwet.marathon.commands.CommandDefinition;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
@@ -13,7 +12,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TextComponent;
 
 @Environment(EnvType.CLIENT)
-public class HudCommand implements CommandDefinition {
+public class HudCommand implements ClientCommand {
     public static final HudCommand INSTANCE = new HudCommand();
 
     private static int toggle(CommandContext<FabricClientCommandSource> context) {
