@@ -5,7 +5,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.logwet.marathon.MarathonData;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -110,10 +109,5 @@ public class SpawnerCommand implements ServerCommand {
                 .then(Commands.literal("analyse").executes(SpawnerCommand::analyse))
                 .then(Commands.literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
                 .then(Commands.literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis));
-    }
-
-    @Override
-    public LiteralArgumentBuilder<FabricClientCommandSource> getCommandBuilder() {
-        return null;
     }
 }

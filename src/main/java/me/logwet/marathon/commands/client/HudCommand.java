@@ -8,7 +8,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.TextComponent;
 
 @Environment(EnvType.CLIENT)
@@ -30,11 +29,6 @@ public class HudCommand implements ClientCommand {
                                                                 : ChatFormatting.RED)));
 
         return 1;
-    }
-
-    @Override
-    public LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated) {
-        return null;
     }
 
     @Override
