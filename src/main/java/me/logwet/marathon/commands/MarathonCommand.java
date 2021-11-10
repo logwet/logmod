@@ -1,27 +1,41 @@
 package me.logwet.marathon.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.tree.LiteralCommandNode;
+import me.logwet.marathon.Marathon;
+import me.logwet.marathon.commands.client.HudCommand;
+import me.logwet.marathon.commands.server.SpawnerCommand;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
-
-import static net.minecraft.commands.Commands.literal;
+import net.minecraft.commands.Commands;
 
 public class MarathonCommand {
-    public static void register(
+    private static final CommandDefinition[] serverCommands =
+            new CommandDefinition[] {SpawnerCommand.INSTANCE};
+
+    @Environment(EnvType.CLIENT)
+    private static final CommandDefinition[] clientCommands =
+            new CommandDefinition[] {HudCommand.INSTANCE};
+
+    public static void registerServer(
             CommandDispatcher<CommandSourceStack> commandDispatcher, boolean dedicated) {
-        LiteralCommandNode<CommandSourceStack> spawnerCommandNode =
-                registerSpawnerCommand(commandDispatcher);
-        commandDispatcher.register(
-                literal("marathon").then(literal("spawner").redirect(spawnerCommandNode)));
+        for (CommandDefinition command : serverCommands) {
+            commandDispatcher.register(
+                    Commands.literal(Marathon.MODID).then(command.getCommandBuilder(dedicated)));
+            commandDispatcher.register(command.getCommandBuilder(dedicated));
+        }
     }
 
-    private static LiteralCommandNode<CommandSourceStack> registerSpawnerCommand(
-            CommandDispatcher<CommandSourceStack> dispatcher) {
-        return dispatcher.register(
-                literal("spawner")
-                        .executes(SpawnerCommand::run)
-                        .then(literal("analyse").executes(SpawnerCommand::run))
-                        .then(literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
-                        .then(literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis)));
+    @Environment(EnvType.CLIENT)
+    public static void registerClient(
+            CommandDispatcher<FabricClientCommandSource> commandDispatcher) {
+        for (CommandDefinition command : clientCommands) {
+            commandDispatcher.register(
+                    ClientCommandManager.literal(Marathon.MODID + "client")
+                            .then(command.getCommandBuilder()));
+            commandDispatcher.register(command.getCommandBuilder());
+        }
     }
 }

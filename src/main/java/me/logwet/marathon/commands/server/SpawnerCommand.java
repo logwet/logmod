@@ -1,11 +1,15 @@
-package me.logwet.marathon.commands;
+package me.logwet.marathon.commands.server;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.logwet.marathon.MarathonData;
+import me.logwet.marathon.commands.CommandDefinition;
 import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
@@ -14,8 +18,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 
-public class SpawnerCommand {
-    public static int run(CommandContext<CommandSourceStack> context)
+public class SpawnerCommand implements CommandDefinition {
+    public static final SpawnerCommand INSTANCE = new SpawnerCommand();
+
+    private static int analyse(CommandContext<CommandSourceStack> context)
             throws CommandSyntaxException {
         Player player = context.getSource().getPlayerOrException();
 
@@ -62,7 +68,7 @@ public class SpawnerCommand {
         }
     }
 
-    public static int toggleSpawning(CommandContext<CommandSourceStack> context) {
+    private static int toggleSpawning(CommandContext<CommandSourceStack> context) {
         boolean status = MarathonData.toggleSpawnersEnabled();
 
         context.getSource()
@@ -80,7 +86,7 @@ public class SpawnerCommand {
         return 1;
     }
 
-    public static int toggleAnalysis(CommandContext<CommandSourceStack> context) {
+    private static int toggleAnalysis(CommandContext<CommandSourceStack> context) {
         boolean status = MarathonData.toggleSpawnerAnalysis();
 
         context.getSource()
@@ -96,5 +102,19 @@ public class SpawnerCommand {
                         true);
 
         return 1;
+    }
+
+    @Override
+    public LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated) {
+        return Commands.literal("spawner")
+                .executes(SpawnerCommand::analyse)
+                .then(Commands.literal("analyse").executes(SpawnerCommand::analyse))
+                .then(Commands.literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
+                .then(Commands.literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis));
+    }
+
+    @Override
+    public LiteralArgumentBuilder<FabricClientCommandSource> getCommandBuilder() {
+        return null;
     }
 }

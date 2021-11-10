@@ -10,12 +10,15 @@ import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MarathonData {
-    private static final Cache<Long, SpawnerInfo> spawnerInfoMap =
+    private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
+    private static final AtomicBoolean spawnerAnalysisEnabled = new AtomicBoolean(true);
+    private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
     private static MinecraftServer MS;
-    private static boolean spawnersEnabled = true;
-    private static boolean spawnerAnalysisEnabled = true;
 
     public static MinecraftServer getMS() {
         return MS;
@@ -25,46 +28,53 @@ public class MarathonData {
         MarathonData.MS = MS;
     }
 
-    private static Cache<Long, SpawnerInfo> getSpawnerInfoMap() {
-        return spawnerInfoMap;
+    private static Cache<Long, SpawnerInfo> getSpawnerInfoCache() {
+        return spawnerInfoCache;
     }
 
     @Environment(EnvType.CLIENT)
     @Nullable
     public static SpawnerInfo getSpawnerInfo(BlockPos blockPos) {
-        return getSpawnerInfoMap().getIfPresent(blockPos.asLong());
+        return getSpawnerInfoCache().getIfPresent(blockPos.asLong());
     }
 
     public static void addSpawnerInfo(BlockPos blockPos, SpawnerInfo spawnerInfo) {
-        getSpawnerInfoMap().put(blockPos.asLong(), spawnerInfo);
+        getSpawnerInfoCache().put(blockPos.asLong(), spawnerInfo);
     }
 
     public static void removeSpawnerInfo(BlockPos blockPos) {
-        getSpawnerInfoMap().invalidate(blockPos.asLong());
+        getSpawnerInfoCache().invalidate(blockPos.asLong());
     }
 
     public static boolean toggleSpawnersEnabled() {
-        spawnersEnabled = !spawnersEnabled;
-        return spawnersEnabled;
+        return !spawnersEnabled.getAndSet(!spawnersEnabled.get());
     }
 
     public static boolean isSpawnersEnabled() {
-        return spawnersEnabled;
+        return spawnersEnabled.get();
     }
 
     public static boolean toggleSpawnerAnalysis() {
-        spawnerAnalysisEnabled = !spawnerAnalysisEnabled;
-        return spawnerAnalysisEnabled;
+        return !spawnerAnalysisEnabled.getAndSet(!spawnerAnalysisEnabled.get());
     }
 
     public static boolean isSpawnerAnalysisEnabled() {
-        return spawnerAnalysisEnabled;
+        return spawnerAnalysisEnabled.get();
+    }
+
+    public static boolean toggleHudEnabled() {
+        return !hudEnabled.getAndSet(!hudEnabled.get());
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static boolean isHudEnabled() {
+        return hudEnabled.get();
     }
 
     public static void onServerInit(MinecraftServer ms) {
         setMS(ms);
-        getSpawnerInfoMap().invalidateAll();
-        getSpawnerInfoMap().cleanUp();
+        getSpawnerInfoCache().invalidateAll();
+        getSpawnerInfoCache().cleanUp();
         Marathon.log(Level.INFO, "Server object initialized!");
     }
 }

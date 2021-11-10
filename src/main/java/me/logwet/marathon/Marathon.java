@@ -56,7 +56,7 @@ public class Marathon implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        CommandRegistrationCallback.EVENT.register(MarathonCommand::register);
+        CommandRegistrationCallback.EVENT.register(MarathonCommand::registerServer);
         log(Level.INFO, "Main class initialized!");
     }
 }
