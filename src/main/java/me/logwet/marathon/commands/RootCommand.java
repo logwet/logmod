@@ -11,7 +11,7 @@ import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
-public class MarathonCommand {
+public class RootCommand {
     private static final CommandDefinition[] serverCommands =
             new CommandDefinition[] {SpawnerCommand.INSTANCE};
 
