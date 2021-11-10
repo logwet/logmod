@@ -23,9 +23,10 @@ public class AttributeRenderer extends AbstractTextRenderer {
             if (entity instanceof Player) {
                 PlayerAttribute playerAttribute;
                 if ((playerAttribute = MarathonData.getPlayerAttribute(entity.getUUID())) != null) {
-                    this.lines.add("Health: " + playerAttribute.getHealth());
+                    this.lines.add(String.format("Health: %.3f", playerAttribute.getHealth()));
                     this.lines.add("Food: " + playerAttribute.getFoodLevel());
-                    this.lines.add("Saturation: " + playerAttribute.getSaturation());
+                    this.lines.add(
+                            String.format("Saturation: %.3f", playerAttribute.getSaturation()));
                 }
             }
         }
