@@ -10,6 +10,7 @@
   "client": [
     "client.DebugHudMixin",
     "client.IntegratedServerMixin",
+    "client.hud.GuiMixin",
     "client.spawner.SpawnerRendererMixin"
   ],
   "server": [

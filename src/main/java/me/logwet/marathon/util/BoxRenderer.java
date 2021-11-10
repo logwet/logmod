@@ -1,11 +1,14 @@
 package me.logwet.marathon.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.AABB;
 
+@Environment(EnvType.CLIENT)
 public class BoxRenderer {
     public static void renderBox(
             PoseStack poseStack,
