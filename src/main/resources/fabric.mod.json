@@ -6,7 +6,11 @@
   "name": "Marathon",
   "description": "Misc practice mod for 1.16 speedrunners.",
   "authors": [
-    "logwet"
+    "logwet",
+    "immigrant"
+  ],
+  "contributors": [
+    "Sharpieman20"
   ],
   "contact": {
     "homepage": "https://github.com/logwet",

@@ -1,6 +1,7 @@
 package me.logwet.marathon.util.spawner;
 
 import org.apache.commons.math3.distribution.UniformRealDistribution;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 
 public class RodStatistics {
     private final boolean enabled;
@@ -17,16 +18,11 @@ public class RodStatistics {
         this.enabled = false;
     }
 
-    public RodStatistics(
-            PoissonBinomialDistribution poissonBinomialDistribution,
-            double lbCycleTime,
-            double ubCycleTime) {
+    public RodStatistics(PoissonBinomialDistribution PBD, double lbCycleTime, double ubCycleTime) {
         this.enabled = true;
+        this.PBD = PBD;
 
-        this.PBD = poissonBinomialDistribution;
-
-        UniformRealDistribution cycleTimeDistribution =
-                new UniformRealDistribution(lbCycleTime, ubCycleTime);
+        UniformRealDistribution cycleTime = new UniformRealDistribution(lbCycleTime, ubCycleTime);
 
         double avgBlazesPerCycle = this.PBD.getMean();
 
@@ -38,12 +34,43 @@ public class RodStatistics {
 
         this.avgCyclesForSixRods = 6.0D / this.avgRodsPerCycle;
 
-        this.avgTimeToSixRods = this.avgCyclesForSixRods * cycleTimeDistribution.getNumericalMean();
+        this.avgTimeToSixRods = this.avgCyclesForSixRods * cycleTime.getNumericalMean();
 
-        this.avgRodsPerMin =
-                60.0D * this.avgRodsPerCycle / cycleTimeDistribution.getNumericalMean();
+        //        PBD.inverseCumulativeProbability()
+
+        this.avgRodsPerMin = 60.0D * this.avgRodsPerCycle / cycleTime.getNumericalMean();
+
+        double chanceOfSixRodsInCycle = 0.0D;
 
         this.chanceOfSixRodsInMin = 0.0D;
+
+        //        int numCycles = Mth.floor(60.0D / lbCycleTime);
+        //
+        //        NormalDistribution cycleTimeDistribution;
+        //
+        //        for (int n = 1; n <= numCycles; n++) {
+        //            cycleTimeDistribution =
+        //                    new NormalDistribution(
+        //                            lbCycleTime * n + (ubCycleTime * n - lbCycleTime * n) / 2.0D,
+        //                            Math.sqrt(n / 12.0D) * (ubCycleTime - lbCycleTime));
+        //
+        //            cycleTimeDistribution.probability(60.0D / n);
+        //        }
+    }
+
+    private double irwinHallCDF(double x, int n) {
+        double r = 0.0D;
+
+        for (int k = 0; k <= Math.abs(x); k++) {
+            r +=
+                    Math.pow(-1, k)
+                            * CombinatoricsUtils.binomialCoefficient(n, k)
+                            * Math.pow(x - k, n);
+        }
+
+        r /= CombinatoricsUtils.factorial(n);
+
+        return r;
     }
 
     public boolean isEnabled() {

@@ -293,14 +293,6 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         String messageString = createMessageString(entityType, blockPos, messageSuffix.toString());
 
-        RodStatistics rodStatistics =
-                entityType == EntityType.BLAZE
-                        ? new RodStatistics(
-                                PBD,
-                                (double) this.minSpawnDelay / 20.0D,
-                                (double) this.maxSpawnDelay / 20.0D)
-                        : new RodStatistics();
-
         Marathon.log(INFO, messageString);
 
         Player player =
@@ -321,6 +313,14 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                         createMessageComponent(messageString, ChatFormatting.GREEN), Util.NIL_UUID);
             }
         }
+
+        RodStatistics rodStatistics =
+                entityType == EntityType.BLAZE
+                        ? new RodStatistics(
+                                PBD,
+                                (double) this.minSpawnDelay / 20.0D,
+                                (double) this.maxSpawnDelay / 20.0D)
+                        : new RodStatistics();
 
         Marathon.addSpawnerInfo(
                 blockPos,

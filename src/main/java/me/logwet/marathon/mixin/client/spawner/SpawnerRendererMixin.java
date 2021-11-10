@@ -69,16 +69,20 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                                         new TextComponent(roundToString(PBD.getMean()))
                                                 .withStyle(ChatFormatting.AQUA))
                                 .append(
-                                        new TextComponent(" ⧖ 6 rods: ")
-                                                .withStyle(ChatFormatting.GREEN))
-                                .append(
-                                        new TextComponent(
-                                                        roundToString(
-                                                                        spawnerInfo
-                                                                                .getRodStatistics()
-                                                                                .getAvgTimeToSixRods())
-                                                                + "s")
-                                                .withStyle(ChatFormatting.AQUA)),
+                                        spawnerInfo.getRodStatistics().isEnabled()
+                                                ? new TextComponent(" ⧖ 6 rods: ")
+                                                        .withStyle(ChatFormatting.GREEN)
+                                                        .append(
+                                                                new TextComponent(
+                                                                                roundToString(
+                                                                                                spawnerInfo
+                                                                                                        .getRodStatistics()
+                                                                                                        .getAvgTimeToSixRods())
+                                                                                        + "s")
+                                                                        .withStyle(
+                                                                                ChatFormatting
+                                                                                        .AQUA))
+                                                : new TextComponent("")),
                         new TextComponent("#: ")
                                 .withStyle(ChatFormatting.GREEN)
                                 .append(
