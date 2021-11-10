@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.spawner;
+package me.logwet.marathon.util.spawner.distributions;
 
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 

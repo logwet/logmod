@@ -1,5 +1,6 @@
 package me.logwet.marathon.util.spawner;
 
+import me.logwet.marathon.util.spawner.distributions.PoissonBinomialDistribution;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
