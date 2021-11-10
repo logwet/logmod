@@ -37,8 +37,6 @@ public class RodStatistics {
 
         this.avgTimeToSixRods = this.avgCyclesForSixRods * cycleTime.getNumericalMean();
 
-        //        PBD.inverseCumulativeProbability()
-
         this.avgRodsPerMin = 60.0D * this.avgRodsPerCycle / cycleTime.getNumericalMean();
 
         double chanceOfSixRodsInCycle = 0.0D;
@@ -47,15 +45,13 @@ public class RodStatistics {
 
         //        int numCycles = Mth.floor(60.0D / lbCycleTime);
         //
-        //        NormalDistribution cycleTimeDistribution;
+        //        IrwinHallDistribution cycleTimeDistribution;
         //
         //        for (int n = 1; n <= numCycles; n++) {
-        //            cycleTimeDistribution =
-        //                    new NormalDistribution(
-        //                            lbCycleTime * n + (ubCycleTime * n - lbCycleTime * n) / 2.0D,
-        //                            Math.sqrt(n / 12.0D) * (ubCycleTime - lbCycleTime));
+        //            cycleTimeDistribution = new IrwinHallDistribution(n, lbCycleTime,
+        // ubCycleTime);
         //
-        //            cycleTimeDistribution.probability(60.0D / n);
+        //            cycleTimeDistribution.cumulativeProbability(60.0D / n);
         //        }
     }
 
