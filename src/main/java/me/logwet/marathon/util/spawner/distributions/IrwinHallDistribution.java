@@ -11,6 +11,8 @@ import org.apache.commons.math3.util.CombinatoricsUtils;
  *     distribution - Wikipedia</a>
  */
 public class IrwinHallDistribution extends AbstractRealDistribution {
+    private static final double SQRT_12 = 2 * Math.sqrt(3);
+
     private final int n;
 
     private final double preLB;
@@ -22,8 +24,8 @@ public class IrwinHallDistribution extends AbstractRealDistribution {
     private final double preSupport;
     private final double support;
 
-    private final double P_F;
-    private final double C_F;
+    private final long P_F;
+    private final long C_F;
 
     private final long[] numCache;
 
@@ -134,7 +136,7 @@ public class IrwinHallDistribution extends AbstractRealDistribution {
     }
 
     public double getStandardDeviation() {
-        return preSupport * Math.sqrt(n) / (2 * Math.sqrt(3));
+        return preSupport * Math.sqrt(n) / SQRT_12;
     }
 
     @Override

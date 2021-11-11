@@ -14,7 +14,7 @@ public abstract class AbstractEnumeratedIntegerDistribution extends EnumeratedIn
     private final double variance;
 
     public AbstractEnumeratedIntegerDistribution(int n, double[] p) {
-        super(IntStream.range(0, n + 1).toArray(), p);
+        super(IntStream.range(0, n + 1).toArray(), trimArray(n, p));
 
         assert n >= 0;
 
@@ -29,6 +29,18 @@ public abstract class AbstractEnumeratedIntegerDistribution extends EnumeratedIn
 
         numericalMean = this.getNumericalMean();
         variance = this.getNumericalVariance();
+    }
+
+    private static double[] trimArray(int n, double[] a) {
+        assert a.length >= n;
+
+        double[] r = new double[n + 1];
+
+        for (int i = 0; i <= n; i++) {
+            r[i] = a[i];
+        }
+
+        return r;
     }
 
     public int getNumTrials() {
