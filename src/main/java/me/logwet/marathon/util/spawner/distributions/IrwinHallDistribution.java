@@ -4,6 +4,8 @@ import net.minecraft.util.Mth;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
+import java.util.function.Function;
+
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution">Irwin-Hall
  *     distribution - Wikipedia</a>
@@ -28,7 +30,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
     private long[] numCache;
 
     public IrwinHallDistribution(int iterations, double min, double max) {
-        super(buildPDF(iterations), buildCDF(iterations));
+        super(buildPDF(iterations), buildCDF(iterations), buildICDF(iterations));
 
         n = iterations;
 
@@ -181,25 +183,20 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
                 break;
 
             case 3:
-                final double threeontwo = 3.0D / 2.0D;
-
                 cdf.addPiece(Range.between(0.0D, 1.0D), (x) -> x * x * x / 6.0D);
                 cdf.addPiece(
                         Range.between(1.0D, 2.0D),
                         (x) -> {
                             double squared = x * x;
 
-                            return x * squared / -3.0D
-                                    + threeontwo * squared
-                                    - threeontwo * x
-                                    + 0.5D;
+                            return x * squared / -3.0D + 1.5D * squared - 1.5D * x + 0.5D;
                         });
                 cdf.addPiece(
                         Range.between(2.0D, 3.0D),
                         (x) -> {
                             double squared = x * x;
 
-                            return x * squared / 6.0D - threeontwo * squared + 4.5D * x - 3.5D;
+                            return x * squared / 6.0D - 1.5D * squared + 4.5D * x - 3.5D;
                         });
                 break;
 
@@ -325,6 +322,97 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
         }
 
         return cdf;
+    }
+
+    private static PiecewiseFunction<Double, Double> buildICDF(int n) {
+        PiecewiseFunction<Double, Double> icdf = new PiecewiseFunction<>();
+
+        double twoonthree = 2.0D / 3.0D;
+
+        switch (n) {
+            case 1:
+                icdf.addPiece(Range.between(0.0D, 1.0D), (x) -> x);
+                break;
+
+            case 2:
+                icdf.addPiece(Range.between(0.0D, 0.5D), (x) -> Math.sqrt(2.0D * x));
+                icdf.addPiece(
+                        Range.between(0.5D, 1.0D), (x) -> -Math.sqrt(-2.0D * x + 2.0D) + 2.0D);
+                break;
+
+            case 3:
+                double sqrt3 = Math.sqrt(3);
+                double cbrt6 = Math.cbrt(6);
+
+                Function<Double, Double> m1_3 =
+                        (x) -> {
+                            double squared = x * x;
+                            return x * squared / -3.0D + 1.5D * squared - 1.5D * x + 0.5D;
+                        };
+
+                double s1_3 = m1_3.apply(1.0D);
+                double s2_3 = m1_3.apply(2.0D);
+
+                icdf.addPiece(Range.between(0.0D, s1_3), (x) -> Math.cbrt(6.0D * x));
+                icdf.addPiece(
+                        Range.between(s1_3, s2_3),
+                        (x) ->
+                                sqrt3
+                                                * Mth.sin(
+                                                        (float)
+                                                                (Math.asin(
+                                                                                twoonthree
+                                                                                        * sqrt3
+                                                                                        * (2.0D * x
+                                                                                                - 1.0D))
+                                                                        / 3.0D))
+                                        + 1.5D);
+                icdf.addPiece(Range.between(s2_3, 1.0D), (x) -> cbrt6 * Math.cbrt(x - 1.0D) + 3.0D);
+                break;
+
+            case 4:
+                double twopowthreeonfour = Math.pow(2, 3.0F / 4.0F);
+                double thirtytwoonthree = 32.0D / 3.0D;
+                double twentynineonthree = 29.0D / 3.0D;
+
+                Function<Double, Double> m1_4 = (x) -> x * x * x * x / 24.0D;
+
+                Function<Double, Double> m2_4 =
+                        (x) -> {
+                            double squared = x * x;
+                            double cubed = squared * x;
+
+                            return x * cubed / -24.0D
+                                    + twoonthree * cubed
+                                    - 4 * squared
+                                    + thirtytwoonthree * x
+                                    - twentynineonthree;
+                        };
+
+                double s1_4 = m1_4.apply(1.0D);
+                double s3_4 = m2_4.apply(3.0D);
+
+                icdf.addPiece(
+                        Range.between(0.0D, s1_4),
+                        (x) -> twopowthreeonfour * Math.pow(3 * x, 0.25F));
+                icdf.addPiece(
+                        Range.between(s3_4, 1.0D),
+                        (x) -> 4.0D - twopowthreeonfour * (Math.pow(3 - 3 * x, 0.25F)));
+                break;
+
+            case 5:
+                double twopowthreeonfive = Math.pow(2, 3.0F / 5.0F);
+
+                Function<Double, Double> m1_5 = (x) -> x * x * x * x * x / 120.0D;
+                double s1_5 = m1_5.apply(1.0D);
+
+                icdf.addPiece(
+                        Range.between(0.0D, s1_5),
+                        (x) -> twopowthreeonfive * Math.pow(15 * x, 0.2F));
+                break;
+        }
+
+        return icdf;
     }
 
     private double transformToStandardSpace(double x) {
