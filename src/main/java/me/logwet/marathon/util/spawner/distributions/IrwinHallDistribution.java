@@ -11,7 +11,7 @@ import java.util.function.Function;
  *     distribution - Wikipedia</a>
  */
 public class IrwinHallDistribution extends PiecewiseDistribution {
-    private static final double SQRT_12 = 2 * Math.sqrt(3);
+    private static final double INV_SQRT_12 = 0.5D * Mth.fastInvSqrt(3.0D);
 
     private final int n;
 
@@ -85,7 +85,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
 
             case 2:
                 pdf.addPiece(Range.between(0.0D, 1.0D), (x) -> x);
-                pdf.addPiece(Range.between(1.0D, 2.0D), (x) -> 1.0D - x);
+                pdf.addPiece(Range.between(1.0D, 2.0D), (x) -> 2.0D - x);
                 break;
 
             case 3:
@@ -482,7 +482,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
     }
 
     public double getStandardDeviation() {
-        return preSupport * Math.sqrt(n) / SQRT_12;
+        return preSupport * Math.sqrt(n) * INV_SQRT_12;
     }
 
     @Override
