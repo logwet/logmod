@@ -38,12 +38,20 @@ public abstract class PiecewiseDistribution extends AbstractRealDistribution {
         this(PDF, CDF, null);
     }
 
+    protected static double square(double x) {
+        return x * x;
+    }
+
+    protected static double cube(double x) {
+        return x * x * x;
+    }
+
+    protected static double fourth(double x) {
+        return x * x * x * x;
+    }
+
     @Override
     public double density(double x) {
-        if (x < this.getSupportLowerBound() || x > this.getSupportUpperBound()) {
-            return 0.0D;
-        }
-
         Double r = PDF.apply(x);
 
         if (!Objects.isNull(r)) {
@@ -55,12 +63,6 @@ public abstract class PiecewiseDistribution extends AbstractRealDistribution {
 
     @Override
     public double cumulativeProbability(double x) {
-        if (x < this.getSupportLowerBound()) {
-            return 0.0D;
-        } else if (x > this.getSupportUpperBound()) {
-            return 1.0D;
-        }
-
         Double r = CDF.apply(x);
 
         if (!Objects.isNull(r)) {
@@ -79,6 +81,10 @@ public abstract class PiecewiseDistribution extends AbstractRealDistribution {
             }
         }
 
+        return defaultInverseCumulativeProbability(p);
+    }
+
+    public double defaultInverseCumulativeProbability(double p) throws OutOfRangeException {
         return super.inverseCumulativeProbability(p);
     }
 }

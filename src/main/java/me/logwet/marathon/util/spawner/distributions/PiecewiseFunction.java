@@ -35,4 +35,8 @@ public class PiecewiseFunction<T, R> {
 
         return null;
     }
+
+    public int size() {
+        return functions.size();
+    }
 }

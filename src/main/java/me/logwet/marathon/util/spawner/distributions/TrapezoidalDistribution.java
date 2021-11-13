@@ -23,7 +23,7 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
 
     private static PiecewiseFunction<Double, Double> buildPDF(
             double a, double b, double c, double d) {
-        double fac = 2.0D / (a + b - c - d);
+        final double fac = 2.0D / (a + b - c - d);
 
         PiecewiseFunction<Double, Double> pdf = new PiecewiseFunction<>();
         pdf.addPiece(Range.between(a, b), (x) -> fac * ((x - a) / (a - b)));
@@ -35,25 +35,23 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
 
     private static PiecewiseFunction<Double, Double> buildCDF(
             double a, double b, double c, double d) {
-        double fac = a + b - c - d;
-
-        Function<Double, Double> square = (x) -> x * x;
+        final double fac = a + b - c - d;
 
         PiecewiseFunction<Double, Double> cdf = new PiecewiseFunction<>();
-        cdf.addPiece(Range.between(a, b), (x) -> square.apply(x - a) / (fac * (a - b)));
+        cdf.addPiece(Range.between(a, b), (x) -> square(x - a) / (fac * (a - b)));
         cdf.addPiece(Range.between(b, c), (x) -> -(2.0D * x - a - b) / fac);
-        cdf.addPiece(Range.between(c, d), (x) -> 1.0D - (square.apply(x - d) / (fac * (c - d))));
+        cdf.addPiece(Range.between(c, d), (x) -> 1.0D - (square(x - d) / (fac * (c - d))));
 
         return cdf;
     }
 
     private static PiecewiseFunction<Double, Double> buildICDF(
             double a, double b, double c, double d) {
-        double fac = a + b - c - d;
+        final double fac = a + b - c - d;
 
         Function<Double, Double> mid = (x) -> -(2.0D * x - a - b) / fac;
-        double s1 = mid.apply(b);
-        double s2 = mid.apply(c);
+        final double s1 = mid.apply(b);
+        final double s2 = mid.apply(c);
 
         PiecewiseFunction<Double, Double> icdf = new PiecewiseFunction<>();
         icdf.addPiece(Range.between(0.0D, s1), (x) -> Math.sqrt((a - b) * fac * x) + a);
@@ -71,7 +69,7 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
 
     @Override
     public double getNumericalVariance() {
-        double mean = getNumericalMean();
+        final double mean = getNumericalMean();
 
         return (1.0D / (6.0D * (D + C - B - A)))
                         * (((D * D * D * D - C * C * C * C) / (D - C))
