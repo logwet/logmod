@@ -1,22 +1,28 @@
 package me.logwet.marathon.statistics.distributions;
 
 import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
+import net.minecraft.util.Mth;
 
 public class DiscreteTrapezoidalDistribution extends AbstractEnumeratedIntegerDistribution {
-    public DiscreteTrapezoidalDistribution(int n, double a, double b, double c, double d) {
-        super(n, buildProbabilities(n, a, b, c, d));
+    public DiscreteTrapezoidalDistribution(double a, double b, double c, double d) {
+        super(Mth.floor(a), buildN(a, d), buildProbabilities(a, b, c, d));
     }
 
-    protected static double[] buildProbabilities(int n, double a, double b, double c, double d) {
+    protected static int buildN(double a, double d) {
+        return Mth.ceil(d - a);
+    }
+
+    protected static double[] buildProbabilities(double a, double b, double c, double d) {
         TrapezoidalDistribution distribution = new TrapezoidalDistribution(a, b, c, d);
+
+        int n = buildN(a, d);
 
         double[] probabilities = new double[n + 1];
 
         for (int i = 0; i <= n; i++) {
-            double p1 = ((double) i / (double) n) * (d - a) + a;
-            double p2 = ((d - a) / (double) n) / 2.0D;
+            double p = i + Mth.floor(a);
 
-            probabilities[i] = distribution.probability(p1 - p2, p1 + p2);
+            probabilities[i] = distribution.probability(p - 0.5D, p + 0.5D);
         }
 
         return probabilities;

@@ -11,7 +11,7 @@ public class PoissonBinomialDistribution extends AbstractEnumeratedIntegerDistri
     private final double[] successProbabilities;
 
     public PoissonBinomialDistribution(int n, double[] sp) {
-        super(n, buildProbabilities(n, sp));
+        super(0, n, buildProbabilities(n, sp));
 
         assert sp.length >= n;
         successProbabilities = sp;

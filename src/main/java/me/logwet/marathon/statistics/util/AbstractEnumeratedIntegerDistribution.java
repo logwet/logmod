@@ -13,8 +13,8 @@ public abstract class AbstractEnumeratedIntegerDistribution extends EnumeratedIn
     private final double numericalMean;
     private final double variance;
 
-    public AbstractEnumeratedIntegerDistribution(int n, double[] p) {
-        super(IntStream.range(0, n + 1).toArray(), trimArray(n, p));
+    public AbstractEnumeratedIntegerDistribution(int s, int n, double[] p) {
+        super(IntStream.range(s, s + n + 1).toArray(), trimArray(n, p));
 
         assert n >= 0;
 

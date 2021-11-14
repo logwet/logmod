@@ -7,7 +7,7 @@ public abstract class AbstractProductOfEnumeratedIntegerDistributions
 
     public AbstractProductOfEnumeratedIntegerDistributions(
             AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
-        super(buildN(d1, d2), buildProbabilities(d1, d2));
+        super(0, buildN(d1, d2), buildProbabilities(d1, d2));
 
         this.d1 = d1;
         this.d2 = d2;
