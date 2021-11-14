@@ -50,8 +50,7 @@ public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribu
         return x * x * x * x;
     }
 
-    @Override
-    public double density(double x) {
+    protected double uncheckedDensity(double x) {
         Double r = PDF.apply(x);
 
         if (!Objects.isNull(r)) {
@@ -62,7 +61,15 @@ public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribu
     }
 
     @Override
-    public double cumulativeProbability(double x) {
+    public double density(double x) {
+        if (x < this.getSupportLowerBound() || x > this.getSupportUpperBound()) {
+            return 0.0D;
+        }
+
+        return uncheckedDensity(x);
+    }
+
+    protected double uncheckedCumulativeProbability(double x) {
         Double r = CDF.apply(x);
 
         if (!Objects.isNull(r)) {
@@ -70,6 +77,17 @@ public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribu
         } else {
             return 0.0D;
         }
+    }
+
+    @Override
+    public double cumulativeProbability(double x) {
+        if (x < this.getSupportLowerBound()) {
+            return 0.0D;
+        } else if (x > this.getSupportUpperBound()) {
+            return 1.0D;
+        }
+
+        return uncheckedCumulativeProbability(x);
     }
 
     @Override

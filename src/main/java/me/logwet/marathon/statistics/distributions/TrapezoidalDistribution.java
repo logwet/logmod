@@ -86,7 +86,7 @@ public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
 
     @Override
     public double getSupportUpperBound() {
-        return B;
+        return D;
     }
 
     @Override

@@ -438,7 +438,7 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
         x = transformToStandardSpace(x);
 
         if (n <= 5) {
-            return super.density(x) / preSupport;
+            return super.uncheckedDensity(x) / preSupport;
         }
 
         double r = 0.0D;
@@ -461,7 +461,7 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
         x = transformToStandardSpace(x);
 
         if (n <= 5) {
-            return super.cumulativeProbability(x);
+            return super.uncheckedCumulativeProbability(x);
         }
 
         double r = 0.0D;
