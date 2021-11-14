@@ -31,7 +31,7 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
         variance = this.getNumericalVariance();
     }
 
-    private static double[] trimArray(int n, double[] a) {
+    protected static double[] trimArray(int n, double[] a) {
         assert a.length >= n;
 
         double[] r = new double[n + 1];

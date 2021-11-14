@@ -4,8 +4,8 @@ import org.apache.commons.lang3.Range;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 public class PiecewiseFunction<T, R> {
@@ -16,9 +16,7 @@ public class PiecewiseFunction<T, R> {
     }
 
     public PiecewiseFunction() {
-        this(
-                new TreeMap<>(
-                        (o1, o2) -> o1.getComparator().compare(o1.getMinimum(), o2.getMinimum())));
+        this(new HashMap<>());
     }
 
     public void addPiece(@NotNull Range<T> range, @NotNull Function<T, R> function) {
@@ -27,13 +25,27 @@ public class PiecewiseFunction<T, R> {
 
     @Nullable
     public R apply(@NotNull T x) {
+        R r = null;
+
         for (Map.Entry<Range<T>, Function<T, R>> entry : functions.entrySet()) {
             if (entry.getKey().contains(x)) {
-                return entry.getValue().apply(x);
+                r = entry.getValue().apply(x);
+
+                if (r instanceof Double) {
+                    if (Double.isFinite((Double) r)) {
+                        break;
+                    }
+                } else if (r instanceof Float) {
+                    if (Float.isFinite((Float) r)) {
+                        break;
+                    }
+                } else {
+                    break;
+                }
             }
         }
 
-        return null;
+        return r;
     }
 
     public int size() {
