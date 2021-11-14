@@ -13,14 +13,14 @@ public abstract class AbstractProductOfDiscreteDistributions extends AbstractDis
     }
 
     protected static int buildN(AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
-        return d1.getNumTrials() * d2.getNumTrials();
+        return d1.getSupportUpperBound() * d2.getSupportUpperBound();
     }
 
     protected static double[] buildProbabilities(
             AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         int n = buildN(d1, d2);
-        int n1 = d1.getNumTrials();
-        int n2 = d2.getNumTrials();
+        int n1 = d1.getSupportUpperBound();
+        int n2 = d2.getSupportUpperBound();
 
         double[] probabilities = new double[n + 1];
 
