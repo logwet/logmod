@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.spawner;
+package me.logwet.marathon.tools.spawner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Matrix4f;

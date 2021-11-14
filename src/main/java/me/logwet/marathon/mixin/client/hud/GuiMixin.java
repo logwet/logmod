@@ -1,7 +1,7 @@
 package me.logwet.marathon.mixin.client.hud;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.logwet.marathon.util.hud.HudRenderer;
+import me.logwet.marathon.tools.hud.HudRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;

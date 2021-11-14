@@ -2,8 +2,8 @@ package me.logwet.marathon;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import me.logwet.marathon.util.hud.PlayerAttribute;
-import me.logwet.marathon.util.spawner.SpawnerInfo;
+import me.logwet.marathon.tools.hud.PlayerAttribute;
+import me.logwet.marathon.tools.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;

@@ -1,6 +1,6 @@
-package me.logwet.marathon.util.spawner;
+package me.logwet.marathon.tools.spawner;
 
-import me.logwet.marathon.util.spawner.distributions.PoissonBinomialDistribution;
+import me.logwet.marathon.statistics.distributions.PoissonBinomialDistribution;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 

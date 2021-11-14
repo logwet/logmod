@@ -1,5 +1,7 @@
-package me.logwet.marathon.util.spawner.distributions;
+package me.logwet.marathon.statistics.distributions;
 
+import me.logwet.marathon.statistics.util.AbstractPiecewiseDistribution;
+import me.logwet.marathon.statistics.util.PiecewiseFunction;
 import org.apache.commons.lang3.Range;
 
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.hud;
+package me.logwet.marathon.tools.hud;
 
 import fi.dy.masa.malilib.config.HudAlignment;
 import net.fabricmc.api.EnvType;

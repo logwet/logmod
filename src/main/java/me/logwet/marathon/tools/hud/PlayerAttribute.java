@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.hud;
+package me.logwet.marathon.tools.hud;
 
 public class PlayerAttribute {
     private final float health;

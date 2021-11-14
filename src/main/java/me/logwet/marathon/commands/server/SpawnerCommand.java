@@ -4,7 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import me.logwet.marathon.MarathonData;
-import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
+import me.logwet.marathon.tools.spawner.BaseSpawnerAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

@@ -2,10 +2,10 @@ package me.logwet.marathon.mixin.common.spawner;
 
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.MarathonData;
-import me.logwet.marathon.util.spawner.BaseSpawnerAccessor;
-import me.logwet.marathon.util.spawner.RodStatistics;
-import me.logwet.marathon.util.spawner.SpawnerInfo;
-import me.logwet.marathon.util.spawner.distributions.PoissonBinomialDistribution;
+import me.logwet.marathon.statistics.distributions.PoissonBinomialDistribution;
+import me.logwet.marathon.tools.spawner.BaseSpawnerAccessor;
+import me.logwet.marathon.tools.spawner.RodStatistics;
+import me.logwet.marathon.tools.spawner.SpawnerInfo;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;

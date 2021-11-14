@@ -1,4 +1,6 @@
-package me.logwet.marathon.util.spawner.distributions;
+package me.logwet.marathon.statistics.distributions;
+
+import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
 
 public class DiscreteTrapezoidalDistribution extends AbstractEnumeratedIntegerDistribution {
     public DiscreteTrapezoidalDistribution(int n, double a, double b, double c, double d) {

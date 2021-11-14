@@ -1,4 +1,4 @@
-package me.logwet.marathon.util;
+package me.logwet.marathon.tools;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.fabricmc.api.EnvType;

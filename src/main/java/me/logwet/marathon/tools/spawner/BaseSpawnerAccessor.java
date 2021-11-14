@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.spawner;
+package me.logwet.marathon.tools.spawner;
 
 public interface BaseSpawnerAccessor {
     long analyse();

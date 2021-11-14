@@ -1,4 +1,4 @@
-package me.logwet.marathon.util.spawner.distributions;
+package me.logwet.marathon.statistics.util;
 
 import org.apache.commons.lang3.Range;
 import org.jetbrains.annotations.NotNull;

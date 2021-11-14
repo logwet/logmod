@@ -3,7 +3,7 @@ package me.logwet.marathon.mixin.common.hud.attributes;
 import com.mojang.authlib.GameProfile;
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.MarathonData;
-import me.logwet.marathon.util.hud.PlayerAttribute;
+import me.logwet.marathon.tools.hud.PlayerAttribute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

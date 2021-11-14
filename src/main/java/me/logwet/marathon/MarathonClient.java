@@ -2,9 +2,9 @@ package me.logwet.marathon;
 
 import me.logwet.marathon.commands.MarathonCommand;
 import me.logwet.marathon.commands.client.HudCommand;
-import me.logwet.marathon.util.hud.AttributeRenderer;
-import me.logwet.marathon.util.hud.HudRenderer;
-import me.logwet.marathon.util.hud.SpeedRenderer;
+import me.logwet.marathon.tools.hud.AttributeRenderer;
+import me.logwet.marathon.tools.hud.HudRenderer;
+import me.logwet.marathon.tools.hud.SpeedRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
