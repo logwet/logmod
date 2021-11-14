@@ -9,13 +9,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public abstract class PiecewiseDistribution extends AbstractRealDistribution {
+public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribution {
     protected final PiecewiseFunction<Double, Double> PDF;
     protected final PiecewiseFunction<Double, Double> CDF;
 
     @Nullable protected final PiecewiseFunction<Double, Double> ICDF;
 
-    public PiecewiseDistribution(
+    public AbstractPiecewiseDistribution(
             PiecewiseFunction<Double, Double> PDF,
             PiecewiseFunction<Double, Double> CDF,
             @Nullable PiecewiseFunction<Double, Double> ICDF,
@@ -26,14 +26,14 @@ public abstract class PiecewiseDistribution extends AbstractRealDistribution {
         this.ICDF = ICDF;
     }
 
-    public PiecewiseDistribution(
+    public AbstractPiecewiseDistribution(
             PiecewiseFunction<Double, Double> PDF,
             PiecewiseFunction<Double, Double> CDF,
             @Nullable PiecewiseFunction<Double, Double> ICDF) {
         this(PDF, CDF, ICDF, new JDKRandomGenerator());
     }
 
-    public PiecewiseDistribution(
+    public AbstractPiecewiseDistribution(
             PiecewiseFunction<Double, Double> PDF, PiecewiseFunction<Double, Double> CDF) {
         this(PDF, CDF, null);
     }

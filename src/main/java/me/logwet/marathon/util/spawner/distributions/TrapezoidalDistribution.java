@@ -4,7 +4,7 @@ import org.apache.commons.lang3.Range;
 
 import java.util.function.Function;
 
-public class TrapezoidalDistribution extends PiecewiseDistribution {
+public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
     private final double A;
     private final double B;
     private final double C;
@@ -21,7 +21,7 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
         D = d;
     }
 
-    private static PiecewiseFunction<Double, Double> buildPDF(
+    protected static PiecewiseFunction<Double, Double> buildPDF(
             double a, double b, double c, double d) {
         final double fac = 2.0D / (a + b - c - d);
 
@@ -33,7 +33,7 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
         return pdf;
     }
 
-    private static PiecewiseFunction<Double, Double> buildCDF(
+    protected static PiecewiseFunction<Double, Double> buildCDF(
             double a, double b, double c, double d) {
         final double fac = a + b - c - d;
 
@@ -45,7 +45,7 @@ public class TrapezoidalDistribution extends PiecewiseDistribution {
         return cdf;
     }
 
-    private static PiecewiseFunction<Double, Double> buildICDF(
+    protected static PiecewiseFunction<Double, Double> buildICDF(
             double a, double b, double c, double d) {
         final double fac = a + b - c - d;
 

@@ -17,7 +17,7 @@ public class PoissonBinomialDistribution extends AbstractEnumeratedIntegerDistri
     }
 
     /** Discrete Fourier Transform based algorithm. */
-    private static double[] buildProbabilities(int n, double[] sp) {
+    protected static double[] buildProbabilities(int n, double[] sp) {
         final Complex C = Complex.I.multiply(2 * Math.PI).divide(n + 1).exp();
 
         double[] rArray = new double[n + 1];

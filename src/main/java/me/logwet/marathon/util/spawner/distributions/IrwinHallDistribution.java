@@ -10,7 +10,7 @@ import java.util.function.Function;
  * @see <a href="https://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution">Irwin-Hall
  *     distribution - Wikipedia</a>
  */
-public class IrwinHallDistribution extends PiecewiseDistribution {
+public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
     private static final double INV_SQRT_12 = 0.5D * Mth.fastInvSqrt(3.0D);
 
     private final int n;
@@ -75,7 +75,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
         return (k & 1) == 0 ? 1 : -1;
     }
 
-    private static PiecewiseFunction<Double, Double> buildPDF(int n) {
+    protected static PiecewiseFunction<Double, Double> buildPDF(int n) {
         PiecewiseFunction<Double, Double> pdf = new PiecewiseFunction<>();
 
         switch (n) {
@@ -169,7 +169,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
         return pdf;
     }
 
-    private static PiecewiseFunction<Double, Double> buildCDF(int n) {
+    protected static PiecewiseFunction<Double, Double> buildCDF(int n) {
         PiecewiseFunction<Double, Double> cdf = new PiecewiseFunction<>();
 
         switch (n) {
@@ -324,7 +324,7 @@ public class IrwinHallDistribution extends PiecewiseDistribution {
         return cdf;
     }
 
-    private static PiecewiseFunction<Double, Double> buildICDF(int n) {
+    protected static PiecewiseFunction<Double, Double> buildICDF(int n) {
         PiecewiseFunction<Double, Double> icdf = new PiecewiseFunction<>();
 
         double twoonthree = 2.0D / 3.0D;
