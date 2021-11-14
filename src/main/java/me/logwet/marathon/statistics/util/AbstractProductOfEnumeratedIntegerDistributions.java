@@ -1,11 +1,11 @@
 package me.logwet.marathon.statistics.util;
 
-public abstract class AbstractProductOfTwoVariablesDistribution
+public abstract class AbstractProductOfEnumeratedIntegerDistributions
         extends AbstractEnumeratedIntegerDistribution {
     protected final AbstractEnumeratedIntegerDistribution d1;
     protected final AbstractEnumeratedIntegerDistribution d2;
 
-    public AbstractProductOfTwoVariablesDistribution(
+    public AbstractProductOfEnumeratedIntegerDistributions(
             AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
         super(buildN(d1, d2), buildProbabilities(d1, d2));
 

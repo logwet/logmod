@@ -447,7 +447,7 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
             r += numCache[k] * Math.pow(x - k, n - 1);
         }
 
-        return Mth.clamp(r / (P_F * preSupport), 0.0D, 1.0D);
+        return r / (P_F * preSupport);
     }
 
     @Override

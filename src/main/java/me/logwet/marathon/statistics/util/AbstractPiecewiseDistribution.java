@@ -55,7 +55,7 @@ public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribu
         Double r = PDF.apply(x);
 
         if (!Objects.isNull(r)) {
-            return Mth.clamp(r, 0.0D, 1.0D);
+            return r;
         } else {
             return 0.0D;
         }
