@@ -5,11 +5,11 @@ import net.minecraft.util.Mth;
 
 public class DiscreteTrapezoidalDistribution extends AbstractDiscreteDistribution {
     public DiscreteTrapezoidalDistribution(double a, double b, double c, double d) {
-        super(Mth.floor(a), buildN(a, d), buildProbabilities(a, b, c, d));
+        super(Mth.ceil(a), buildN(a, d), buildProbabilities(a, b, c, d));
     }
 
     protected static int buildN(double a, double d) {
-        return Mth.ceil(d - a);
+        return Mth.floor(d) - Mth.ceil(a) + 1;
     }
 
     protected static double[] buildProbabilities(double a, double b, double c, double d) {
@@ -20,7 +20,7 @@ public class DiscreteTrapezoidalDistribution extends AbstractDiscreteDistributio
         double[] probabilities = new double[n + 1];
 
         for (int i = 0; i <= n; i++) {
-            double p = i + Mth.floor(a);
+            double p = i + Mth.ceil(a);
 
             probabilities[i] = distribution.probability(p - 0.5D, p + 0.5D);
         }
