@@ -1,12 +1,12 @@
 package me.logwet.marathon.statistics.distributions;
 
-import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
-import me.logwet.marathon.statistics.util.AbstractProductOfEnumeratedIntegerDistributions;
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
+import me.logwet.marathon.statistics.util.AbstractProductOfDiscreteDistributions;
 
 public class ProductOfEnumeratedIntegerDistributionsImpl
-        extends AbstractProductOfEnumeratedIntegerDistributions {
+        extends AbstractProductOfDiscreteDistributions {
     public ProductOfEnumeratedIntegerDistributionsImpl(
-            AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
+            AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         super(d1, d2);
     }
 }

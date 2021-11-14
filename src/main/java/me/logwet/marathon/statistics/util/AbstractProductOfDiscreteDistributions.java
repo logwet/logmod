@@ -1,25 +1,23 @@
 package me.logwet.marathon.statistics.util;
 
-public abstract class AbstractProductOfEnumeratedIntegerDistributions
-        extends AbstractEnumeratedIntegerDistribution {
-    protected final AbstractEnumeratedIntegerDistribution d1;
-    protected final AbstractEnumeratedIntegerDistribution d2;
+public abstract class AbstractProductOfDiscreteDistributions extends AbstractDiscreteDistribution {
+    protected final AbstractDiscreteDistribution d1;
+    protected final AbstractDiscreteDistribution d2;
 
-    public AbstractProductOfEnumeratedIntegerDistributions(
-            AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
+    public AbstractProductOfDiscreteDistributions(
+            AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         super(0, buildN(d1, d2), buildProbabilities(d1, d2));
 
         this.d1 = d1;
         this.d2 = d2;
     }
 
-    protected static int buildN(
-            AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
+    protected static int buildN(AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         return d1.getNumTrials() * d2.getNumTrials();
     }
 
     protected static double[] buildProbabilities(
-            AbstractEnumeratedIntegerDistribution d1, AbstractEnumeratedIntegerDistribution d2) {
+            AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         int n = buildN(d1, d2);
         int n1 = d1.getNumTrials();
         int n2 = d2.getNumTrials();

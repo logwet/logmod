@@ -1,9 +1,9 @@
 package me.logwet.marathon.statistics.distributions;
 
-import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
 import net.minecraft.util.Mth;
 
-public class DiscreteInverseUniformDistribution extends AbstractEnumeratedIntegerDistribution {
+public class DiscreteInverseUniformDistribution extends AbstractDiscreteDistribution {
     public DiscreteInverseUniformDistribution(double lower, double upper, double factor) {
         super(
                 Mth.floor(factor / upper),

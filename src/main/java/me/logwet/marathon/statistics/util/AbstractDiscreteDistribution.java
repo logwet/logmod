@@ -4,7 +4,7 @@ import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 
 import java.util.stream.IntStream;
 
-public abstract class AbstractEnumeratedIntegerDistribution extends EnumeratedIntegerDistribution {
+public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDistribution {
     private final int numberOfTrials;
 
     private final double[] probabilities;
@@ -13,7 +13,7 @@ public abstract class AbstractEnumeratedIntegerDistribution extends EnumeratedIn
     private final double numericalMean;
     private final double variance;
 
-    public AbstractEnumeratedIntegerDistribution(int s, int n, double[] p) {
+    public AbstractDiscreteDistribution(int s, int n, double[] p) {
         super(IntStream.range(s, s + n + 1).toArray(), trimArray(n, p));
 
         assert n >= 0;

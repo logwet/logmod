@@ -1,9 +1,9 @@
 package me.logwet.marathon.statistics.distributions;
 
-import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
 import net.minecraft.util.Mth;
 
-public class DiscreteTrapezoidalDistribution extends AbstractEnumeratedIntegerDistribution {
+public class DiscreteTrapezoidalDistribution extends AbstractDiscreteDistribution {
     public DiscreteTrapezoidalDistribution(double a, double b, double c, double d) {
         super(Mth.floor(a), buildN(a, d), buildProbabilities(a, b, c, d));
     }

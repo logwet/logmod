@@ -1,13 +1,13 @@
 package me.logwet.marathon.statistics.distributions;
 
-import me.logwet.marathon.statistics.util.AbstractEnumeratedIntegerDistribution;
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
 import org.apache.commons.math3.complex.Complex;
 
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Poisson_binomial_distribution">Poisson binomial
  *     distribution - Wikipedia</a>
  */
-public class PoissonBinomialDistribution extends AbstractEnumeratedIntegerDistribution {
+public class PoissonBinomialDistribution extends AbstractDiscreteDistribution {
     private final double[] successProbabilities;
 
     public PoissonBinomialDistribution(int n, double[] sp) {
