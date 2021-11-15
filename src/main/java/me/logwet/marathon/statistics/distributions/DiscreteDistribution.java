@@ -4,12 +4,12 @@ import me.logwet.marathon.statistics.util.AbstractContinuousDistribution;
 import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
 import net.minecraft.util.Mth;
 
-public class DiscreteDistributionImpl extends AbstractDiscreteDistribution {
-    public DiscreteDistributionImpl(int s, int n, double[] p) {
+public class DiscreteDistribution extends AbstractDiscreteDistribution {
+    public DiscreteDistribution(int s, int n, double[] p) {
         super(s, n, p);
     }
 
-    public DiscreteDistributionImpl(AbstractContinuousDistribution distribution) {
+    public DiscreteDistribution(AbstractContinuousDistribution distribution) {
         this(buildS(distribution), buildN(distribution), buildProbabilities(distribution));
     }
 
