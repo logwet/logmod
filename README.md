@@ -1,5 +1,7 @@
 # Marathon
 
+[![Build and Release Artifacts](https://github.com/logwet/marathon/actions/workflows/build.yml/badge.svg)](https://github.com/logwet/marathon/actions/workflows/build.yml)
+
 Misc utilities mod for 1.16 speedrunners.
 
 ## Utilities
