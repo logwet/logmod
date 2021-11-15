@@ -11,10 +11,10 @@ import java.util.function.Function;
  *     Wikipedia</a>
  */
 public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
-    private final double A;
-    private final double B;
-    private final double C;
-    private final double D;
+    protected final double A;
+    protected final double B;
+    protected final double C;
+    protected final double D;
 
     public TrapezoidalDistribution(double a, double b, double c, double d) {
         super(buildPDF(a, b, c, d), buildCDF(a, b, c, d), buildICDF(a, b, c, d));

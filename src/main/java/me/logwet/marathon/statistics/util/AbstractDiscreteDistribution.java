@@ -5,19 +5,21 @@ import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import java.util.stream.IntStream;
 
 public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDistribution {
-    private final int numberOfTrials;
+    protected final int startingValue;
+    protected final int numberOfTrials;
 
-    private final double[] probabilities;
-    private final double[] cumulativeProbabilities;
+    protected final double[] probabilities;
+    protected final double[] cumulativeProbabilities;
 
-    private final double numericalMean;
-    private final double variance;
+    protected final double numericalMean;
+    protected final double variance;
 
     public AbstractDiscreteDistribution(int s, int n, double[] p) {
         super(IntStream.range(s, s + n + 1).toArray(), trimArray(n, p));
 
         assert n >= 0;
 
+        startingValue = s;
         numberOfTrials = n;
 
         probabilities = new double[n + 1];

@@ -8,7 +8,7 @@ import org.apache.commons.math3.complex.Complex;
  *     distribution - Wikipedia</a>
  */
 public class PoissonBinomialDistribution extends AbstractDiscreteDistribution {
-    private final double[] successProbabilities;
+    protected final double[] successProbabilities;
 
     public PoissonBinomialDistribution(int n, double[] sp) {
         super(0, n, buildProbabilities(n, sp));

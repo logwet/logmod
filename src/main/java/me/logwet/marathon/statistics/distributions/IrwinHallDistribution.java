@@ -15,21 +15,21 @@ import java.util.function.Function;
 public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
     private static final double INV_SQRT_12 = 0.5D * Mth.fastInvSqrt(3.0D);
 
-    private final int n;
+    protected final int n;
 
-    private final double preLB;
-    private final double preUB;
+    protected final double preLB;
+    protected final double preUB;
 
-    private final double lb;
-    private final double ub;
+    protected final double lb;
+    protected final double ub;
 
-    private final double preSupport;
-    private final double support;
+    protected final double preSupport;
+    protected final double support;
 
-    private long P_F;
-    private long C_F;
+    protected long P_F;
+    protected long C_F;
 
-    private long[] numCache;
+    protected long[] numCache;
 
     public IrwinHallDistribution(int iterations, double min, double max) {
         super(buildPDF(iterations), buildCDF(iterations), buildICDF(iterations));
