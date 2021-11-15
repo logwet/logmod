@@ -1,6 +1,8 @@
 package me.logwet.marathon.statistics.util;
 
+import net.minecraft.util.Mth;
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
+import org.apache.commons.math3.util.MathArrays;
 
 import java.util.stream.IntStream;
 
@@ -22,15 +24,18 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
         startingValue = s;
         numberOfTrials = n;
 
-        probabilities = new double[n + 1];
+        probabilities = MathArrays.normalizeArray(trimArray(n, p), 1.0);
+
         cumulativeProbabilities = new double[n + 1];
+        double sum = 0.0D;
+
         for (int i = 0; i <= n; i++) {
-            probabilities[i] = this.probability(i);
-            cumulativeProbabilities[i] = this.cumulativeProbability(i);
+            sum += probabilities[i];
+            cumulativeProbabilities[i] = Mth.clamp(sum, 0.0D, 1.0D);
         }
 
-        numericalMean = this.getNumericalMean();
-        variance = this.getNumericalVariance();
+        numericalMean = super.getNumericalMean();
+        variance = super.getNumericalVariance();
     }
 
     protected static double[] trimArray(int n, double[] a) {
@@ -38,40 +43,57 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
 
         double[] r = new double[n + 1];
 
-        for (int i = 0; i <= n; i++) {
-            r[i] = a[i];
-        }
+        System.arraycopy(a, 0, r, 0, n + 1);
 
         return r;
+    }
+
+    public int getStartingValue() {
+        return startingValue;
     }
 
     public int getNumTrials() {
         return numberOfTrials;
     }
 
-    public double getMean() {
+    @Override
+    public double getNumericalMean() {
         return numericalMean;
     }
 
-    public double getVariance() {
+    @Override
+    public double getNumericalVariance() {
         return variance;
     }
 
-    public double getProbability(int k) {
-        if (k < 0 || k > numberOfTrials) {
+    @Override
+    public double probability(int k) {
+        if (k < this.getSupportLowerBound() || k > this.getSupportUpperBound()) {
             return 0.0D;
         }
-        return probabilities[k];
+        return probabilities[k - startingValue];
     }
 
-    public double getCumulativeProbability(int k) {
-        if (k < 0) {
+    @Override
+    public double cumulativeProbability(int k) {
+        if (k < this.getSupportLowerBound()) {
             return 0.0D;
         }
-        if (k > numberOfTrials) {
+        if (k > this.getSupportUpperBound()) {
             return 1.0D;
         }
-        return cumulativeProbabilities[k];
+
+        return cumulativeProbabilities[k - startingValue];
+    }
+
+    @Override
+    public int getSupportLowerBound() {
+        return startingValue;
+    }
+
+    @Override
+    public int getSupportUpperBound() {
+        return startingValue + numberOfTrials;
     }
 
     public double[] getProbabilities() {

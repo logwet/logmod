@@ -19,25 +19,27 @@ public abstract class AbstractProductOfDiscreteDistributions extends AbstractDis
     protected static double[] buildProbabilities(
             AbstractDiscreteDistribution d1, AbstractDiscreteDistribution d2) {
         int n = buildN(d1, d2);
-        int n1 = d1.numberOfTrials;
-        int n2 = d2.numberOfTrials;
+        int n1 = d1.getNumTrials();
+        int n2 = d2.getNumTrials();
 
         double[] probabilities = new double[n + 1];
 
         AbstractDiscreteDistribution td1 = n1 <= n2 ? d1 : d2;
         AbstractDiscreteDistribution td2 = n1 <= n2 ? d2 : d1;
-        int tn1 = Math.min(n1, n2);
-        int tn2 = Math.max(n1, n2);
 
         for (int k = 0; k <= n; k++) {
-            for (int t = td1.startingValue; t <= tn1; t++) {
+            for (int t1 = td1.getSupportLowerBound(); t1 <= td1.getSupportUpperBound(); t1++) {
                 try {
-                    if (k % t == 0) {
-                        probabilities[k] += td1.getProbability(t) * td2.getProbability(k / t);
+                    if (k % t1 == 0) {
+                        probabilities[k] += td1.probability(t1) * td2.probability(k / t1);
                     }
                 } catch (ArithmeticException ignored) {
-                    for (int t2 = td2.startingValue; t2 <= tn2; t2++) {
-                        probabilities[k] += td1.getProbability(0) * td2.getProbability(t2);
+                    if (t1 == 0) {
+                        for (int t2 = td2.getSupportLowerBound();
+                                t2 <= td2.getSupportUpperBound();
+                                t2++) {
+                            probabilities[k] += td1.probability(0) * td2.probability(t2);
+                        }
                     }
                 }
             }

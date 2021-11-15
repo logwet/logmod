@@ -283,13 +283,16 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         StringBuilder messageSuffix = new StringBuilder();
 
-        messageSuffix.append("Avg: ").append(roundToString(PBD.getMean())).append(" Prob: ");
+        messageSuffix
+                .append("Avg: ")
+                .append(roundToString(PBD.getNumericalMean()))
+                .append(" Prob: ");
 
         for (int i = 0; i <= Mth.clamp(numTrials + 1, 0, this.spawnCount); i++) {
             messageSuffix
                     .append(i)
                     .append(": ")
-                    .append(String.format("%.2f", PBD.getProbability(i) * 100D))
+                    .append(String.format("%.2f", PBD.probability(i) * 100D))
                     .append("% ");
         }
 
