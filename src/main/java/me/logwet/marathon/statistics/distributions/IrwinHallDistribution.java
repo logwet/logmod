@@ -73,10 +73,6 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
         this(iterations, 0.0D, 1.0D);
     }
 
-    private static int signFromPow(int k) {
-        return (k & 1) == 0 ? 1 : -1;
-    }
-
     protected static PiecewiseFunction<Double, Double> buildPDF(int n) {
         PiecewiseFunction<Double, Double> pdf = new PiecewiseFunction<>();
 

@@ -1,15 +1,12 @@
 package me.logwet.marathon.statistics.util;
 
 import net.minecraft.util.Mth;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.random.JDKRandomGenerator;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribution {
+public abstract class AbstractPiecewiseDistribution extends AbstractContinuousDistribution {
     protected final PiecewiseFunction<Double, Double> PDF;
     protected final PiecewiseFunction<Double, Double> CDF;
 
@@ -18,36 +15,16 @@ public abstract class AbstractPiecewiseDistribution extends AbstractRealDistribu
     public AbstractPiecewiseDistribution(
             PiecewiseFunction<Double, Double> PDF,
             PiecewiseFunction<Double, Double> CDF,
-            @Nullable PiecewiseFunction<Double, Double> ICDF,
-            RandomGenerator rng) {
-        super(rng);
+            @Nullable PiecewiseFunction<Double, Double> ICDF) {
+        super();
         this.PDF = PDF;
         this.CDF = CDF;
         this.ICDF = ICDF;
     }
 
     public AbstractPiecewiseDistribution(
-            PiecewiseFunction<Double, Double> PDF,
-            PiecewiseFunction<Double, Double> CDF,
-            @Nullable PiecewiseFunction<Double, Double> ICDF) {
-        this(PDF, CDF, ICDF, new JDKRandomGenerator());
-    }
-
-    public AbstractPiecewiseDistribution(
             PiecewiseFunction<Double, Double> PDF, PiecewiseFunction<Double, Double> CDF) {
         this(PDF, CDF, null);
-    }
-
-    protected static double square(double x) {
-        return x * x;
-    }
-
-    protected static double cube(double x) {
-        return x * x * x;
-    }
-
-    protected static double fourth(double x) {
-        return x * x * x * x;
     }
 
     protected double uncheckedDensity(double x) {

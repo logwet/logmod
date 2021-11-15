@@ -1,12 +1,15 @@
 package me.logwet.marathon.statistics.distributions;
 
+import me.logwet.marathon.statistics.util.AbstractContinuousDistribution;
 import net.minecraft.util.Mth;
-import org.apache.commons.math3.distribution.AbstractRealDistribution;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-import org.apache.commons.math3.random.JDKRandomGenerator;
 
-public class InverseUniformDistribution extends AbstractRealDistribution {
+/**
+ * @see <a href="https://en.wikipedia.org/wiki/Inverse_distribution">Inverse distribution -
+ *     Wikipedia</a>
+ */
+public class InverseUniformDistribution extends AbstractContinuousDistribution {
     protected double preLb;
     protected double preUb;
     protected double preSupport;
@@ -14,7 +17,7 @@ public class InverseUniformDistribution extends AbstractRealDistribution {
 
     public InverseUniformDistribution(double lower, double upper, double factor)
             throws NumberIsTooLargeException {
-        super(new JDKRandomGenerator());
+        super();
 
         if (lower >= upper) {
             throw new NumberIsTooLargeException(
@@ -30,10 +33,6 @@ public class InverseUniformDistribution extends AbstractRealDistribution {
         fac = factor;
     }
 
-    protected static double square(double x) {
-        return x * x;
-    }
-
     @Override
     public double density(double x) {
         if (x < getSupportLowerBound() || x > getSupportUpperBound()) {
@@ -45,10 +44,10 @@ public class InverseUniformDistribution extends AbstractRealDistribution {
 
     @Override
     public double cumulativeProbability(double x) {
-        if (x <= getSupportLowerBound()) {
+        if (x < getSupportLowerBound()) {
             return 0;
         }
-        if (x >= getSupportUpperBound()) {
+        if (x > getSupportUpperBound()) {
             return 1;
         }
 

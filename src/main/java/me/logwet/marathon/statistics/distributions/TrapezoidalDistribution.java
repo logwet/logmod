@@ -6,6 +6,10 @@ import org.apache.commons.lang3.Range;
 
 import java.util.function.Function;
 
+/**
+ * @see <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">Trapezoidal distribution -
+ *     Wikipedia</a>
+ */
 public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
     private final double A;
     private final double B;
