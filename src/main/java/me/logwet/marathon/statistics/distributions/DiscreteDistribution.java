@@ -4,13 +4,14 @@ import me.logwet.marathon.statistics.util.AbstractContinuousDistribution;
 import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
 import net.minecraft.util.Mth;
 
-public class DiscreteDistribution extends AbstractDiscreteDistribution {
-    public DiscreteDistribution(int s, int n, double[] p) {
-        super(s, n, p);
-    }
+public class DiscreteDistribution<T extends AbstractContinuousDistribution>
+        extends AbstractDiscreteDistribution {
+    protected final T sourceDistribution;
 
-    public DiscreteDistribution(AbstractContinuousDistribution distribution) {
-        this(buildS(distribution), buildN(distribution), buildProbabilities(distribution));
+    public DiscreteDistribution(T distribution) {
+        super(buildS(distribution), buildN(distribution), buildProbabilities(distribution));
+
+        sourceDistribution = distribution;
     }
 
     protected static int buildS(AbstractContinuousDistribution distribution) {
@@ -36,5 +37,9 @@ public class DiscreteDistribution extends AbstractDiscreteDistribution {
         }
 
         return probabilities;
+    }
+
+    public T getSourceDistribution() {
+        return sourceDistribution;
     }
 }
