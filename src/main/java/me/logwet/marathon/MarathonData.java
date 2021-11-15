@@ -2,6 +2,7 @@ package me.logwet.marathon;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.util.concurrent.AtomicDouble;
 import me.logwet.marathon.tools.hud.PlayerAttribute;
 import me.logwet.marathon.tools.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MarathonData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
@@ -22,6 +24,11 @@ public class MarathonData {
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean spawnerAnalysisEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
+
+    private static final AtomicInteger targetRods = new AtomicInteger(6);
+    private static final AtomicDouble targetTime = new AtomicDouble(60.0D);
+    private static final AtomicInteger lootingLevel = new AtomicInteger(0);
+
     private static MinecraftServer MS;
 
     public static MinecraftServer getMS() {
@@ -96,6 +103,30 @@ public class MarathonData {
 
     public static boolean toggleHudEnabled() {
         return !hudEnabled.getAndSet(!hudEnabled.get());
+    }
+
+    public static int getTargetRods() {
+        return targetRods.get();
+    }
+
+    public static void setTargetRods(int value) {
+        targetRods.set(value);
+    }
+
+    public static double getTargetTime() {
+        return targetTime.get();
+    }
+
+    public static void setTargetTime(double value) {
+        targetTime.set(value);
+    }
+
+    public static int getLootingLevel() {
+        return lootingLevel.get();
+    }
+
+    public static void setLootingLevel(int value) {
+        lootingLevel.set(value);
     }
 
     @Environment(EnvType.CLIENT)
