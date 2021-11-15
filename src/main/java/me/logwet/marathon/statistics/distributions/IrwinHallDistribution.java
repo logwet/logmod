@@ -4,6 +4,8 @@ import me.logwet.marathon.statistics.util.AbstractPiecewiseDistribution;
 import me.logwet.marathon.statistics.util.PiecewiseFunction;
 import net.minecraft.util.Mth;
 import org.apache.commons.lang3.Range;
+import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
 import java.util.function.Function;
@@ -37,7 +39,11 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
         n = iterations;
 
         assert n > 0 && n <= 20;
-        assert max > min;
+
+        if (min >= max) {
+            throw new NumberIsTooLargeException(
+                    LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND, min, max, false);
+        }
 
         preLB = min;
         preUB = max;

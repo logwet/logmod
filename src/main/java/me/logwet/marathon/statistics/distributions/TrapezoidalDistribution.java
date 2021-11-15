@@ -3,6 +3,8 @@ package me.logwet.marathon.statistics.distributions;
 import me.logwet.marathon.statistics.util.AbstractPiecewiseDistribution;
 import me.logwet.marathon.statistics.util.PiecewiseFunction;
 import org.apache.commons.lang3.Range;
+import org.apache.commons.math3.exception.NumberIsTooLargeException;
+import org.apache.commons.math3.exception.util.LocalizedFormats;
 
 import java.util.function.Function;
 
@@ -19,7 +21,10 @@ public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
     public TrapezoidalDistribution(double a, double b, double c, double d) {
         super(buildPDF(a, b, c, d), buildCDF(a, b, c, d), buildICDF(a, b, c, d));
 
-        assert a <= b && b <= c && c <= d;
+        if (a >= d) {
+            throw new NumberIsTooLargeException(
+                    LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND, a, d, false);
+        }
 
         A = a;
         B = b;
