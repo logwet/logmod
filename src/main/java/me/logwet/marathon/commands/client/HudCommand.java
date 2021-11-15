@@ -5,10 +5,11 @@ import com.mojang.brigadier.context.CommandContext;
 import me.logwet.marathon.MarathonData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TextComponent;
+
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
 @Environment(EnvType.CLIENT)
 public class HudCommand implements ClientCommand {
@@ -33,6 +34,6 @@ public class HudCommand implements ClientCommand {
 
     @Override
     public LiteralArgumentBuilder<FabricClientCommandSource> getCommandBuilder() {
-        return ClientCommandManager.literal("hud").executes(HudCommand::toggle);
+        return literal("hud").executes(HudCommand::toggle);
     }
 }

@@ -7,7 +7,6 @@ import me.logwet.marathon.MarathonData;
 import me.logwet.marathon.tools.spawner.BaseSpawnerAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +14,8 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+
+import static net.minecraft.commands.Commands.literal;
 
 public class SpawnerCommand implements ServerCommand {
     public static final SpawnerCommand INSTANCE = new SpawnerCommand();
@@ -104,10 +105,10 @@ public class SpawnerCommand implements ServerCommand {
 
     @Override
     public LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated) {
-        return Commands.literal("spawner")
+        return literal("spawner")
                 .executes(SpawnerCommand::analyse)
-                .then(Commands.literal("analyse").executes(SpawnerCommand::analyse))
-                .then(Commands.literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
-                .then(Commands.literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis));
+                .then(literal("analyse").executes(SpawnerCommand::analyse))
+                .then(literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
+                .then(literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis));
     }
 }
