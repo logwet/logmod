@@ -12,4 +12,9 @@ public class DiscreteDistribution extends AbstractDiscreteDistribution {
             T distribution) {
         return new ConvertedDiscreteDistribution<>(distribution);
     }
+
+    public static <D1 extends AbstractDiscreteDistribution, D2 extends AbstractDiscreteDistribution>
+            ElementwiseProductDistribution<D1, D2> elementwiseProductOf(D1 d1, D2 d2) {
+        return new ElementwiseProductDistribution<>(d1, d2);
+    }
 }
