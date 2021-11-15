@@ -20,8 +20,7 @@ public class ConvertedDiscreteDistribution<T extends AbstractContinuousDistribut
 
     protected static int buildN(AbstractContinuousDistribution distribution) {
         return Mth.floor(distribution.getSupportUpperBound())
-                - Mth.ceil(distribution.getSupportLowerBound())
-                + 1;
+                - Mth.ceil(distribution.getSupportLowerBound());
     }
 
     protected static double[] buildProbabilities(AbstractContinuousDistribution distribution) {

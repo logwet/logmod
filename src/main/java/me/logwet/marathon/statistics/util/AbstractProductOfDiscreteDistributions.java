@@ -28,18 +28,17 @@ public abstract class AbstractProductOfDiscreteDistributions extends AbstractDis
         AbstractDiscreteDistribution td2 = n1 <= n2 ? d2 : d1;
 
         for (int k = 0; k <= n; k++) {
-            for (int t1 = td1.getSupportLowerBound(); t1 <= td1.getSupportUpperBound(); t1++) {
-                try {
-                    if (k % t1 == 0) {
+            if (k == 0) {
+                for (int t1 = td1.getSupportLowerBound(); t1 <= td1.getSupportUpperBound(); t1++) {
+                    probabilities[0] += td1.probability(t1) * td2.probability(0);
+                }
+                for (int t2 = td2.getSupportLowerBound(); t2 <= td2.getSupportUpperBound(); t2++) {
+                    probabilities[0] += td1.probability(0) * td2.probability(t2);
+                }
+            } else {
+                for (int t1 = td1.getSupportLowerBound(); t1 <= td1.getSupportUpperBound(); t1++) {
+                    if (t1 != 0 && k % t1 == 0) {
                         probabilities[k] += td1.probability(t1) * td2.probability(k / t1);
-                    }
-                } catch (ArithmeticException ignored) {
-                    if (t1 == 0) {
-                        for (int t2 = td2.getSupportLowerBound();
-                                t2 <= td2.getSupportUpperBound();
-                                t2++) {
-                            probabilities[k] += td1.probability(0) * td2.probability(t2);
-                        }
                     }
                 }
             }

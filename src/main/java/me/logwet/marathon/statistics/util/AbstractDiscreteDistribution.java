@@ -13,6 +13,8 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
     protected final double[] probabilities;
     protected final double[] cumulativeProbabilities;
 
+    protected final int lb;
+    protected final int ub;
     protected final double numericalMean;
     protected final double variance;
 
@@ -21,21 +23,33 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
 
         assert n >= 0;
 
-        startingValue = s;
-        numberOfTrials = n;
-
-        probabilities = MathArrays.normalizeArray(trimArray(n, p), 1.0);
-
-        cumulativeProbabilities = new double[n + 1];
-        double sum = 0.0D;
-
-        for (int i = 0; i <= n; i++) {
-            sum += probabilities[i];
-            cumulativeProbabilities[i] = Mth.clamp(sum, 0.0D, 1.0D);
-        }
+        lb = super.getSupportLowerBound();
+        ub = super.getSupportUpperBound();
 
         numericalMean = super.getNumericalMean();
         variance = super.getNumericalVariance();
+
+        startingValue = lb;
+        numberOfTrials = ub - lb;
+
+        probabilities =
+                MathArrays.normalizeArray(trimArray(startingValue, numberOfTrials, lb, p), 1.0);
+
+        cumulativeProbabilities = new double[numberOfTrials + 1];
+        double sum = 0.0D;
+
+        for (int i = 0; i <= numberOfTrials; i++) {
+            sum += probabilities[i];
+            cumulativeProbabilities[i] = Mth.clamp(sum, 0.0D, 1.0D);
+        }
+    }
+
+    protected static double[] trimArray(int s, int n, int lb, double[] a) {
+        double[] r = new double[n + 1];
+
+        System.arraycopy(a, lb - s, r, 0, n + 1);
+
+        return r;
     }
 
     protected static double[] trimArray(int n, double[] a) {
@@ -88,12 +102,12 @@ public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDist
 
     @Override
     public int getSupportLowerBound() {
-        return startingValue;
+        return lb;
     }
 
     @Override
     public int getSupportUpperBound() {
-        return startingValue + numberOfTrials;
+        return ub;
     }
 
     public double[] getProbabilities() {

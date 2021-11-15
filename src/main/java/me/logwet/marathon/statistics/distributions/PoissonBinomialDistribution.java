@@ -13,7 +13,7 @@ public class PoissonBinomialDistribution extends AbstractDiscreteDistribution {
     public PoissonBinomialDistribution(int n, double[] sp) {
         super(0, n, buildProbabilities(n, sp));
 
-        assert sp.length >= n;
+        assert sp.length == n;
         successProbabilities = sp;
     }
 
