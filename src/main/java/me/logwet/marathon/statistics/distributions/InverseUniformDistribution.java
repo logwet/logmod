@@ -10,10 +10,14 @@ import org.apache.commons.math3.exception.util.LocalizedFormats;
  *     Wikipedia</a>
  */
 public class InverseUniformDistribution extends AbstractContinuousDistribution {
-    protected double preLb;
-    protected double preUb;
-    protected double preSupport;
-    protected double fac;
+    protected final double preLb;
+    protected final double preUb;
+
+    protected final double lb;
+    protected final double ub;
+
+    protected final double preSupport;
+    protected final double fac;
 
     public InverseUniformDistribution(double lower, double upper, double factor)
             throws NumberIsTooLargeException {
@@ -27,6 +31,9 @@ public class InverseUniformDistribution extends AbstractContinuousDistribution {
         preLb = lower;
         preUb = upper;
         preSupport = preUb - preLb;
+
+        lb = factor / upper;
+        ub = factor / lower;
 
         assert factor > 0.0D;
 
@@ -78,12 +85,12 @@ public class InverseUniformDistribution extends AbstractContinuousDistribution {
 
     @Override
     public double getSupportLowerBound() {
-        return 1.0D / preUb;
+        return lb;
     }
 
     @Override
     public double getSupportUpperBound() {
-        return 1.0D / preLb;
+        return ub;
     }
 
     @Override
