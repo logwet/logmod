@@ -35,7 +35,7 @@ public class InverseUniformDistribution extends AbstractContinuousDistribution {
 
     @Override
     public double density(double x) {
-        if (x < getSupportLowerBound() || x > getSupportUpperBound()) {
+        if (x < this.getSupportLowerBound() || x > this.getSupportUpperBound()) {
             return 0.0;
         }
 
@@ -44,11 +44,11 @@ public class InverseUniformDistribution extends AbstractContinuousDistribution {
 
     @Override
     public double cumulativeProbability(double x) {
-        if (x < getSupportLowerBound()) {
-            return 0;
+        if (x < this.getSupportLowerBound()) {
+            return 0.0D;
         }
-        if (x > getSupportUpperBound()) {
-            return 1;
+        if (x > this.getSupportUpperBound()) {
+            return 1.0D;
         }
 
         return Mth.clamp((preUb - (fac / x)) / preSupport, 0.0D, 1.0D);
