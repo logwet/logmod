@@ -54,7 +54,7 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
 
             for (int k = 0; k <= PBD.getNumTrials(); k++) {
                 numText.append(k);
-                probText.append(roundToString(PBD.getProbability(k) * 100D));
+                probText.append(roundToString(PBD.probability(k) * 100D));
 
                 if (k < PBD.getNumTrials()) {
                     numText.append("      ");
@@ -67,7 +67,7 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                         new TextComponent("Avg #: ")
                                 .withStyle(ChatFormatting.GREEN)
                                 .append(
-                                        new TextComponent(roundToString(PBD.getMean()))
+                                        new TextComponent(roundToString(PBD.getNumericalMean()))
                                                 .withStyle(ChatFormatting.AQUA))
                                 .append(
                                         spawnerInfo.getRodStatistics().isEnabled()
@@ -78,7 +78,7 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                                                                                 roundToString(
                                                                                                 spawnerInfo
                                                                                                                 .getRodStatistics()
-                                                                                                                .getChanceOfSixRodsInMin()
+                                                                                                                .getChanceOfTargetRodsInTargetTime()
                                                                                                         * 100.0D)
                                                                                         + "%")
                                                                         .withStyle(
