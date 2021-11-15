@@ -108,7 +108,13 @@ public class SpawnerCommand implements ServerCommand {
         return literal("spawner")
                 .executes(SpawnerCommand::analyse)
                 .then(literal("analyse").executes(SpawnerCommand::analyse))
-                .then(literal("toggleSpawners").executes(SpawnerCommand::toggleSpawning))
-                .then(literal("toggleAnalysis").executes(SpawnerCommand::toggleAnalysis));
+                .then(
+                        literal("toggleSpawners")
+                                .requires(source -> source.hasPermission(1))
+                                .executes(SpawnerCommand::toggleSpawning))
+                .then(
+                        literal("toggleAnalysis")
+                                .requires(source -> source.hasPermission(1))
+                                .executes(SpawnerCommand::toggleAnalysis));
     }
 }
