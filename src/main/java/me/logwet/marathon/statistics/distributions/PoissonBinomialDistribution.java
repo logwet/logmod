@@ -10,18 +10,24 @@ import org.apache.commons.math3.complex.Complex;
 public class PoissonBinomialDistribution extends AbstractDiscreteDistribution {
     protected final double[] successProbabilities;
 
-    public PoissonBinomialDistribution(int n, double[] sp) {
-        super(0, n, buildProbabilities(n, sp));
+    public PoissonBinomialDistribution(int s, int n, double[] sp) {
+        super(s, n, buildProbabilities(s, n, sp));
 
         assert sp.length == n;
         successProbabilities = sp;
     }
 
+    public PoissonBinomialDistribution(int n, double[] sp) {
+        this(0, n, sp);
+    }
+
     /** Discrete Fourier Transform based algorithm. */
-    protected static double[] buildProbabilities(int n, double[] sp) {
+    protected static double[] buildProbabilities(int s, int numTrials, double[] sp) {
+        int n = numTrials + s;
+
         final Complex C = Complex.I.multiply(2 * Math.PI).divide(n + 1).exp();
 
-        double[] rArray = new double[n + 1];
+        double[] rArray = new double[numTrials + 1];
         Complex[] productCache = new Complex[n + 1];
 
         Complex r;
@@ -36,14 +42,14 @@ public class PoissonBinomialDistribution extends AbstractDiscreteDistribution {
             productCache[l] = r;
         }
 
-        for (int k = 0; k <= n; k++) {
+        for (int k = s; k <= n; k++) {
             r = Complex.ZERO;
 
             for (int l = 0; l <= n; l++) {
                 r = r.add(productCache[l].multiply(C.pow(-l * k)));
             }
 
-            rArray[k] = r.divide(n + 1).getReal();
+            rArray[k - s] = r.divide(n + 1).getReal();
         }
 
         return rArray;
