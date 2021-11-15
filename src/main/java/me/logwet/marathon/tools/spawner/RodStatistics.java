@@ -65,22 +65,13 @@ public class RodStatistics {
             IrwinHallDistribution summedCycleDistribution =
                     new IrwinHallDistribution(n, lbCycleTime, ubCycleTime);
 
-            // For n number of cycles, the following is the probability that they occur within the
-            // target time.
             cycleNumProbs[n - minCyclesToAnalyse] =
-                    summedCycleDistribution.cumulativeProbability(targetTime);
+                    summedCycleDistribution.cumulativeProbability(targetTime)
+                            * cycleProportionDistribution.probability(n);
         }
 
-        PoissonBinomialDistribution cycleNumDistribution =
-                new PoissonBinomialDistribution(
-                        minCyclesToAnalyse, numCyclesToAnalyse, cycleNumProbs);
-
-        ElementwiseProductDistribution<
-                        PoissonBinomialDistribution,
-                        ConvertedDiscreteDistribution<InverseUniformDistribution>>
-                adjustedCycleNumDistribution =
-                        DiscreteDistribution.elementwiseProductOf(
-                                cycleNumDistribution, cycleProportionDistribution);
+        DiscreteDistribution adjustedCycleNumDistribution =
+                new DiscreteDistribution(minCyclesToAnalyse, numCyclesToAnalyse, cycleNumProbs);
 
         ProductOfTwoDiscreteDistributions targetRodsDistribution =
                 new ProductOfTwoDiscreteDistributions(
