@@ -98,11 +98,13 @@ public class TrapezoidalDistribution extends AbstractPiecewiseDistribution {
         return D;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportUpperBoundInclusive() {
         return true;

@@ -93,11 +93,13 @@ public class InverseUniformDistribution extends AbstractContinuousDistribution {
         return ub;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportUpperBoundInclusive() {
         return true;

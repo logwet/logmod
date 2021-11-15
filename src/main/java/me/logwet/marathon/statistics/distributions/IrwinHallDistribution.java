@@ -499,11 +499,13 @@ public class IrwinHallDistribution extends AbstractPiecewiseDistribution {
         return ub;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportLowerBoundInclusive() {
         return true;
     }
 
+    @Deprecated
     @Override
     public boolean isSupportUpperBoundInclusive() {
         return true;
