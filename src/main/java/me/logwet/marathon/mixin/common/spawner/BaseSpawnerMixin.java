@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static me.logwet.marathon.Marathon.roundToString;
+import static org.apache.logging.log4j.Level.ERROR;
 import static org.apache.logging.log4j.Level.INFO;
 
 @Mixin(BaseSpawner.class)
@@ -377,7 +378,13 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
             cancellable = true)
     private void onSpawnAttemptStart(CallbackInfo ci) {
         if (MarathonData.isSpawnerAnalysisEnabled() && !this.finished) {
-            analyse();
+            try {
+                analyse();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Marathon.log(ERROR, "Unable to analyse spawner!");
+            }
+
             this.finished = true;
         }
 
