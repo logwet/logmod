@@ -1,6 +1,7 @@
 package me.logwet.marathon.tools.spawner;
 
 import me.logwet.marathon.Marathon;
+import me.logwet.marathon.MarathonData;
 import me.logwet.marathon.statistics.distributions.*;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.apache.logging.log4j.Level;
@@ -27,9 +28,9 @@ public class RodStatistics {
         this.enabled = true;
         this.PBD = PBD;
 
-        final int targetRods = 6;
-        final double targetTime = 60.0D;
-        final int lootingLevel = 0;
+        final int targetRods = MarathonData.getTargetRods();
+        final double targetTime = MarathonData.getTargetTime();
+        final int lootingLevel = MarathonData.getLootingLevel();
 
         ConvertedDiscreteDistribution<TrapezoidalDistribution> rodDistribution;
 
