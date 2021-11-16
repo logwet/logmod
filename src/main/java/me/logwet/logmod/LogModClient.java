@@ -6,6 +6,7 @@ import me.logwet.logmod.commands.client.RenderSpawnerCommand;
 import me.logwet.logmod.tools.overlay.OverlayRenderer;
 import me.logwet.logmod.tools.overlay.hud.AttributeRenderer;
 import me.logwet.logmod.tools.overlay.hud.SpeedRenderer;
+import me.logwet.logmod.tools.overlay.trajectories.TrajectoryRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,6 +19,7 @@ public class LogModClient implements ClientModInitializer {
     public void onInitializeClient() {
         OverlayRenderer.registerRenderer(new SpeedRenderer());
         OverlayRenderer.registerRenderer(new AttributeRenderer());
+        OverlayRenderer.registerRenderer(new TrajectoryRenderer());
 
         RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         RootCommand.registerClientCommand(HudCommand.INSTANCE);

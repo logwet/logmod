@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
 import me.logwet.logmod.tools.overlay.hud.PlayerAttribute;
+import me.logwet.logmod.tools.overlay.trajectories.Trajectory;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,6 +21,8 @@ public class LogModData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final Cache<UUID, Trajectory> trajectoryCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
 
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
@@ -88,6 +91,29 @@ public class LogModData {
         getSpawnerInfoCache().cleanUp();
     }
 
+    private static Cache<UUID, Trajectory> getTrajectoryCache() {
+        return trajectoryCache;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    public static Trajectory getTrajectory(UUID uuid) {
+        return getTrajectoryCache().getIfPresent(uuid);
+    }
+
+    public static void addTrajectory(UUID uuid, Trajectory trajectory) {
+        getTrajectoryCache().put(uuid, trajectory);
+    }
+
+    public static void removeTrajectory(UUID uuid) {
+        getTrajectoryCache().invalidate(uuid);
+    }
+
+    private static void resetTrajectories() {
+        getTrajectoryCache().invalidateAll();
+        getTrajectoryCache().cleanUp();
+    }
+
     public static boolean toggleSpawnersEnabled() {
         return !spawnersEnabled.getAndSet(!spawnersEnabled.get());
     }
@@ -147,8 +173,11 @@ public class LogModData {
 
     public static void onServerInit(MinecraftServer ms) {
         setMS(ms);
+
         resetPlayerAttributes();
         resetSpawnerInfo();
+        resetTrajectories();
+
         LogMod.log(Level.INFO, "Server object initialized!");
     }
 }
