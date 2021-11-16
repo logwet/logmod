@@ -22,13 +22,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "me.logwet.marathon.Marathon"
+      "me.logwet.logmod.Marathon"
     ],
     "client": [
-      "me.logwet.marathon.MarathonClient"
+      "me.logwet.logmod.MarathonClient"
     ],
     "server": [
-      "me.logwet.marathon.MarathonServer"
+      "me.logwet.logmod.MarathonServer"
     ]
   },
   "mixins": [
