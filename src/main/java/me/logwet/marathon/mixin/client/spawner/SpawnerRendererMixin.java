@@ -71,7 +71,16 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                                                 .withStyle(ChatFormatting.AQUA))
                                 .append(
                                         spawnerInfo.getRodStatistics().isEnabled()
-                                                ? new TextComponent(" % 6 rods in min: ")
+                                                ? new TextComponent(
+                                                                " % "
+                                                                        + MarathonData
+                                                                                .getTargetRods()
+                                                                        + " rods in "
+                                                                        + Marathon.roundToString(
+                                                                                MarathonData
+                                                                                        .getTargetTime(),
+                                                                                0)
+                                                                        + "s: ")
                                                         .withStyle(ChatFormatting.GREEN)
                                                         .append(
                                                                 new TextComponent(

@@ -26,6 +26,7 @@ public class RodStatistics {
             double lbCycleTime,
             double ubCycleTime) {
         Marathon.log(Level.INFO, "Calculating rod statistics...");
+        long startTime = System.currentTimeMillis();
 
         this.enabled = true;
 
@@ -92,7 +93,8 @@ public class RodStatistics {
         this.chanceOfTargetRodsInTargetTime =
                 1.0D - targetRodsDistribution.cumulativeProbability(targetRods - 1);
 
-        Marathon.log(Level.INFO, "Rod statistics calculated.");
+        long endTime = System.currentTimeMillis();
+        Marathon.log(Level.INFO, "Rod statistics calculated in " + (endTime - startTime) + "ms");
     }
 
     public boolean isEnabled() {
