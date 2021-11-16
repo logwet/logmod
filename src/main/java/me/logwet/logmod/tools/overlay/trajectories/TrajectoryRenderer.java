@@ -1,32 +1,41 @@
 package me.logwet.logmod.tools.overlay.trajectories;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.logwet.logmod.LogModData;
-import me.logwet.logmod.tools.overlay.RenderOverlay;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.phys.Vec3;
 
-public class TrajectoryRenderer implements RenderOverlay {
-    private long infoUpdateTime;
+public class TrajectoryRenderer {
 
-    @Override
-    public void update(Minecraft MC) {
-        assert MC.player != null;
+    public static void renderTrajectory(
+            PoseStack poseStack,
+            MultiBufferSource.BufferSource bufferSource,
+            double x,
+            double y,
+            double z,
+            Trajectory trajectory) {
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.lines());
+        Matrix4f matrix4f = poseStack.last().pose();
 
-        Trajectory trajectory;
-        if ((trajectory = LogModData.getTrajectory(MC.player.getUUID())) != null) {
-            System.out.println(trajectory.getTrajectory());
-        }
-    }
+        for (int i = 5; i < trajectory.getTrajectory().size(); i++) {
+            Vec3 prevPos = trajectory.getTrajectory().get(i - 1);
+            Vec3 pos = trajectory.getTrajectory().get(i);
 
-    @Override
-    public void onPostRenderGameOverlay(Minecraft MC, PoseStack poseStack, float partialTicks) {
-        if (MC.player != null && !MC.options.hideGui) {
-            long currentTime = System.currentTimeMillis();
+            vertexConsumer
+                    .vertex(
+                            matrix4f,
+                            (float) (prevPos.x - x),
+                            (float) (prevPos.y - y),
+                            (float) (prevPos.z - z))
+                    .color(0.0F, 1.0F, 1.0F, 1.0F)
+                    .endVertex();
 
-            if (currentTime - this.infoUpdateTime >= 50) {
-                this.update(MC);
-                this.infoUpdateTime = currentTime;
-            }
+            vertexConsumer
+                    .vertex(matrix4f, (float) (pos.x - x), (float) (pos.y - y), (float) (pos.z - z))
+                    .color(0.0F, 1.0F, 1.0F, 1.0F)
+                    .endVertex();
         }
     }
 }

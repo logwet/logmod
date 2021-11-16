@@ -13,7 +13,8 @@
     "client.DebugScreenOverlayMixin",
     "client.IntegratedServerMixin",
     "client.hud.GuiMixin",
-    "client.spawner.SpawnerRendererMixin"
+    "client.spawner.SpawnerRendererMixin",
+    "client.trajectories.DebugRendererMixin"
   ],
   "server": [
     "server.DedicatedServerMixin"
