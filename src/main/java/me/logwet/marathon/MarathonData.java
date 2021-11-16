@@ -23,6 +23,8 @@ public class MarathonData {
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean spawnerAnalysisEnabled = new AtomicBoolean(true);
+
+    private static final AtomicBoolean renderSpawnerEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
 
     private static final AtomicInteger targetRods = new AtomicInteger(6);
@@ -99,6 +101,14 @@ public class MarathonData {
 
     public static boolean isSpawnerAnalysisEnabled() {
         return spawnerAnalysisEnabled.get();
+    }
+
+    public static boolean toggleRenderSpawnersEnabled() {
+        return !renderSpawnerEnabled.getAndSet(!renderSpawnerEnabled.get());
+    }
+
+    public static boolean isRenderSpawnersEnabled() {
+        return renderSpawnerEnabled.get();
     }
 
     public static boolean toggleHudEnabled() {

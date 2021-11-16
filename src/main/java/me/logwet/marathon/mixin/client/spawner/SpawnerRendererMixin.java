@@ -44,7 +44,8 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
             int j,
             CallbackInfo ci) {
         SpawnerInfo spawnerInfo;
-        if (Marathon.shouldRender()
+        if (MarathonData.isRenderSpawnersEnabled()
+                && Marathon.shouldRender()
                 && (spawnerInfo = MarathonData.getSpawnerInfo(spawnerBlockEntity.getBlockPos()))
                         != null) {
             PoissonBinomialDistribution PBD = spawnerInfo.getPBD();
