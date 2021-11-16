@@ -32,6 +32,16 @@ If you enable entity hitboxes (F3 + B) you will see a full point cloud. Green re
 spawning a blaze, blue the lowest. (Note that at the darkest blue at the edge of the point cloud is functionally
 identical to red in terms of spawn chance (ie. none), but is coloured differently nonetheless.)
 
+### HUD
+
+Renders the player's current absolute speed and speed on each axis in the top left corner. Also renders the player's
+exact health, hunger and saturation in the top right. Toggled with `/hud`
+
+### Pearl/Potion Trajectories
+
+Calculates and renders the trajectory of thrown projectiles and the block they will eventually hit. Calculates up to 60
+seconds in the future.
+
 ## Setup
 
 Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not require `Fabric API`. This mod is

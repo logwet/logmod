@@ -1,6 +1,7 @@
 package me.logwet.logmod.mixin.client.trajectories;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.BoxRenderer;
 import me.logwet.logmod.tools.overlay.trajectories.Trajectory;
@@ -36,7 +37,7 @@ public abstract class DebugRendererMixin {
 
         Trajectory trajectory;
 
-        if ((trajectory = LogModData.getTrajectory(uuid)) != null) {
+        if (LogMod.shouldRender() && (trajectory = LogModData.getTrajectory(uuid)) != null) {
             TrajectoryRenderer.renderTrajectory(poseStack, bufferSource, x, y, z, trajectory);
 
             BlockHitResult blockHitResult = trajectory.getBlockHitResult();
@@ -48,7 +49,10 @@ public abstract class DebugRendererMixin {
                         poseStack,
                         bufferSource,
                         AABB.unitCubeFromLowerCorner(
-                                new Vec3(blockPos.getX()-x, blockPos.getY()-y, blockPos.getZ()-z)),
+                                new Vec3(
+                                        blockPos.getX() - x,
+                                        blockPos.getY() - y,
+                                        blockPos.getZ() - z)),
                         1.0F,
                         0.0F,
                         1.0F);
