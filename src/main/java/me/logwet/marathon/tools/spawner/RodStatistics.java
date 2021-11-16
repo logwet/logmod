@@ -44,8 +44,11 @@ public class RodStatistics {
                             new TrapezoidalDistribution(0, 1, lootingLevel, lootingLevel + 1));
         }
 
-        ProductOfTwoDiscreteDistributions rodsPerCycleDistribution =
-                new ProductOfTwoDiscreteDistributions(blazeNumDistribution, rodDistribution);
+        ProductOfDiscreteDistributions<
+                        PoissonBinomialDistribution,
+                        ConvertedDiscreteDistribution<TrapezoidalDistribution>>
+                rodsPerCycleDistribution =
+                        DiscreteDistribution.productOf(blazeNumDistribution, rodDistribution);
 
         UniformRealDistribution cycleTimeDistribution =
                 new UniformRealDistribution(lbCycleTime, ubCycleTime);
@@ -53,7 +56,7 @@ public class RodStatistics {
         int minCyclesToAnalyse = Mth.floor(targetTime / ubCycleTime);
         int maxCyclesToAnalyse = Mth.floor(targetTime / lbCycleTime);
         int numCyclesToAnalyse = maxCyclesToAnalyse - minCyclesToAnalyse;
-        double[] cycleNumProbs = new double[numCyclesToAnalyse + 1];
+        double[] cycleNumSuccessProbs = new double[numCyclesToAnalyse + 1];
 
         ConvertedDiscreteDistribution<InverseUniformDistribution> cycleProportionDistribution =
                 DiscreteDistribution.from(
@@ -66,17 +69,27 @@ public class RodStatistics {
             IrwinHallDistribution summedCycleDistribution =
                     new IrwinHallDistribution(n, lbCycleTime, ubCycleTime);
 
-            cycleNumProbs[n - minCyclesToAnalyse] =
-                    summedCycleDistribution.cumulativeProbability(targetTime)
-                            * cycleProportionDistribution.probability(n);
+            cycleNumSuccessProbs[n - minCyclesToAnalyse] =
+                    summedCycleDistribution.cumulativeProbability(targetTime);
+            //                    * cycleProportionDistribution.probability(n);
         }
 
-        DiscreteDistribution adjustedCycleNumDistribution =
-                new DiscreteDistribution(minCyclesToAnalyse, numCyclesToAnalyse, cycleNumProbs);
+        //        DiscreteDistribution adjustedCycleNumDistribution =
+        //                new DiscreteDistribution(
+        //                        minCyclesToAnalyse, numCyclesToAnalyse, cycleNumSuccessProbs);
 
-        ProductOfTwoDiscreteDistributions targetRodsDistribution =
-                new ProductOfTwoDiscreteDistributions(
-                        rodsPerCycleDistribution, adjustedCycleNumDistribution);
+        PoissonBinomialDistribution adjustedCycleNumDistribution =
+                new PoissonBinomialDistribution(
+                        minCyclesToAnalyse, numCyclesToAnalyse, cycleNumSuccessProbs);
+
+        ProductOfDiscreteDistributions<
+                        ProductOfDiscreteDistributions<
+                                PoissonBinomialDistribution,
+                                ConvertedDiscreteDistribution<TrapezoidalDistribution>>,
+                        PoissonBinomialDistribution>
+                targetRodsDistribution =
+                        DiscreteDistribution.productOf(
+                                rodsPerCycleDistribution, adjustedCycleNumDistribution);
 
         this.avgBlazesPerCycle = blazeNumDistribution.getNumericalMean();
 
