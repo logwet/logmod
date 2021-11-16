@@ -13,7 +13,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DebugScreenOverlay.class)
-public abstract class DebugHudMixin {
+public abstract class DebugScreenOverlayMixin {
     /**
      * @author DuncanRuns
      * @reason Puts mod notice in F3 menu

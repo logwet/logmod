@@ -10,7 +10,7 @@
     "common.trajectories.ServerPlayerMixin"
   ],
   "client": [
-    "client.DebugHudMixin",
+    "client.DebugScreenOverlayMixin",
     "client.IntegratedServerMixin",
     "client.hud.GuiMixin",
     "client.spawner.SpawnerRendererMixin"
