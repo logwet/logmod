@@ -1,9 +1,10 @@
-package me.logwet.logmod.tools.hud;
+package me.logwet.logmod.tools.overlay.hud;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import fi.dy.masa.malilib.config.HudAlignment;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import me.logwet.logmod.tools.overlay.RenderOverlay;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public abstract class AbstractTextRenderer implements IRenderOverlay {
+public abstract class AbstractTextRenderer implements RenderOverlay {
     private final HudAlignment hudAlignment;
     protected List<String> lines = new ArrayList<>();
     private long infoUpdateTime;

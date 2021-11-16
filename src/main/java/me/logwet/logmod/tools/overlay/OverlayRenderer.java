@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.hud;
+package me.logwet.logmod.tools.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.logwet.logmod.LogMod;
@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class HudRenderer {
-    private static final List<IRenderOverlay> renderOverlays = new ArrayList<>();
+public class OverlayRenderer {
+    private static final List<RenderOverlay> renderOverlays = new ArrayList<>();
 
-    public static void registerRenderer(IRenderOverlay overlay) {
+    public static void registerRenderer(RenderOverlay overlay) {
         renderOverlays.add(overlay);
     }
 
@@ -23,7 +23,7 @@ public class HudRenderer {
         MC.getProfiler().push(LogMod.MODID + "_renderhud");
 
         if (LogModData.isHudEnabled()) {
-            for (IRenderOverlay overlay : renderOverlays) {
+            for (RenderOverlay overlay : renderOverlays) {
                 MC.getProfiler().push(overlay.getProfilerSectionSupplier());
 
                 overlay.onPostRenderGameOverlay(MC, poseStack, partialTicks);

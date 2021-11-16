@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.hud;
+package me.logwet.logmod.tools.overlay.hud;
 
 public class PlayerAttribute {
     private final float health;

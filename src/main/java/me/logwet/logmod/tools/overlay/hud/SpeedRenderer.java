@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.hud;
+package me.logwet.logmod.tools.overlay.hud;
 
 import fi.dy.masa.malilib.config.HudAlignment;
 import net.fabricmc.api.EnvType;

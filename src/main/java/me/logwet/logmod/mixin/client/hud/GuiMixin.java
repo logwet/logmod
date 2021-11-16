@@ -1,7 +1,7 @@
 package me.logwet.logmod.mixin.client.hud;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.logwet.logmod.tools.hud.HudRenderer;
+import me.logwet.logmod.tools.overlay.OverlayRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -20,6 +20,6 @@ public abstract class GuiMixin {
 
     @Inject(method = "render", at = @At("RETURN"))
     private void onPostRenderGameOverlay(PoseStack poseStack, float f, CallbackInfo ci) {
-        HudRenderer.onPostRenderGameOverlay(this.minecraft, poseStack, f);
+        OverlayRenderer.onPostRenderGameOverlay(this.minecraft, poseStack, f);
     }
 }

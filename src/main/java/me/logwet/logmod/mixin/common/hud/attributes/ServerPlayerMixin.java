@@ -3,7 +3,7 @@ package me.logwet.logmod.mixin.common.hud.attributes;
 import com.mojang.authlib.GameProfile;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
-import me.logwet.logmod.tools.hud.PlayerAttribute;
+import me.logwet.logmod.tools.overlay.hud.PlayerAttribute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

@@ -3,7 +3,7 @@ package me.logwet.logmod;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
-import me.logwet.logmod.tools.hud.PlayerAttribute;
+import me.logwet.logmod.tools.overlay.hud.PlayerAttribute;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,6 +21,7 @@ public class LogModData {
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean spawnerAnalysisEnabled = new AtomicBoolean(true);
 
