@@ -1,9 +1,13 @@
-package me.logwet.marathon.statistics.util;
+package me.logwet.marathon.statistics.distributions;
 
-public class AbstractProductOfDiscreteDistributions<
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
+import me.logwet.marathon.statistics.util.AbstractDiscreteDistributionPair;
+import me.logwet.marathon.statistics.util.DiscreteDistributionPairBuilder;
+
+public class ProductOfDiscreteDistributions<
                 D1 extends AbstractDiscreteDistribution, D2 extends AbstractDiscreteDistribution>
         extends AbstractDiscreteDistributionPair<D1, D2> {
-    public AbstractProductOfDiscreteDistributions(D1 d1, D2 d2) {
+    public ProductOfDiscreteDistributions(D1 d1, D2 d2) {
         super(d1, d2, Builder.INSTANCE);
     }
 

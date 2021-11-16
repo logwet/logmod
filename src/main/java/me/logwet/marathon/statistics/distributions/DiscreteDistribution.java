@@ -2,7 +2,6 @@ package me.logwet.marathon.statistics.distributions;
 
 import me.logwet.marathon.statistics.util.AbstractContinuousDistribution;
 import me.logwet.marathon.statistics.util.AbstractDiscreteDistribution;
-import me.logwet.marathon.statistics.util.AbstractProductOfDiscreteDistributions;
 
 public class DiscreteDistribution extends AbstractDiscreteDistribution {
     public DiscreteDistribution(int s, int n, double[] p) {
@@ -15,8 +14,8 @@ public class DiscreteDistribution extends AbstractDiscreteDistribution {
     }
 
     public static <D1 extends AbstractDiscreteDistribution, D2 extends AbstractDiscreteDistribution>
-            AbstractProductOfDiscreteDistributions<D1, D2> productOf(D1 d1, D2 d2) {
-        return new AbstractProductOfDiscreteDistributions<>(d1, d2);
+            ProductOfDiscreteDistributions<D1, D2> productOf(D1 d1, D2 d2) {
+        return new ProductOfDiscreteDistributions<>(d1, d2);
     }
 
     public static <D1 extends AbstractDiscreteDistribution, D2 extends AbstractDiscreteDistribution>
