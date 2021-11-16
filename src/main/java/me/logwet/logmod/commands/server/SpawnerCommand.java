@@ -3,7 +3,7 @@ package me.logwet.logmod.commands.server;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.spawner.BaseSpawnerAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -69,7 +69,7 @@ public class SpawnerCommand implements ServerCommand {
     }
 
     private static int toggleSpawning(CommandContext<CommandSourceStack> context) {
-        boolean status = MarathonData.toggleSpawnersEnabled();
+        boolean status = LogModData.toggleSpawnersEnabled();
 
         context.getSource()
                 .sendSuccess(
@@ -87,7 +87,7 @@ public class SpawnerCommand implements ServerCommand {
     }
 
     private static int toggleAnalysis(CommandContext<CommandSourceStack> context) {
-        boolean status = MarathonData.toggleSpawnerAnalysis();
+        boolean status = LogModData.toggleSpawnerAnalysis();
 
         context.getSource()
                 .sendSuccess(

@@ -1,7 +1,7 @@
 package me.logwet.logmod.tools.spawner;
 
-import me.logwet.logmod.Marathon;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import me.logwet.logmod.statistics.distributions.*;
 import net.minecraft.util.Mth;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
@@ -25,14 +25,14 @@ public class RodStatistics {
             PoissonBinomialDistribution blazeNumDistribution,
             double lbCycleTime,
             double ubCycleTime) {
-        Marathon.log(Level.INFO, "Calculating rod statistics...");
+        LogMod.log(Level.INFO, "Calculating rod statistics...");
         long startTime = System.currentTimeMillis();
 
         this.enabled = true;
 
-        final int targetRods = MarathonData.getTargetRods();
-        final double targetTime = MarathonData.getTargetTime();
-        final int lootingLevel = MarathonData.getLootingLevel();
+        final int targetRods = LogModData.getTargetRods();
+        final double targetTime = LogModData.getTargetTime();
+        final int lootingLevel = LogModData.getLootingLevel();
 
         ConvertedDiscreteDistribution<TrapezoidalDistribution> rodDistribution;
 
@@ -107,7 +107,7 @@ public class RodStatistics {
                 1.0D - targetRodsDistribution.cumulativeProbability(targetRods - 1);
 
         long endTime = System.currentTimeMillis();
-        Marathon.log(Level.INFO, "Rod statistics calculated in " + (endTime - startTime) + "ms");
+        LogMod.log(Level.INFO, "Rod statistics calculated in " + (endTime - startTime) + "ms");
     }
 
     public boolean isEnabled() {

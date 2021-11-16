@@ -1,7 +1,8 @@
 package me.logwet.logmod.tools.hud;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -19,9 +20,9 @@ public class HudRenderer {
 
     public static void onPostRenderGameOverlay(
             Minecraft MC, PoseStack poseStack, float partialTicks) {
-        MC.getProfiler().push("marathon_renderhud");
+        MC.getProfiler().push(LogMod.MODID + "_renderhud");
 
-        if (MarathonData.isHudEnabled()) {
+        if (LogModData.isHudEnabled()) {
             for (IRenderOverlay overlay : renderOverlays) {
                 MC.getProfiler().push(overlay.getProfilerSectionSupplier());
 

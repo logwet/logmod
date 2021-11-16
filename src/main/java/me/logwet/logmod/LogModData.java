@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MarathonData {
+public class LogModData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
@@ -38,7 +38,7 @@ public class MarathonData {
     }
 
     private static void setMS(MinecraftServer MS) {
-        MarathonData.MS = MS;
+        LogModData.MS = MS;
     }
 
     private static Cache<UUID, PlayerAttribute> getPlayerAttributeCache() {
@@ -148,6 +148,6 @@ public class MarathonData {
         setMS(ms);
         resetPlayerAttributes();
         resetSpawnerInfo();
-        Marathon.log(Level.INFO, "Server object initialized!");
+        LogMod.log(Level.INFO, "Server object initialized!");
     }
 }

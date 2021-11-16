@@ -1,7 +1,7 @@
 package me.logwet.logmod.mixin.common.spawner;
 
-import me.logwet.logmod.Marathon;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import me.logwet.logmod.statistics.distributions.PoissonBinomialDistribution;
 import me.logwet.logmod.tools.spawner.BaseSpawnerAccessor;
 import me.logwet.logmod.tools.spawner.RodStatistics;
@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static me.logwet.logmod.Marathon.roundToString;
+import static me.logwet.logmod.LogMod.roundToString;
 import static org.apache.logging.log4j.Level.ERROR;
 import static org.apache.logging.log4j.Level.INFO;
 
@@ -298,7 +298,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         String messageString = createMessageString(entityType, blockPos, messageSuffix.toString());
 
-        Marathon.log(INFO, messageString);
+        LogMod.log(INFO, messageString);
 
         Player player =
                 this.getLevel()
@@ -327,7 +327,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                                 (double) this.maxSpawnDelay / 20.0D)
                         : new RodStatistics();
 
-        MarathonData.addSpawnerInfo(
+        LogModData.addSpawnerInfo(
                 blockPos,
                 new SpawnerInfo(
                         blockPos,
@@ -343,7 +343,7 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
 
         level.getProfiler().pop();
 
-        Marathon.log(
+        LogMod.log(
                 INFO,
                 "Success Probabilities: "
                         + Arrays.toString(successProbabilities)
@@ -380,18 +380,18 @@ public abstract class BaseSpawnerMixin implements BaseSpawnerAccessor {
                             shift = At.Shift.AFTER),
             cancellable = true)
     private void onSpawnAttemptStart(CallbackInfo ci) {
-        if (MarathonData.isSpawnerAnalysisEnabled() && !this.finished) {
+        if (LogModData.isSpawnerAnalysisEnabled() && !this.finished) {
             try {
                 analyse();
             } catch (Exception e) {
                 e.printStackTrace();
-                Marathon.log(ERROR, "Unable to analyse spawner!");
+                LogMod.log(ERROR, "Unable to analyse spawner!");
             }
 
             this.finished = true;
         }
 
-        if (!MarathonData.isSpawnersEnabled()) {
+        if (!LogModData.isSpawnersEnabled()) {
             this.delay();
             ci.cancel();
         }

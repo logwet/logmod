@@ -1,6 +1,6 @@
 package me.logwet.logmod;
 
-import me.logwet.logmod.commands.MarathonCommand;
+import me.logwet.logmod.commands.RootCommand;
 import me.logwet.logmod.commands.server.RodsCommand;
 import me.logwet.logmod.commands.server.SpawnerCommand;
 import net.fabricmc.api.EnvType;
@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Marathon implements ModInitializer {
+public class LogMod implements ModInitializer {
     public static final String MODID = "logmod";
     public static final String VERSION =
             FabricLoader.getInstance()
@@ -58,9 +58,9 @@ public class Marathon implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        MarathonCommand.registerServerCommand(SpawnerCommand.INSTANCE);
-        MarathonCommand.registerServerCommand(RodsCommand.INSTANCE);
-        CommandRegistrationCallback.EVENT.register(MarathonCommand::registerServer);
+        RootCommand.registerServerCommand(SpawnerCommand.INSTANCE);
+        RootCommand.registerServerCommand(RodsCommand.INSTANCE);
+        CommandRegistrationCallback.EVENT.register(RootCommand::registerServer);
 
         log(Level.INFO, "Main class initialized!");
     }

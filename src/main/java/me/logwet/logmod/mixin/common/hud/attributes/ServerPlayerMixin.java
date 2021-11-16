@@ -1,8 +1,8 @@
 package me.logwet.logmod.mixin.common.hud.attributes;
 
 import com.mojang.authlib.GameProfile;
-import me.logwet.logmod.Marathon;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.hud.PlayerAttribute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,8 +28,8 @@ public abstract class ServerPlayerMixin extends Player {
                                     "Lnet/minecraft/network/protocol/game/ClientboundSetHealthPacket;<init>(FIF)V",
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
-        if (Marathon.IS_CLIENT) {
-            MarathonData.addPlayerAttribute(
+        if (LogMod.IS_CLIENT) {
+            LogModData.addPlayerAttribute(
                     this.getUUID(),
                     new PlayerAttribute(
                             this.getHealth(),

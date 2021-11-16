@@ -1,8 +1,8 @@
 package me.logwet.logmod.mixin.client.spawner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import me.logwet.logmod.Marathon;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import me.logwet.logmod.statistics.distributions.PoissonBinomialDistribution;
 import me.logwet.logmod.tools.BoxRenderer;
 import me.logwet.logmod.tools.spawner.HoloTextRenderer;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static me.logwet.logmod.Marathon.roundToString;
+import static me.logwet.logmod.LogMod.roundToString;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SpawnerRenderer.class)
@@ -44,9 +44,9 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
             int j,
             CallbackInfo ci) {
         SpawnerInfo spawnerInfo;
-        if (MarathonData.isRenderSpawnersEnabled()
-                && Marathon.shouldRender()
-                && (spawnerInfo = MarathonData.getSpawnerInfo(spawnerBlockEntity.getBlockPos()))
+        if (LogModData.isRenderSpawnersEnabled()
+                && LogMod.shouldRender()
+                && (spawnerInfo = LogModData.getSpawnerInfo(spawnerBlockEntity.getBlockPos()))
                         != null) {
             PoissonBinomialDistribution PBD = spawnerInfo.getPBD();
 
@@ -74,11 +74,10 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
                                         spawnerInfo.getRodStatistics().isEnabled()
                                                 ? new TextComponent(
                                                                 " % "
-                                                                        + MarathonData
-                                                                                .getTargetRods()
+                                                                        + LogModData.getTargetRods()
                                                                         + " rods in "
-                                                                        + Marathon.roundToString(
-                                                                                MarathonData
+                                                                        + LogMod.roundToString(
+                                                                                LogModData
                                                                                         .getTargetTime(),
                                                                                 0)
                                                                         + "s: ")
@@ -145,7 +144,7 @@ public abstract class SpawnerRendererMixin extends BlockEntityRenderer<SpawnerBl
             BoxRenderer.renderBox(
                     poseStack, multiBufferSource, blockBoundingBox, 1.0F, 0.65F, 0.0F);
 
-            if (Marathon.shouldRenderOptional()) {
+            if (LogMod.shouldRenderOptional()) {
                 BoxRenderer.renderBox(
                         poseStack,
                         multiBufferSource,

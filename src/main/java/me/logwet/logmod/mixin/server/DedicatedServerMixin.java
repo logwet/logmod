@@ -1,6 +1,6 @@
 package me.logwet.logmod.mixin.server;
 
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogModData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DedicatedServerMixin {
     @Inject(method = "initServer", at = @At("HEAD"))
     private void onInitServer(CallbackInfoReturnable<Boolean> cir) {
-        MarathonData.onServerInit((MinecraftServer) (Object) this);
+        LogModData.onServerInit((MinecraftServer) (Object) this);
     }
 }

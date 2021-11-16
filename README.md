@@ -1,6 +1,6 @@
 # LogMod
 
-[![Build and Release Artifacts](https://github.com/logwet/logmod/actions/workflows/build.yml/badge.svg)](https://github.com/logwet/marathon/actions/workflows/build.yml)
+[![Build and Release Artifacts](https://github.com/logwet/logmod/actions/workflows/build.yml/badge.svg)](https://github.com/logwet/logmod/actions/workflows/build.yml)
 
 Misc utilities mod for 1.16 speedrunners. (I didn't choose the name k4 did Okayge)
 

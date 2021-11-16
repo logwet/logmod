@@ -3,8 +3,8 @@ package me.logwet.logmod.commands.server;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import me.logwet.logmod.Marathon;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogMod;
+import me.logwet.logmod.LogModData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.TimeArgument;
@@ -19,7 +19,7 @@ public class RodsCommand implements ServerCommand {
     protected static final String root = "rods";
 
     private static int getTargetRods(CommandContext<CommandSourceStack> context) {
-        int value = MarathonData.getTargetRods();
+        int value = LogModData.getTargetRods();
 
         context.getSource().sendSuccess(buildGetMessage("targetRods", value, "", 0), true);
 
@@ -29,7 +29,7 @@ public class RodsCommand implements ServerCommand {
     private static int setTargetRods(CommandContext<CommandSourceStack> context) {
         int value = IntegerArgumentType.getInteger(context, "num");
 
-        MarathonData.setTargetRods(value);
+        LogModData.setTargetRods(value);
 
         context.getSource().sendSuccess(buildSetMessage("targetRods", value, "", 0), true);
 
@@ -37,7 +37,7 @@ public class RodsCommand implements ServerCommand {
     }
 
     private static int getTargetTime(CommandContext<CommandSourceStack> context) {
-        double value = MarathonData.getTargetTime();
+        double value = LogModData.getTargetTime();
 
         context.getSource().sendSuccess(buildGetMessage("targetTime", value, "s", 2), true);
 
@@ -48,7 +48,7 @@ public class RodsCommand implements ServerCommand {
         int rawValue = IntegerArgumentType.getInteger(context, "time");
         double value = (double) rawValue / 20.0D;
 
-        MarathonData.setTargetTime(value);
+        LogModData.setTargetTime(value);
 
         context.getSource().sendSuccess(buildSetMessage("targetTime", value, "s", 2), true);
 
@@ -56,7 +56,7 @@ public class RodsCommand implements ServerCommand {
     }
 
     private static int getLootingLevel(CommandContext<CommandSourceStack> context) {
-        int value = MarathonData.getLootingLevel();
+        int value = LogModData.getLootingLevel();
 
         context.getSource().sendSuccess(buildGetMessage("lootingLevel", value, "", 0), true);
 
@@ -66,7 +66,7 @@ public class RodsCommand implements ServerCommand {
     private static int setLootingLevel(CommandContext<CommandSourceStack> context) {
         int value = IntegerArgumentType.getInteger(context, "level");
 
-        MarathonData.setLootingLevel(value);
+        LogModData.setLootingLevel(value);
 
         context.getSource().sendSuccess(buildSetMessage("lootingLevel", value, "", 0), true);
 
@@ -77,7 +77,7 @@ public class RodsCommand implements ServerCommand {
         return new TextComponent(name + " is ")
                 .withStyle(ChatFormatting.LIGHT_PURPLE)
                 .append(
-                        new TextComponent(Marathon.roundToString(value, places))
+                        new TextComponent(LogMod.roundToString(value, places))
                                 .withStyle(ChatFormatting.GOLD))
                 .append(new TextComponent(unit).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
@@ -86,7 +86,7 @@ public class RodsCommand implements ServerCommand {
         return new TextComponent("Set " + name + " to ")
                 .withStyle(ChatFormatting.LIGHT_PURPLE)
                 .append(
-                        new TextComponent(Marathon.roundToString(value, places))
+                        new TextComponent(LogMod.roundToString(value, places))
                                 .withStyle(ChatFormatting.GOLD))
                 .append(new TextComponent(unit).withStyle(ChatFormatting.LIGHT_PURPLE));
     }

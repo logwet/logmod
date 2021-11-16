@@ -2,7 +2,7 @@ package me.logwet.logmod.commands.client;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import me.logwet.logmod.MarathonData;
+import me.logwet.logmod.LogModData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
@@ -17,7 +17,7 @@ public class HudCommand implements ClientCommand {
     protected static final String root = "hud";
 
     private static int toggle(CommandContext<FabricClientCommandSource> context) {
-        boolean status = MarathonData.toggleHudEnabled();
+        boolean status = LogModData.toggleHudEnabled();
 
         context.getSource()
                 .sendFeedback(

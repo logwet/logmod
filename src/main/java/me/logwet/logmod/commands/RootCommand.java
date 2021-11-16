@@ -2,7 +2,7 @@ package me.logwet.logmod.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import me.logwet.logmod.Marathon;
+import me.logwet.logmod.LogMod;
 import me.logwet.logmod.commands.client.ClientCommand;
 import me.logwet.logmod.commands.server.ServerCommand;
 import net.fabricmc.api.EnvType;
@@ -15,7 +15,7 @@ import net.minecraft.commands.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarathonCommand {
+public class RootCommand {
     private static final List<ServerCommand> serverCommands = new ArrayList<>();
 
     @Environment(EnvType.CLIENT)
@@ -32,7 +32,7 @@ public class MarathonCommand {
 
     public static void registerServer(
             CommandDispatcher<CommandSourceStack> commandDispatcher, boolean dedicated) {
-        LiteralArgumentBuilder<CommandSourceStack> rootCommand = Commands.literal(Marathon.MODID);
+        LiteralArgumentBuilder<CommandSourceStack> rootCommand = Commands.literal(LogMod.MODID);
 
         for (ServerCommand command : serverCommands) {
             rootCommand.then(command.getCommandBuilder(dedicated));
@@ -46,7 +46,7 @@ public class MarathonCommand {
     public static void registerClient(
             CommandDispatcher<FabricClientCommandSource> commandDispatcher) {
         LiteralArgumentBuilder<FabricClientCommandSource> rootCommand =
-                ClientCommandManager.literal(Marathon.MODID + "client");
+                ClientCommandManager.literal(LogMod.MODID + "client");
 
         for (ClientCommand command : clientCommands) {
             rootCommand.then(command.getCommandBuilder());

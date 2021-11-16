@@ -1,6 +1,6 @@
 package me.logwet.logmod.mixin.client;
 
-import me.logwet.logmod.Marathon;
+import me.logwet.logmod.LogMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
@@ -20,6 +20,6 @@ public abstract class DebugHudMixin {
      */
     @Inject(at = @At("RETURN"), method = "getGameInformation")
     private void injectGetLeftText(CallbackInfoReturnable<List<String>> info) {
-        info.getReturnValue().add(Marathon.MODID + " mod v" + Marathon.VERSION + " by logwet");
+        info.getReturnValue().add(LogMod.MODID + " mod v" + LogMod.VERSION + " by logwet");
     }
 }
