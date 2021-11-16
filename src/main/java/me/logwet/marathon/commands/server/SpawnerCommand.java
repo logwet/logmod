@@ -19,6 +19,7 @@ import static net.minecraft.commands.Commands.literal;
 
 public class SpawnerCommand implements ServerCommand {
     public static final SpawnerCommand INSTANCE = new SpawnerCommand();
+    protected static final String root = "spawner";
 
     private static int analyse(CommandContext<CommandSourceStack> context)
             throws CommandSyntaxException {
@@ -104,8 +105,13 @@ public class SpawnerCommand implements ServerCommand {
     }
 
     @Override
+    public String getRoot() {
+        return root;
+    }
+
+    @Override
     public LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated) {
-        return literal("spawner")
+        return literal(root)
                 .executes(SpawnerCommand::analyse)
                 .then(literal("analyse").executes(SpawnerCommand::analyse))
                 .then(

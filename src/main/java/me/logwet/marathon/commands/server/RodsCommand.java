@@ -16,6 +16,7 @@ import static net.minecraft.commands.Commands.literal;
 
 public class RodsCommand implements ServerCommand {
     public static final RodsCommand INSTANCE = new RodsCommand();
+    protected static final String root = "rods";
 
     private static int getTargetRods(CommandContext<CommandSourceStack> context) {
         int value = MarathonData.getTargetRods();
@@ -91,8 +92,13 @@ public class RodsCommand implements ServerCommand {
     }
 
     @Override
+    public String getRoot() {
+        return root;
+    }
+
+    @Override
     public LiteralArgumentBuilder<CommandSourceStack> getCommandBuilder(boolean dedicated) {
-        return literal("rods")
+        return literal(root)
                 .then(
                         literal("targetRods")
                                 .executes(RodsCommand::getTargetRods)

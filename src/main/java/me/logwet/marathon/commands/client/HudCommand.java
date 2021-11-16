@@ -14,6 +14,7 @@ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.lit
 @Environment(EnvType.CLIENT)
 public class HudCommand implements ClientCommand {
     public static final HudCommand INSTANCE = new HudCommand();
+    protected static final String root = "hud";
 
     private static int toggle(CommandContext<FabricClientCommandSource> context) {
         boolean status = MarathonData.toggleHudEnabled();
@@ -33,7 +34,12 @@ public class HudCommand implements ClientCommand {
     }
 
     @Override
+    public String getRoot() {
+        return root;
+    }
+
+    @Override
     public LiteralArgumentBuilder<FabricClientCommandSource> getCommandBuilder() {
-        return literal("hud").executes(HudCommand::toggle);
+        return literal(root).executes(HudCommand::toggle);
     }
 }

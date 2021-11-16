@@ -1,6 +1,7 @@
 package me.logwet.marathon.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.logwet.marathon.Marathon;
 import me.logwet.marathon.commands.client.ClientCommand;
 import me.logwet.marathon.commands.server.ServerCommand;
@@ -31,21 +32,27 @@ public class MarathonCommand {
 
     public static void registerServer(
             CommandDispatcher<CommandSourceStack> commandDispatcher, boolean dedicated) {
+        LiteralArgumentBuilder<CommandSourceStack> rootCommand = Commands.literal(Marathon.MODID);
+
         for (ServerCommand command : serverCommands) {
-            commandDispatcher.register(
-                    Commands.literal(Marathon.MODID).then(command.getCommandBuilder(dedicated)));
+            rootCommand.then(command.getCommandBuilder(dedicated));
             commandDispatcher.register(command.getCommandBuilder(dedicated));
         }
+
+        commandDispatcher.register(rootCommand);
     }
 
     @Environment(EnvType.CLIENT)
     public static void registerClient(
             CommandDispatcher<FabricClientCommandSource> commandDispatcher) {
+        LiteralArgumentBuilder<FabricClientCommandSource> rootCommand =
+                ClientCommandManager.literal(Marathon.MODID + "client");
+
         for (ClientCommand command : clientCommands) {
-            commandDispatcher.register(
-                    ClientCommandManager.literal(Marathon.MODID + "client")
-                            .then(command.getCommandBuilder()));
+            rootCommand.then(command.getCommandBuilder());
             commandDispatcher.register(command.getCommandBuilder());
         }
+
+        commandDispatcher.register(rootCommand);
     }
 }
