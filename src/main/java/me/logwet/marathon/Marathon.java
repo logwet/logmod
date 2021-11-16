@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Marathon implements ModInitializer {
-    public static final String MODID = "marathon";
+    public static final String MODID = "logmod";
     public static final String VERSION =
             FabricLoader.getInstance()
                     .getModContainer(MODID)

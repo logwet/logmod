@@ -1,23 +1,24 @@
 {
   "schemaVersion": 1,
-  "id": "marathon",
+  "id": "logmod",
   "version": "${version}",
-  "accessWidener": "marathon.accesswidener",
-  "name": "Marathon",
+  "accessWidener": "logmod.accesswidener",
+  "name": "LogMod",
   "description": "Misc practice mod for 1.16 speedrunners.",
   "authors": [
-    "logwet",
-    "immigrant"
+    "logwet"
   ],
   "contributors": [
+    "immigrant",
+    "k4yfour",
     "Sharpieman20"
   ],
   "contact": {
     "homepage": "https://github.com/logwet",
-    "sources": "https://github.com/logwet/marathon"
+    "sources": "https://github.com/logwet/logmod"
   },
   "license": "GPL-3.0",
-  "icon": "assets/marathon/icon.png",
+  "icon": "assets/logmod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -31,7 +32,7 @@
     ]
   },
   "mixins": [
-    "marathon.mixins.json"
+    "logmod.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.4",
