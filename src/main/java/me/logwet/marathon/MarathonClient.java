@@ -2,6 +2,7 @@ package me.logwet.marathon;
 
 import me.logwet.marathon.commands.MarathonCommand;
 import me.logwet.marathon.commands.client.HudCommand;
+import me.logwet.marathon.commands.client.RenderSpawnerCommand;
 import me.logwet.marathon.tools.hud.AttributeRenderer;
 import me.logwet.marathon.tools.hud.HudRenderer;
 import me.logwet.marathon.tools.hud.SpeedRenderer;
@@ -18,6 +19,7 @@ public class MarathonClient implements ClientModInitializer {
         HudRenderer.registerRenderer(new SpeedRenderer());
         HudRenderer.registerRenderer(new AttributeRenderer());
 
+        MarathonCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         MarathonCommand.registerClientCommand(HudCommand.INSTANCE);
         MarathonCommand.registerClient(ClientCommandManager.DISPATCHER);
 
