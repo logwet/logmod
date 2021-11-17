@@ -47,7 +47,7 @@ public abstract class ServerPlayerMixin extends Player {
                             target = "Lnet/minecraft/world/entity/player/Player;tick()V",
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
-        if (LogMod.IS_CLIENT) {
+        if (LogMod.IS_CLIENT && LogModData.isProjectilesEnabled()) {
             Item holdingItem = null;
 
             for (Item targetItem : targetItems) {

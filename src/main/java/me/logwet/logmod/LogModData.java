@@ -31,6 +31,8 @@ public class LogModData {
     private static final AtomicBoolean renderSpawnerEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
 
+    private static final AtomicBoolean projectilesEnabled = new AtomicBoolean(true);
+
     private static final AtomicInteger targetRods = new AtomicInteger(6);
     private static final AtomicDouble targetTime = new AtomicDouble(60.0D);
     private static final AtomicInteger lootingLevel = new AtomicInteger(0);
@@ -142,6 +144,19 @@ public class LogModData {
         return !hudEnabled.getAndSet(!hudEnabled.get());
     }
 
+    @Environment(EnvType.CLIENT)
+    public static boolean isHudEnabled() {
+        return hudEnabled.get();
+    }
+
+    public static boolean toggleProjectilesEnabled() {
+        return !projectilesEnabled.getAndSet(!projectilesEnabled.get());
+    }
+
+    public static boolean isProjectilesEnabled() {
+        return projectilesEnabled.get();
+    }
+
     public static int getTargetRods() {
         return targetRods.get();
     }
@@ -164,11 +179,6 @@ public class LogModData {
 
     public static void setLootingLevel(int value) {
         lootingLevel.set(value);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static boolean isHudEnabled() {
-        return hudEnabled.get();
     }
 
     public static void onServerInit(MinecraftServer ms) {

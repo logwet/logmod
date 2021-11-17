@@ -37,8 +37,11 @@ public abstract class DebugRendererMixin {
 
         Trajectory trajectory;
 
-        if (LogMod.shouldRender() && (trajectory = LogModData.getTrajectory(uuid)) != null) {
-            TrajectoryRenderer.renderTrajectory(poseStack, bufferSource, new Vec3(x, y, z), trajectory);
+        if (LogMod.shouldRender()
+                && LogModData.isProjectilesEnabled()
+                && (trajectory = LogModData.getTrajectory(uuid)) != null) {
+            TrajectoryRenderer.renderTrajectory(
+                    poseStack, bufferSource, new Vec3(x, y, z), trajectory);
 
             BlockHitResult blockHitResult = trajectory.getBlockHitResult();
 
