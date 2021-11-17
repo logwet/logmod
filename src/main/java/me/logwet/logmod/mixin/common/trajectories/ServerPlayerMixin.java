@@ -23,13 +23,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
     private static final List<Item> targetItems =
             Arrays.asList(Items.ENDER_PEARL, Items.SPLASH_POTION);
-    private final Map<UUID, Integer> playerStateHashes = new HashMap<>();
 
     public ServerPlayerMixin(Level level, BlockPos blockPos, GameProfile gameProfile) {
         super(level, blockPos, gameProfile);
@@ -48,99 +49,90 @@ public abstract class ServerPlayerMixin extends Player {
     private void onTick(CallbackInfo ci) {
         if (LogMod.IS_CLIENT) {
             PlayerState playerState = new PlayerState(this.position(), this.getRotationVector());
-            int currStateHash = playerState.hashCode();
-            Integer lastStateHash = playerStateHashes.get(this.getUUID());
 
-            if (lastStateHash == null) {
-                playerStateHashes.put(this.getUUID(), currStateHash);
-                lastStateHash = Integer.MAX_VALUE;
+            Item holdingItem = null;
+
+            for (Item targetItem : targetItems) {
+                if (this.isHolding(targetItem)) {
+                    holdingItem = targetItem;
+                    break;
+                }
             }
 
-            if (!lastStateHash.equals(currStateHash)) {
-                Item holdingItem = null;
+            if (holdingItem != null) {
+                IProjectile projectile = null;
+                ThrowableProjectile baseProjectile = null;
 
-                for (Item targetItem : targetItems) {
-                    if (this.isHolding(targetItem)) {
-                        holdingItem = targetItem;
+                List<Vec3> trajectory = new ArrayList<>();
+                BlockHitResult blockHitResult = null;
+
+                if (Items.ENDER_PEARL.equals(holdingItem)) {
+                    projectile = PearlProjectile.INSTANCE;
+                } else if (Items.SPLASH_POTION.equals(holdingItem)) {
+                    projectile = PotionProjectile.INSTANCE;
+                }
+
+                assert projectile != null;
+                baseProjectile = projectile.getBaseProjectile(this.getLevel(), this);
+                baseProjectile.shootFromRotation(
+                        this,
+                        this.xRot,
+                        this.yRot,
+                        projectile.getVertScalingFac(),
+                        projectile.getVelScalingFac(),
+                        projectile.getRandScalingFac());
+
+                trajectory.add(baseProjectile.position());
+
+                int tickCount;
+                for (tickCount = 0; tickCount <= 1200; tickCount++) {
+                    HitResult hitResult =
+                            ProjectileUtil.getHitResult(
+                                    baseProjectile,
+                                    (entity) -> {
+                                        if (!entity.isSpectator()
+                                                && entity.isAlive()
+                                                && entity.isPickable()) {
+                                            return this.isPassengerOfSameVehicle(entity);
+                                        } else {
+                                            return false;
+                                        }
+                                    },
+                                    ClipContext.Block.OUTLINE);
+
+                    if (hitResult.getType() == HitResult.Type.BLOCK) {
+                        blockHitResult = (BlockHitResult) hitResult;
                         break;
                     }
-                }
 
-                if (holdingItem != null) {
-                    IProjectile projectile = null;
-                    ThrowableProjectile baseProjectile = null;
+                    Vec3 vec3 = baseProjectile.getDeltaMovement();
+                    double d = baseProjectile.getX() + vec3.x;
+                    double e = baseProjectile.getY() + vec3.y;
+                    double f = baseProjectile.getZ() + vec3.z;
+                    ((ProjectileInvoker) baseProjectile).invokeUpdateRotation();
 
-                    List<Vec3> trajectory = new ArrayList<>();
-                    BlockHitResult blockHitResult = null;
+                    baseProjectile.setDeltaMovement(vec3.scale(projectile.getDrag()));
 
-                    if (Items.ENDER_PEARL.equals(holdingItem)) {
-                        projectile = PearlProjectile.INSTANCE;
-                    } else if (Items.SPLASH_POTION.equals(holdingItem)) {
-                        projectile = PotionProjectile.INSTANCE;
-                    }
+                    Vec3 vec32 = baseProjectile.getDeltaMovement();
+                    baseProjectile.setDeltaMovement(
+                            vec32.x, vec32.y - (double) projectile.getGravity(), vec32.z);
 
-                    assert projectile != null;
-                    baseProjectile = projectile.getBaseProjectile(this.getLevel(), this);
-                    baseProjectile.shootFromRotation(
-                            this,
-                            this.xRot,
-                            this.yRot,
-                            projectile.getVertScalingFac(),
-                            projectile.getVelScalingFac(),
-                            projectile.getRandScalingFac());
+                    baseProjectile.setPos(d, e, f);
 
                     trajectory.add(baseProjectile.position());
-
-                    int tickCount;
-                    for (tickCount = 0; tickCount <= 1200; tickCount++) {
-                        HitResult hitResult =
-                                ProjectileUtil.getHitResult(
-                                        baseProjectile,
-                                        (entity) -> {
-                                            if (!entity.isSpectator()
-                                                    && entity.isAlive()
-                                                    && entity.isPickable()) {
-                                                return this.isPassengerOfSameVehicle(entity);
-                                            } else {
-                                                return false;
-                                            }
-                                        },
-                                        ClipContext.Block.OUTLINE);
-
-                        if (hitResult.getType() == HitResult.Type.BLOCK) {
-                            blockHitResult = (BlockHitResult) hitResult;
-                            break;
-                        }
-
-                        Vec3 vec3 = baseProjectile.getDeltaMovement();
-                        double d = baseProjectile.getX() + vec3.x;
-                        double e = baseProjectile.getY() + vec3.y;
-                        double f = baseProjectile.getZ() + vec3.z;
-                        ((ProjectileInvoker) baseProjectile).invokeUpdateRotation();
-
-                        baseProjectile.setDeltaMovement(vec3.scale(projectile.getDrag()));
-
-                        Vec3 vec32 = baseProjectile.getDeltaMovement();
-                        baseProjectile.setDeltaMovement(
-                                vec32.x, vec32.y - (double) projectile.getGravity(), vec32.z);
-
-                        baseProjectile.setPos(d, e, f);
-
-                        trajectory.add(baseProjectile.position());
-                    }
-
-                    baseProjectile.kill();
-
-                    LogModData.addTrajectory(
-                            this.getUUID(),
-                            new Trajectory(
-                                    playerState.getPos(),
-                                    playerState.getRot(),
-                                    trajectory,
-                                    blockHitResult));
-                } else {
-                    LogModData.removeTrajectory(this.getUUID());
                 }
+
+                baseProjectile.kill();
+
+                LogModData.addTrajectory(
+                        this.getUUID(),
+                        new Trajectory(
+                                playerState.getPos(),
+                                playerState.getRot(),
+                                trajectory,
+                                blockHitResult));
+            } else {
+                LogModData.removeTrajectory(this.getUUID());
             }
         }
     }
