@@ -48,8 +48,6 @@ public abstract class ServerPlayerMixin extends Player {
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
         if (LogMod.IS_CLIENT) {
-            PlayerState playerState = new PlayerState(this.position(), this.getRotationVector());
-
             Item holdingItem = null;
 
             for (Item targetItem : targetItems) {
@@ -60,6 +58,9 @@ public abstract class ServerPlayerMixin extends Player {
             }
 
             if (holdingItem != null) {
+                PlayerState playerState =
+                        new PlayerState(this.position(), this.getRotationVector());
+
                 IProjectile projectile = null;
                 ThrowableProjectile baseProjectile = null;
 
