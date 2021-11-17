@@ -28,7 +28,7 @@ public abstract class ServerPlayerMixin extends Player {
                                     "Lnet/minecraft/network/protocol/game/ClientboundSetHealthPacket;<init>(FIF)V",
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
-        if (LogMod.IS_CLIENT) {
+        if (LogMod.IS_CLIENT && LogModData.isHudEnabled()) {
             LogModData.addPlayerAttribute(
                     this.getUUID(),
                     new PlayerAttribute(

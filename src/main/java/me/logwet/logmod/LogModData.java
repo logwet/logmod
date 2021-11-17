@@ -144,7 +144,6 @@ public class LogModData {
         return !hudEnabled.getAndSet(!hudEnabled.get());
     }
 
-    @Environment(EnvType.CLIENT)
     public static boolean isHudEnabled() {
         return hudEnabled.get();
     }
