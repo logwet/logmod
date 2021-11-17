@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.overlay.trajectories;
+package me.logwet.logmod.tools.trajectories;
 
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec2;

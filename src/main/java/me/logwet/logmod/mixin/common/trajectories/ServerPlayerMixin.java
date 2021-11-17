@@ -3,7 +3,7 @@ package me.logwet.logmod.mixin.common.trajectories;
 import com.mojang.authlib.GameProfile;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
-import me.logwet.logmod.tools.overlay.trajectories.*;
+import me.logwet.logmod.tools.trajectories.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

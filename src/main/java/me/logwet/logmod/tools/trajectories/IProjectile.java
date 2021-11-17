@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.overlay.trajectories;
+package me.logwet.logmod.tools.trajectories;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;

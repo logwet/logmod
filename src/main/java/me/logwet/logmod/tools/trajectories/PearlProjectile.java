@@ -1,4 +1,4 @@
-package me.logwet.logmod.tools.overlay.trajectories;
+package me.logwet.logmod.tools.trajectories;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
