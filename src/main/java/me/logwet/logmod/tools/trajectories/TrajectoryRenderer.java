@@ -100,9 +100,13 @@ public class TrajectoryRenderer {
             Vec3 prevPos = trajectory.getTrajectory().get(i - 1).subtract(entityPos);
             Vec3 pos = trajectory.getTrajectory().get(i).subtract(entityPos);
 
-            offset =
-                    renderDottedLine(
-                            vertexConsumer, matrix4f, prevPos, pos, offset, 0.0F, 1.0F, 1.0F);
+            if (trajectory.getRenderType() == Trajectory.RenderType.FILLED) {
+                drawLine(vertexConsumer, matrix4f, prevPos, pos, 0.0F, 1.0F, 1.0F);
+            } else if (trajectory.getRenderType() == Trajectory.RenderType.DOTTED) {
+                offset =
+                        renderDottedLine(
+                                vertexConsumer, matrix4f, prevPos, pos, offset, 0.0F, 1.0F, 1.0F);
+            }
         }
     }
 }

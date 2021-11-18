@@ -77,6 +77,6 @@ public abstract class AbstractThrowableProjectile implements IThrowableProjectil
 
         projectileEntity.kill();
 
-        return new Trajectory(trajectoryList, blockHitResult);
+        return new Trajectory(trajectoryList, blockHitResult, Trajectory.RenderType.DOTTED);
     }
 }
