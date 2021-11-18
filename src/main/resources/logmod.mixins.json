@@ -7,7 +7,6 @@
     "common.hud.attributes.ServerPlayerMixin",
     "common.spawner.BaseSpawnerMixin",
     "common.trajectories.EntityAccessor",
-    "common.trajectories.EntityInvoker",
     "common.trajectories.ProjectileInvoker",
     "common.trajectories.ServerPlayerMixin"
   ],

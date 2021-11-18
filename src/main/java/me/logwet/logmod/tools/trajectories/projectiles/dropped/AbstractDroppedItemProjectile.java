@@ -1,7 +1,6 @@
 package me.logwet.logmod.tools.trajectories.projectiles.dropped;
 
 import me.logwet.logmod.mixin.common.trajectories.EntityAccessor;
-import me.logwet.logmod.mixin.common.trajectories.EntityInvoker;
 import me.logwet.logmod.tools.trajectories.Trajectory;
 import me.logwet.logmod.tools.trajectories.projectiles.IDroppedItemProjectile;
 import net.minecraft.core.BlockPos;
@@ -76,18 +75,6 @@ public abstract class AbstractDroppedItemProjectile implements IDroppedItemProje
                             vec3.z * 0.9900000095367432D);
                 } else {
                     projectileEntity.setDeltaMovement(vec3.add(0.0D, -0.04D, 0.0D));
-                }
-
-                projectileEntity.noPhysics = !projectileEntity.level.noCollision(projectileEntity);
-
-                if (projectileEntity.noPhysics) {
-                    ((EntityInvoker) projectileEntity)
-                            .checkInBlock(
-                                    projectileEntity.getX(),
-                                    (projectileEntity.getBoundingBox().minY
-                                                    + projectileEntity.getBoundingBox().maxY)
-                                            / 2.0D,
-                                    projectileEntity.getZ());
                 }
 
                 if (!((EntityAccessor) projectileEntity).getOnGround()
