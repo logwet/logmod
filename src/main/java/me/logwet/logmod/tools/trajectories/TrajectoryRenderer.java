@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class TrajectoryRenderer {
@@ -95,17 +96,29 @@ public class TrajectoryRenderer {
         Matrix4f matrix4f = poseStack.last().pose();
 
         double offset = 0.0D;
+        int tickLength = trajectory.getTrajectory().size();
 
-        for (int i = trajectory.getStartTick(); i < trajectory.getTrajectory().size(); i++) {
+        for (int i = trajectory.getStartTick(); i < tickLength; i++) {
             Vec3 prevPos = trajectory.getTrajectory().get(i - 1).subtract(entityPos);
             Vec3 pos = trajectory.getTrajectory().get(i).subtract(entityPos);
 
+            float r;
+            float g;
+            float b;
+
+            float colorFactor =
+                    Mth.clamp(
+                            (float) i / ((float) tickLength - trajectory.getStartTick()),
+                            0.0F,
+                            1.0F);
+            r = colorFactor;
+            g = (1.0F - colorFactor);
+            b = 0.0F;
+
             if (trajectory.getRenderType() == Trajectory.RenderType.FILLED) {
-                drawLine(vertexConsumer, matrix4f, prevPos, pos, 0.0F, 1.0F, 1.0F);
+                drawLine(vertexConsumer, matrix4f, prevPos, pos, r, g, b);
             } else if (trajectory.getRenderType() == Trajectory.RenderType.DOTTED) {
-                offset =
-                        renderDottedLine(
-                                vertexConsumer, matrix4f, prevPos, pos, offset, 0.0F, 1.0F, 1.0F);
+                offset = renderDottedLine(vertexConsumer, matrix4f, prevPos, pos, offset, r, g, b);
             }
         }
     }
