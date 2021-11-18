@@ -1,5 +1,6 @@
-package me.logwet.logmod.tools.trajectories;
+package me.logwet.logmod.tools.trajectories.projectiles;
 
+import me.logwet.logmod.tools.trajectories.Trajectory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

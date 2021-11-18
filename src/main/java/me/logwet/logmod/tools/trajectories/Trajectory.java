@@ -30,7 +30,7 @@ public class Trajectory {
         return renderType;
     }
 
-    enum RenderType {
+    public enum RenderType {
         FILLED,
         DOTTED
     }
