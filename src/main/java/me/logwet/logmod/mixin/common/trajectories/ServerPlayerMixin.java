@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.trajectories.projectiles.IProjectile;
+import me.logwet.logmod.tools.trajectories.projectiles.dropped.GoldIngotProjectile;
 import me.logwet.logmod.tools.trajectories.projectiles.throwable.PearlProjectile;
 import me.logwet.logmod.tools.trajectories.projectiles.throwable.PotionProjectile;
 import net.minecraft.core.BlockPos;
@@ -18,15 +19,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
     @SuppressWarnings("rawtypes")
-    private static final List<IProjectile> trackedProjectiles =
-            Arrays.asList(PearlProjectile.INSTANCE, PotionProjectile.INSTANCE);
+    private static final IProjectile[] trackedProjectiles =
+            new IProjectile[] {
+                PearlProjectile.INSTANCE, PotionProjectile.INSTANCE, GoldIngotProjectile.INSTANCE
+            };
 
     public ServerPlayerMixin(Level level, BlockPos blockPos, GameProfile gameProfile) {
         super(level, blockPos, gameProfile);

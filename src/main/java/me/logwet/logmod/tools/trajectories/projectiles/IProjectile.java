@@ -13,5 +13,5 @@ public interface IProjectile<T extends Entity> {
 
     T getBaseEntity(Level level, Player player);
 
-    Trajectory calculateTrajectory(Player parentEntity);
+    Trajectory calculateTrajectory(Player parent);
 }
