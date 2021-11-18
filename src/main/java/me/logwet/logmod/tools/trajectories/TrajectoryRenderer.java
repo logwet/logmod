@@ -96,7 +96,7 @@ public class TrajectoryRenderer {
 
         double offset = 0.0D;
 
-        for (int i = 5; i < trajectory.getTrajectory().size(); i++) {
+        for (int i = trajectory.getStartTick(); i < trajectory.getTrajectory().size(); i++) {
             Vec3 prevPos = trajectory.getTrajectory().get(i - 1).subtract(entityPos);
             Vec3 pos = trajectory.getTrajectory().get(i).subtract(entityPos);
 

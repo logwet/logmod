@@ -115,6 +115,6 @@ public abstract class AbstractDroppedItemProjectile implements IDroppedItemProje
 
         projectileEntity.kill();
 
-        return new Trajectory(trajectoryList, null, Trajectory.RenderType.FILLED);
+        return new Trajectory(trajectoryList, null, Trajectory.RenderType.FILLED, 2);
     }
 }
