@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "common.hud.attributes.ServerPlayerMixin",
+    "common.piglins.PiglinAiInvoker",
+    "common.piglins.ServerPlayerMixin",
     "common.spawner.BaseSpawnerMixin",
     "common.trajectories.EntityAccessor",
     "common.trajectories.ProjectileInvoker",

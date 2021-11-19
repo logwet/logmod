@@ -4,6 +4,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
 import me.logwet.logmod.tools.hud.PlayerAttribute;
+import me.logwet.logmod.tools.piglins.PiglinAggroRange;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
 import me.logwet.logmod.tools.trajectories.Trajectory;
 import net.fabricmc.api.EnvType;
@@ -23,6 +24,8 @@ public class LogModData {
     private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, Trajectory> trajectoryCache =
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final Cache<UUID, PiglinAggroRange> aggroRangeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
 
     private static final AtomicBoolean spawnersEnabled = new AtomicBoolean(true);
@@ -116,6 +119,29 @@ public class LogModData {
         getTrajectoryCache().cleanUp();
     }
 
+    private static Cache<UUID, PiglinAggroRange> getAggroRangeCache() {
+        return aggroRangeCache;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    public static PiglinAggroRange getAggroRange(UUID uuid) {
+        return getAggroRangeCache().getIfPresent(uuid);
+    }
+
+    public static void addAggroRange(UUID uuid, PiglinAggroRange aggroRange) {
+        getAggroRangeCache().put(uuid, aggroRange);
+    }
+
+    public static void removeAggroRange(UUID uuid) {
+        getAggroRangeCache().invalidate(uuid);
+    }
+
+    private static void resetAggroRanges() {
+        getAggroRangeCache().invalidateAll();
+        getAggroRangeCache().cleanUp();
+    }
+
     public static boolean toggleSpawnersEnabled() {
         return !spawnersEnabled.getAndSet(!spawnersEnabled.get());
     }
@@ -186,6 +212,7 @@ public class LogModData {
         resetPlayerAttributes();
         resetSpawnerInfo();
         resetTrajectories();
+        resetAggroRanges();
 
         LogMod.log(Level.INFO, "Server object initialized!");
     }
