@@ -95,7 +95,7 @@ java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
     // if it is present.
     // If you remove this line, sources will not be generated.
-    // withSourcesJar()
+    withSourcesJar()
 }
 
 jar {
@@ -111,9 +111,9 @@ publishing {
             artifact(remapJar) {
                 builtBy remapJar
             }
-//			artifact(sourcesJar) {
-//				builtBy remapSourcesJar
-//			}
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
 
@@ -123,5 +123,14 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/logwet/${archivesBaseName}"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
 }
