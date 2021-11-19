@@ -35,6 +35,7 @@ public class LogModData {
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
 
     private static final AtomicBoolean projectilesEnabled = new AtomicBoolean(true);
+    private static final AtomicBoolean piglinsEnabled = new AtomicBoolean(true);
 
     private static final AtomicInteger targetRods = new AtomicInteger(6);
     private static final AtomicDouble targetTime = new AtomicDouble(60.0D);
@@ -180,6 +181,14 @@ public class LogModData {
 
     public static boolean isProjectilesEnabled() {
         return projectilesEnabled.get();
+    }
+
+    public static boolean togglePiglinsEnabled() {
+        return !piglinsEnabled.getAndSet(!piglinsEnabled.get());
+    }
+
+    public static boolean isPiglinsEnabled() {
+        return piglinsEnabled.get();
     }
 
     public static int getTargetRods() {

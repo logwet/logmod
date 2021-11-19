@@ -11,11 +11,6 @@ import java.util.Optional;
 
 @Mixin(PiglinAi.class)
 public interface PiglinAiInvoker {
-    @Invoker("isIdle")
-    static boolean isIdle(Piglin piglin) {
-        throw new AssertionError();
-    }
-
     @Invoker("getAdultPiglins")
     static List<Piglin> getAdultPiglins(Piglin piglin) {
         throw new AssertionError();
