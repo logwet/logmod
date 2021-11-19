@@ -28,7 +28,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
@@ -62,7 +61,7 @@ public abstract class ServerPlayerMixin extends Player {
                     if (blockState.getBlock().is(BlockTags.GUARDED_BY_PIGLINS)) {
                         boolean bl = !blockState.getBlock().is(Blocks.GOLD_BLOCK);
 
-                        List<UUID> piglinList = new ArrayList<>();
+                        List<Integer> piglinList = new ArrayList<>();
 
                         AABB searchBB = this.getBoundingBox().inflate(16.0D);
 
@@ -70,7 +69,7 @@ public abstract class ServerPlayerMixin extends Player {
                         list.stream()
                                 .filter(PiglinAiInvoker::isIdle)
                                 .filter((piglin) -> !bl || BehaviorUtils.canSee(piglin, this))
-                                .forEach((piglin) -> piglinList.add(piglin.getUUID()));
+                                .forEach((piglin) -> piglinList.add(piglin.getId()));
 
                         LogModData.addAggroRange(
                                 this.getUUID(),
@@ -83,7 +82,7 @@ public abstract class ServerPlayerMixin extends Player {
                     Entity entity = entityHitResult.getEntity();
 
                     if (entity.getType() == EntityType.PIGLIN) {
-                        List<UUID> piglinList = new ArrayList<>();
+                        List<Integer> piglinList = new ArrayList<>();
 
                         Piglin piglin = (Piglin) entity;
 
@@ -99,13 +98,13 @@ public abstract class ServerPlayerMixin extends Player {
 
                                             if (!optional.isPresent()
                                                     || optional.get() != livingEntity2) {
-                                                piglinList.add(piglinx.getUUID());
+                                                piglinList.add(piglinx.getId());
                                             }
                                         });
 
                         LogModData.addAggroRange(
                                 this.getUUID(),
-                                new PiglinAggroRange(piglin.getUUID(), null, piglinList));
+                                new PiglinAggroRange(piglin.getId(), null, piglinList));
                     }
                 } else {
                     LogModData.removeAggroRange(this.getUUID());

@@ -6,15 +6,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class PiglinAggroRange {
-    @Nullable private final UUID entityTarget;
+    @Nullable private final Integer entityTarget;
     @Nullable private final BlockPos blockTarget;
     @Nullable private final AABB range;
-    private final List<UUID> entities;
+    private final List<Integer> entities;
 
-    public PiglinAggroRange(@NotNull UUID entityTarget, @Nullable AABB range, List<UUID> entities) {
+    public PiglinAggroRange(
+            @NotNull Integer entityTarget, @Nullable AABB range, List<Integer> entities) {
         this.entityTarget = entityTarget;
         this.blockTarget = null;
         this.range = range;
@@ -22,7 +22,7 @@ public class PiglinAggroRange {
     }
 
     public PiglinAggroRange(
-            @NotNull BlockPos blockTarget, @Nullable AABB range, List<UUID> entities) {
+            @NotNull BlockPos blockTarget, @Nullable AABB range, List<Integer> entities) {
         this.entityTarget = null;
         this.blockTarget = blockTarget;
         this.range = range;
@@ -30,7 +30,7 @@ public class PiglinAggroRange {
     }
 
     @Nullable
-    public UUID getEntityTarget() {
+    public Integer getEntityTarget() {
         return entityTarget;
     }
 
@@ -44,7 +44,7 @@ public class PiglinAggroRange {
         return range;
     }
 
-    public List<UUID> getEntities() {
+    public List<Integer> getEntities() {
         return entities;
     }
 }
