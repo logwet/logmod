@@ -40,8 +40,9 @@ public abstract class DebugRendererMixin {
         if (LogMod.shouldRender()
                 && LogModData.isProjectilesEnabled()
                 && (trajectory = LogModData.getTrajectory(uuid)) != null) {
-            TrajectoryRenderer.renderTrajectory(
-                    poseStack, bufferSource, new Vec3(x, y, z), trajectory);
+            Vec3 playerPos = new Vec3(x, y, z);
+
+            TrajectoryRenderer.renderTrajectory(poseStack, bufferSource, playerPos, trajectory);
 
             BlockHitResult blockHitResult = trajectory.getBlockHitResult();
 
@@ -52,10 +53,7 @@ public abstract class DebugRendererMixin {
                         poseStack,
                         bufferSource,
                         AABB.unitCubeFromLowerCorner(
-                                new Vec3(
-                                        blockPos.getX() - x,
-                                        blockPos.getY() - y,
-                                        blockPos.getZ() - z)),
+                                Vec3.atLowerCornerOf(blockPos).subtract(playerPos)),
                         1.0F,
                         0.0F,
                         1.0F);
