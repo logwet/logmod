@@ -36,7 +36,9 @@ public abstract class DebugRendererMixin {
 
         PiglinAggroRange piglinAggroRange;
 
-        if (LogMod.shouldRender() && (piglinAggroRange = LogModData.getAggroRange(uuid)) != null) {
+        if (LogMod.shouldRender()
+                && LogModData.isPiglinsEnabled()
+                && (piglinAggroRange = LogModData.getAggroRange(uuid)) != null) {
             Vec3 playerPos = new Vec3(x, y, z);
 
             if (piglinAggroRange.getBlockTarget() != null) {

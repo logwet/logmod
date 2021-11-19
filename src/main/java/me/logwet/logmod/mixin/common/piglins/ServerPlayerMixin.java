@@ -212,8 +212,7 @@ public abstract class ServerPlayerMixin extends Player {
                         applyGlowingToList(piglinList);
 
                         LogModData.addAggroRange(
-                                this.getUUID(),
-                                new PiglinAggroRange(piglin.getId(), null, piglinList));
+                                this.getUUID(), new PiglinAggroRange(piglin.getId(), piglinList));
 
                         break calculate;
                     }

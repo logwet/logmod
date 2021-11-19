@@ -13,16 +13,15 @@ public class PiglinAggroRange {
     @Nullable private final AABB range;
     private final List<Integer> entities;
 
-    public PiglinAggroRange(
-            @NotNull Integer entityTarget, @Nullable AABB range, List<Integer> entities) {
+    public PiglinAggroRange(@NotNull Integer entityTarget, List<Integer> entities) {
         this.entityTarget = entityTarget;
         this.blockTarget = null;
-        this.range = range;
+        this.range = null;
         this.entities = entities;
     }
 
     public PiglinAggroRange(
-            @NotNull BlockPos blockTarget, @Nullable AABB range, List<Integer> entities) {
+            @NotNull BlockPos blockTarget, @NotNull AABB range, List<Integer> entities) {
         this.entityTarget = null;
         this.blockTarget = blockTarget;
         this.range = range;

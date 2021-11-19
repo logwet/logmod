@@ -2,6 +2,7 @@ package me.logwet.logmod;
 
 import me.logwet.logmod.commands.RootCommand;
 import me.logwet.logmod.commands.client.HudCommand;
+import me.logwet.logmod.commands.client.PiglinsCommand;
 import me.logwet.logmod.commands.client.ProjectilesCommand;
 import me.logwet.logmod.commands.client.RenderSpawnerCommand;
 import me.logwet.logmod.tools.hud.AttributeRenderer;
@@ -23,6 +24,7 @@ public class LogModClient implements ClientModInitializer {
         RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         RootCommand.registerClientCommand(HudCommand.INSTANCE);
         RootCommand.registerClientCommand(ProjectilesCommand.INSTANCE);
+        RootCommand.registerClientCommand(PiglinsCommand.INSTANCE);
         RootCommand.registerClient(ClientCommandManager.DISPATCHER);
 
         LogMod.log(Level.INFO, "Client class initialized!");
