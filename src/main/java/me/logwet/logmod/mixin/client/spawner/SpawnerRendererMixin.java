@@ -1,5 +1,7 @@
 package me.logwet.logmod.mixin.client.spawner;
 
+import static me.logwet.logmod.LogMod.roundToString;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
@@ -24,8 +26,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import static me.logwet.logmod.LogMod.roundToString;
 
 @Environment(EnvType.CLIENT)
 @Mixin(SpawnerRenderer.class)

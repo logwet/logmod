@@ -1,5 +1,7 @@
 package me.logwet.logmod.commands.client;
 
+import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import me.logwet.logmod.LogModData;
@@ -8,8 +10,6 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TextComponent;
-
-import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 
 @Environment(EnvType.CLIENT)
 public class HudCommand implements ClientCommand {

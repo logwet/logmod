@@ -1,12 +1,11 @@
 package me.logwet.logmod.tools.trajectories.projectiles.dropped;
 
+import java.util.function.Predicate;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-
-import java.util.function.Predicate;
 
 public class GoldIngotProjectile extends AbstractDroppedItemProjectile {
     public static GoldIngotProjectile INSTANCE = new GoldIngotProjectile();

@@ -3,6 +3,9 @@ package me.logwet.logmod;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.AtomicDouble;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import me.logwet.logmod.tools.hud.PlayerAttribute;
 import me.logwet.logmod.tools.piglins.PiglinAggroRange;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
@@ -13,10 +16,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class LogModData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =

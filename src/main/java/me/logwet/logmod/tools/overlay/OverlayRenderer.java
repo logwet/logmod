@@ -1,14 +1,13 @@
 package me.logwet.logmod.tools.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.ArrayList;
+import java.util.List;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class OverlayRenderer {

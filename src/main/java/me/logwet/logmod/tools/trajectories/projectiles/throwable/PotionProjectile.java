@@ -1,13 +1,12 @@
 package me.logwet.logmod.tools.trajectories.projectiles.throwable;
 
+import java.util.function.Predicate;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-
-import java.util.function.Predicate;
 
 public class PotionProjectile extends AbstractThrowableProjectile {
     public static PotionProjectile INSTANCE = new PotionProjectile();

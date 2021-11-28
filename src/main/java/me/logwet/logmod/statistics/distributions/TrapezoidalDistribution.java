@@ -1,12 +1,11 @@
 package me.logwet.logmod.statistics.distributions;
 
+import java.util.function.Function;
 import me.logwet.logmod.statistics.util.AbstractPiecewiseDistribution;
 import me.logwet.logmod.statistics.util.PiecewiseFunction;
 import org.apache.commons.lang3.Range;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.util.LocalizedFormats;
-
-import java.util.function.Function;
 
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">Trapezoidal distribution -

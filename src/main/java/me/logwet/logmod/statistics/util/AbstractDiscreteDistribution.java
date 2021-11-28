@@ -1,10 +1,9 @@
 package me.logwet.logmod.statistics.util;
 
+import java.util.stream.IntStream;
 import net.minecraft.util.Mth;
 import org.apache.commons.math3.distribution.EnumeratedIntegerDistribution;
 import org.apache.commons.math3.util.MathArrays;
-
-import java.util.stream.IntStream;
 
 public abstract class AbstractDiscreteDistribution extends EnumeratedIntegerDistribution {
     protected final int startingValue;

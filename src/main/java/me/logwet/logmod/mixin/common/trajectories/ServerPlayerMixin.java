@@ -1,6 +1,7 @@
 package me.logwet.logmod.mixin.common.trajectories;
 
 import com.mojang.authlib.GameProfile;
+import java.util.function.Predicate;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.trajectories.projectiles.IProjectile;
@@ -18,8 +19,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.function.Predicate;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {

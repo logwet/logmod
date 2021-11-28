@@ -1,10 +1,9 @@
 package me.logwet.logmod.statistics.util;
 
+import java.util.Objects;
 import net.minecraft.util.Mth;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public abstract class AbstractPiecewiseDistribution extends AbstractContinuousDistribution {
     protected final PiecewiseFunction<Double, Double> PDF;

@@ -1,7 +1,13 @@
 package me.logwet.logmod.mixin.common.piglins;
 
+import static org.apache.logging.log4j.Level.ERROR;
+
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.piglins.PiglinAggroRange;
@@ -23,7 +29,11 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.*;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import org.spongepowered.asm.mixin.Final;
@@ -33,13 +43,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.apache.logging.log4j.Level.ERROR;
 
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {

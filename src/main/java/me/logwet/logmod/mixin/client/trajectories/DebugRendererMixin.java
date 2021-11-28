@@ -1,6 +1,7 @@
 package me.logwet.logmod.mixin.client.trajectories;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.UUID;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
 import me.logwet.logmod.tools.BoxRenderer;
@@ -19,8 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.UUID;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DebugRenderer.class)

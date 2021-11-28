@@ -1,5 +1,7 @@
 package me.logwet.logmod.tools.trajectories.projectiles.throwable;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.logwet.logmod.mixin.common.trajectories.ProjectileInvoker;
 import me.logwet.logmod.tools.trajectories.Trajectory;
 import me.logwet.logmod.tools.trajectories.projectiles.IThrowableProjectile;
@@ -12,9 +14,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractThrowableProjectile implements IThrowableProjectile {
     @Override

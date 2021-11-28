@@ -1,10 +1,9 @@
 package me.logwet.logmod.tools.trajectories;
 
+import java.util.List;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class Trajectory {
     private final List<Vec3> trajectory;

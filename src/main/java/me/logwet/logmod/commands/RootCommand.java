@@ -2,6 +2,8 @@ package me.logwet.logmod.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import java.util.ArrayList;
+import java.util.List;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.commands.client.ClientCommand;
 import me.logwet.logmod.commands.server.ServerCommand;
@@ -11,9 +13,6 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RootCommand {
     private static final List<ServerCommand> serverCommands = new ArrayList<>();

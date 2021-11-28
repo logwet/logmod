@@ -1,5 +1,7 @@
 package me.logwet.logmod.commands.server;
 
+import static net.minecraft.commands.Commands.literal;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -14,8 +16,6 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-
-import static net.minecraft.commands.Commands.literal;
 
 public class SpawnerCommand implements ServerCommand {
     public static final SpawnerCommand INSTANCE = new SpawnerCommand();

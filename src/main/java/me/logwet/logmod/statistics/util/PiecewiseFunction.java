@@ -1,12 +1,11 @@
 package me.logwet.logmod.statistics.util;
 
-import org.apache.commons.lang3.Range;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.apache.commons.lang3.Range;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PiecewiseFunction<T, R> {
     private final Map<Range<T>, Function<T, R>> functions;

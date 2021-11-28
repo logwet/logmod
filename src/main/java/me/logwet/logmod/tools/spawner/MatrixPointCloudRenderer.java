@@ -3,14 +3,13 @@ package me.logwet.logmod.tools.spawner;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.AABB;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @Environment(EnvType.CLIENT)
 public class MatrixPointCloudRenderer {

@@ -1,11 +1,10 @@
 package me.logwet.logmod.tools.overlay;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.function.Supplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
-
-import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
 public interface RenderOverlay {

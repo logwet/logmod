@@ -2,7 +2,13 @@ package me.logwet.logmod.tools.spawner;
 
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
-import me.logwet.logmod.statistics.distributions.*;
+import me.logwet.logmod.statistics.distributions.ConvertedDiscreteDistribution;
+import me.logwet.logmod.statistics.distributions.DiscreteDistribution;
+import me.logwet.logmod.statistics.distributions.InverseUniformDistribution;
+import me.logwet.logmod.statistics.distributions.IrwinHallDistribution;
+import me.logwet.logmod.statistics.distributions.PoissonBinomialDistribution;
+import me.logwet.logmod.statistics.distributions.ProductOfDiscreteDistributions;
+import me.logwet.logmod.statistics.distributions.TrapezoidalDistribution;
 import net.minecraft.util.Mth;
 import org.apache.commons.math3.distribution.UniformRealDistribution;
 import org.apache.logging.log4j.Level;

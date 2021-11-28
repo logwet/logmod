@@ -1,5 +1,7 @@
 package me.logwet.logmod.tools.trajectories.projectiles.dropped;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.logwet.logmod.mixin.common.trajectories.EntityAccessor;
 import me.logwet.logmod.tools.trajectories.Trajectory;
 import me.logwet.logmod.tools.trajectories.projectiles.IDroppedItemProjectile;
@@ -15,9 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractDroppedItemProjectile implements IDroppedItemProjectile {
     protected ItemEntity getBaseEntity(Level level, Player player, Item item) {

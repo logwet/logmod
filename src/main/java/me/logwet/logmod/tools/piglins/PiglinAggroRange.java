@@ -1,11 +1,10 @@
 package me.logwet.logmod.tools.piglins;
 
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class PiglinAggroRange {
     @Nullable private final Integer entityTarget;

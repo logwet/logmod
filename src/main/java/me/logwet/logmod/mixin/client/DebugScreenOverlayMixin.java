@@ -1,5 +1,6 @@
 package me.logwet.logmod.mixin.client;
 
+import java.util.List;
 import me.logwet.logmod.LogMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -8,8 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.List;
 
 @Environment(EnvType.CLIENT)
 @Mixin(DebugScreenOverlay.class)
