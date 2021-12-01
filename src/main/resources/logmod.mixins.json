@@ -16,6 +16,7 @@
     "client.DebugScreenOverlayMixin",
     "client.IntegratedServerMixin",
     "client.hud.GuiMixin",
+    "client.paths.DebugRendererMixin",
     "client.piglins.DebugRendererMixin",
     "client.spawner.SpawnerRendererMixin",
     "client.trajectories.DebugRendererMixin"

@@ -3,12 +3,14 @@ package me.logwet.logmod;
 import com.mojang.blaze3d.platform.InputConstants.Type;
 import me.logwet.logmod.commands.RootCommand;
 import me.logwet.logmod.commands.client.HudCommand;
+import me.logwet.logmod.commands.client.PathsCommand;
 import me.logwet.logmod.commands.client.PiglinsCommand;
 import me.logwet.logmod.commands.client.ProjectilesCommand;
 import me.logwet.logmod.commands.client.RenderSpawnerCommand;
 import me.logwet.logmod.tools.hud.AttributeRenderer;
 import me.logwet.logmod.tools.hud.SpeedRenderer;
 import me.logwet.logmod.tools.overlay.OverlayRenderer;
+import me.logwet.logmod.tools.paths.PathHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,6 +32,7 @@ public class LogModClient implements ClientModInitializer {
         RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         RootCommand.registerClientCommand(HudCommand.INSTANCE);
         RootCommand.registerClientCommand(ProjectilesCommand.INSTANCE);
+        RootCommand.registerClientCommand(PathsCommand.INSTANCE);
         RootCommand.registerClientCommand(PiglinsCommand.INSTANCE);
         RootCommand.registerClient(ClientCommandManager.DISPATCHER);
 
@@ -53,11 +56,15 @@ public class LogModClient implements ClientModInitializer {
                 client -> {
                     if (client.player != null) {
                         while (buildPathKey.consumeClick()) {
+                            PathHandler.buildPath(client);
+
                             client.player.displayClientMessage(
                                     new TextComponent("Adding node to path!"), false);
                         }
 
                         while (deletePathKey.consumeClick()) {
+                            PathHandler.deletePath(client);
+
                             client.player.displayClientMessage(
                                     new TextComponent("Deleting path!"), false);
                         }

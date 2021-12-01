@@ -9,7 +9,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public class TrajectoryRenderer {
-    private static void drawLine(
+    public static void drawLine(
             VertexConsumer vertexConsumer,
             Matrix4f matrix4f,
             Vec3 pos1,

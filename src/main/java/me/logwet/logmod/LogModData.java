@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import me.logwet.logmod.tools.hud.PlayerAttribute;
+import me.logwet.logmod.tools.paths.PathSet;
 import me.logwet.logmod.tools.piglins.PiglinAggroRange;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
 import me.logwet.logmod.tools.trajectories.Trajectory;
@@ -24,6 +25,8 @@ public class LogModData {
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, Trajectory> trajectoryCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final Cache<Long, PathSet> pathSetCache =
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, PiglinAggroRange> aggroRangeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
 
@@ -34,6 +37,8 @@ public class LogModData {
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
 
     private static final AtomicBoolean projectilesEnabled = new AtomicBoolean(true);
+    private static final AtomicBoolean pathsEnabled = new AtomicBoolean(true);
+
     private static final AtomicBoolean piglinsEnabled = new AtomicBoolean(true);
 
     private static final AtomicInteger targetRods = new AtomicInteger(6);
@@ -119,6 +124,29 @@ public class LogModData {
         getTrajectoryCache().cleanUp();
     }
 
+    private static Cache<Long, PathSet> getPathSetCache() {
+        return pathSetCache;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    public static PathSet getPathSet(long seed) {
+        return getPathSetCache().getIfPresent(seed);
+    }
+
+    public static void addPathSet(long seed, PathSet pathSet) {
+        getPathSetCache().put(seed, pathSet);
+    }
+
+    public static void removePathSet(long seed) {
+        getPathSetCache().invalidate(seed);
+    }
+
+    private static void resetPathCaches() {
+        getPathSetCache().invalidateAll();
+        getPathSetCache().cleanUp();
+    }
+
     private static Cache<UUID, PiglinAggroRange> getAggroRangeCache() {
         return aggroRangeCache;
     }
@@ -180,6 +208,14 @@ public class LogModData {
 
     public static boolean isProjectilesEnabled() {
         return projectilesEnabled.get();
+    }
+
+    public static boolean togglePathsEnabled() {
+        return !pathsEnabled.getAndSet(!projectilesEnabled.get());
+    }
+
+    public static boolean isPathsEnabled() {
+        return pathsEnabled.get();
     }
 
     public static boolean togglePiglinsEnabled() {
