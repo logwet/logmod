@@ -38,6 +38,8 @@ likelihood of spawning a blaze, blue the lowest. (Note that at the darkest blue 
 point cloud is functionally identical to red in terms of spawn chance (ie. none), but is coloured
 differently nonetheless.)
 
+Control with `/spawner` and `/rods` (to change rod statistics variables).
+
 ### HUD
 
 Renders the player's current absolute speed and speed on each axis in the top left corner. Also
@@ -46,18 +48,23 @@ renders the player's exact health, hunger and saturation in the top right. Toggl
 ### Pearl/Potion Trajectories
 
 Calculates and renders the trajectory of thrown projectiles and the block they will eventually hit.
-Calculates up to 60 seconds in the future.
+Calculates up to 60 seconds in the future. Control with `/projectiles`
+
+### Thrown Item Trajectories
+
+Will render the trajectory of a thrown item. Currently enabled for gold ingots to be used in
+bastions. Control with `/projectiles`
 
 ### Piglins
 
 Looking at a block protected by piglins (eg. a chest or gold block) will highlight all nearby
 Piglins that will be aggroed if you break or open that block. Looking at a piglin will highlight the
-piglins around it that will be aggroed if you hit it.
+piglins around it that will be aggroed if you hit it. Control with `/piglins`
 
 ### Paths
 
 Create paths. Use a hotkey (by default bound to `Insert`) to add a node to a path while holding a
-wool block of the corresponding colour.
+wool block of the corresponding colour. Control with `/paths`
 
 ### And more
 
