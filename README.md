@@ -2,7 +2,8 @@
 
 [![Build and Release Artifacts](https://github.com/logwet/logmod/actions/workflows/build.yml/badge.svg)](https://github.com/logwet/logmod/actions/workflows/build.yml)
 
-Misc utilities mod for 1.16 speedrunners. (I didn't choose the name k4 did Okayge)
+Misc utilities mod for 1.16 speedrunners created in collaboration with k4yfour. (I didn't choose the
+name btw 👀). Code and algorithm contributions by al (immigrant) and Sharpieman20.
 
 ## Utilities
 
@@ -12,45 +13,65 @@ Misc utilities mod for 1.16 speedrunners. (I didn't choose the name k4 did Okayg
 
 A near completely accurate simulation of in game spawner behaviour and spawn statistics.
 
-This is useful for testing and evaluating different blaze bedding/mining techniques. The info is calculated and
-displayed just _before_ a spawn attempt is made, and simulations are done on a pixel (1/16th of a block) resolution.
+This is useful for testing and evaluating different blaze bedding/mining techniques. The info is
+calculated and displayed just _before_ a spawn attempt is made, and simulations are done on a
+pixel (1/16th of a block) resolution.
 
-The green text displays the chance of spawning x number of blazes and the average number of blazes that will spawn based
-on the configuration of blocks, entities, fluid and lighting around the spawner.
+The green text displays the chance of spawning x number of blazes and the average number of blazes
+that will spawn based on the configuration of blocks, entities, fluid and lighting around the
+spawner.
 
-Note that this accounts for everything, including the hitboxes of entities (including the player's hitbox) and the
-presence of nearby blazes preventing spawn attempts. It also accounts for the impact of multiple spawns in one cycle
-taking away potential spawning spaces thanks to a clever forecasting algorithm by Sharpieman20.
+Note that this accounts for everything, including the hitboxes of entities (including the player's
+hitbox) and the presence of nearby blazes preventing spawn attempts. It also accounts for the impact
+of multiple spawns in one cycle taking away potential spawning spaces thanks to a clever forecasting
+algorithm by Sharpieman20.
 
 ![blocked_spawner_point_cloud](assets/spawner/blocked_point_cloud.png)
 
-The mod will render every spawn position blocked by a block, liquid, entity hitbox, light etc. with a red dot.
+The mod will render every spawn position blocked by a block, liquid, entity hitbox, light etc. with
+a red dot.
 
 ![full_spawner_point_cloud](assets/spawner/full_point_cloud.png)
 
-If you enable entity hitboxes (F3 + B) you will see a full point cloud. Green represents the highest likelihood of
-spawning a blaze, blue the lowest. (Note that at the darkest blue at the edge of the point cloud is functionally
-identical to red in terms of spawn chance (ie. none), but is coloured differently nonetheless.)
+If you enable entity hitboxes (F3 + B) you will see a full point cloud. Green represents the highest
+likelihood of spawning a blaze, blue the lowest. (Note that at the darkest blue at the edge of the
+point cloud is functionally identical to red in terms of spawn chance (ie. none), but is coloured
+differently nonetheless.)
 
 ### HUD
 
-Renders the player's current absolute speed and speed on each axis in the top left corner. Also renders the player's
-exact health, hunger and saturation in the top right. Toggled with `/hud`
+Renders the player's current absolute speed and speed on each axis in the top left corner. Also
+renders the player's exact health, hunger and saturation in the top right. Toggled with `/hud`
 
 ### Pearl/Potion Trajectories
 
-Calculates and renders the trajectory of thrown projectiles and the block they will eventually hit. Calculates up to 60
-seconds in the future.
+Calculates and renders the trajectory of thrown projectiles and the block they will eventually hit.
+Calculates up to 60 seconds in the future.
+
+### Piglins
+
+Looking at a block protected by piglins (eg. a chest or gold block) will highlight all nearby
+Piglins that will be aggroed if you break or open that block. Looking at a piglin will highlight the
+piglins around it that will be aggroed if you hit it.
+
+### Paths
+
+Create paths. Use a hotkey (by default bound to `Insert`) to add a node to a path while holding a
+wool block of the corresponding colour.
+
+### And more
+
+Sometimes I forget to document stuff on here. Check the release notes!
 
 ## Setup
 
-Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not require `Fabric API`. This mod is
-developed and tested for `1.16.1` but may work in other versions.
+Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not
+require `Fabric API`. This mod is developed and tested for `1.16.1` but may work in other versions.
 
 ## License
 
-This project is available under the `GPL-3.0` license. Feel free to learn from it and incorporate its components in your
-own projects, as long as you abide by the terms of the license.
+This project is available under the `GPL-3.0` license. Feel free to learn from it and incorporate
+its components in your own projects, as long as you abide by the terms of the license.
 
-If you fork the project and distribute your version, please change the name and `modid` to a suitable and distinct
-alternative to avoid confusion.
+If you fork the project and distribute your version, please change the name and `modid` to a
+suitable and distinct alternative to avoid confusion.
