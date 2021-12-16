@@ -7,6 +7,13 @@ name btw 👀). Code and algorithm contributions by al (immigrant) and Sharpiema
 
 ## Utilities
 
+### Savestates
+
+Implemented through my mod [DeLorean](https://github.com/logwet/delorean) and bundled into LogMod.
+Lets you save the current state of the game and load it again at any point. Default hotkeys
+are `Page Up` to create a savestate and `Page Down` to load the latest savestate. Use
+the `/delorean` command for more options.
+
 ### Spawner Statistics
 
 ![spawner_info](assets/spawner/info.png)
