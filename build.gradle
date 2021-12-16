@@ -28,6 +28,16 @@ repositories {
     maven {
         url 'https://maven.terraformersmc.com/releases/'
     }
+
+    // DeLorean
+    maven {
+        name = 'DeLorean'
+        url = "https://maven.pkg.github.com/logwet/delorean"
+        credentials {
+            username = 'logwet'
+            password = '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'
+        }
+    }
 }
 
 loom {
@@ -60,6 +70,8 @@ dependencies {
     include(modImplementation("net.fabricmc.fabric-api:fabric-command-api-v1:${project.fabric_command_api_version}"))
     include(modImplementation("net.fabricmc.fabric-api:fabric-key-binding-api-v1:${project.fabric_key_binding_api_version}"))
     include(modImplementation("net.fabricmc.fabric-api:fabric-lifecycle-events-v1:${project.fabric_lifecycle_events_version}"))
+
+    include(modImplementation("me.logwet.delorean:delorean:${project.delorean_version}"))
 
     // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
     // You may need to force-disable transitiveness on them.
