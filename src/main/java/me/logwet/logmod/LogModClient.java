@@ -9,6 +9,7 @@ import me.logwet.logmod.commands.client.ProjectilesCommand;
 import me.logwet.logmod.commands.client.RenderSpawnerCommand;
 import me.logwet.logmod.tools.hud.PlayerAttributeRenderer;
 import me.logwet.logmod.tools.hud.SpeedRenderer;
+import me.logwet.logmod.tools.hud.WeaponAttributeRenderer;
 import me.logwet.logmod.tools.overlay.OverlayRenderer;
 import me.logwet.logmod.tools.paths.PathHandler;
 import net.fabricmc.api.ClientModInitializer;
@@ -28,6 +29,7 @@ public class LogModClient implements ClientModInitializer {
     public void onInitializeClient() {
         OverlayRenderer.registerRenderer(new SpeedRenderer());
         OverlayRenderer.registerRenderer(new PlayerAttributeRenderer());
+        OverlayRenderer.registerRenderer(new WeaponAttributeRenderer());
 
         RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         RootCommand.registerClientCommand(HudCommand.INSTANCE);
