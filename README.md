@@ -9,6 +9,8 @@ name btw 👀). Code and algorithm contributions by al (immigrant) and Sharpiema
 
 ### Savestates
 
+![hud](assets/savestates.png)
+
 Implemented through my mod [DeLorean](https://github.com/logwet/delorean) and bundled into LogMod.
 Lets you save the current state of the game and load it again at any point. Default hotkeys
 are `Page Up` to create a savestate and `Page Down` to load the latest savestate. Use
@@ -49,6 +51,8 @@ Control with `/spawner` and `/rods` (to change rod statistics variables).
 
 ### HUD
 
+![hud](assets/hud.png)
+
 Renders the player's current absolute speed and speed on each axis in the top left corner. Renders
 the player's exact health, hunger and saturation in the top right. Renders the potential damage
 dealt by a weapon, it's charge percent and information about whether it is ready to crit in the
@@ -56,15 +60,21 @@ bottom left. Toggled with `/hud`
 
 ### Pearl/Potion Trajectories
 
+![hud](assets/pearl_trajectory.png)
+
 Calculates and renders the trajectory of thrown projectiles and the block they will eventually hit.
 Calculates up to 60 seconds in the future. Control with `/projectiles`
 
 ### Thrown Item Trajectories
 
+![hud](assets/gold_trajectory.png)
+
 Will render the trajectory of a thrown item. Currently enabled for gold ingots to be used in
 bastions. Control with `/projectiles`
 
 ### Piglins
+
+![hud](assets/piglins_hit_aggro.png)
 
 Looking at a block protected by piglins (eg. a chest or gold block) will highlight all nearby
 Piglins that will be aggroed if you break or open that block. Looking at a piglin will highlight the
@@ -72,10 +82,14 @@ piglins around it that will be aggroed if you hit it. Control with `/piglins`
 
 ### Paths
 
+![hud](assets/paths.png)
+
 Create paths. Use a hotkey (by default bound to `Insert`) to add a node to a path while holding a
 wool block of the corresponding colour. Control with `/paths`
 
 ### Health
+
+![hud](assets/health.png)
 
 Renders the health of any entity if it has been damaged. ie. Fully healed entities won't render
 anything, entities that have been hurt will have a red number floating above them that indicates how
