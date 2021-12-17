@@ -7,8 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
-public class AttributeRenderer extends AbstractTextRenderer {
-    public AttributeRenderer() {
+public class PlayerAttributeRenderer extends AbstractTextRenderer {
+    public PlayerAttributeRenderer() {
         super(HudAlignment.TOP_RIGHT);
     }
 

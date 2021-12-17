@@ -3,7 +3,6 @@ package me.logwet.logmod.mixin.common.hud.weapons;
 import com.mojang.authlib.GameProfile;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
-import me.logwet.logmod.tools.hud.PlayerAttribute;
 import me.logwet.logmod.tools.hud.WeaponAttribute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,13 +32,6 @@ public abstract class ServerPlayerMixin extends Player {
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
         if (LogMod.IS_CLIENT && LogModData.isHudEnabled()) {
-            LogModData.addPlayerAttribute(
-                    this.getUUID(),
-                    new PlayerAttribute(
-                            this.getHealth(),
-                            this.foodData.getFoodLevel(),
-                            this.foodData.getSaturationLevel()));
-
             float attackDamage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
 
             float enchantModifier =

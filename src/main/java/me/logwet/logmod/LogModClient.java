@@ -7,7 +7,7 @@ import me.logwet.logmod.commands.client.PathsCommand;
 import me.logwet.logmod.commands.client.PiglinsCommand;
 import me.logwet.logmod.commands.client.ProjectilesCommand;
 import me.logwet.logmod.commands.client.RenderSpawnerCommand;
-import me.logwet.logmod.tools.hud.AttributeRenderer;
+import me.logwet.logmod.tools.hud.PlayerAttributeRenderer;
 import me.logwet.logmod.tools.hud.SpeedRenderer;
 import me.logwet.logmod.tools.overlay.OverlayRenderer;
 import me.logwet.logmod.tools.paths.PathHandler;
@@ -27,7 +27,7 @@ public class LogModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         OverlayRenderer.registerRenderer(new SpeedRenderer());
-        OverlayRenderer.registerRenderer(new AttributeRenderer());
+        OverlayRenderer.registerRenderer(new PlayerAttributeRenderer());
 
         RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
         RootCommand.registerClientCommand(HudCommand.INSTANCE);
