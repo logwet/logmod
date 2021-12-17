@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "common.hud.attributes.ServerPlayerMixin",
+    "common.hud.weapons.ServerPlayerMixin",
     "common.piglins.PiglinAiInvoker",
     "common.piglins.ServerPlayerMixin",
     "common.spawner.BaseSpawnerMixin",

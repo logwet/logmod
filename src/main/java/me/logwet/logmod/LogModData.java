@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import me.logwet.logmod.tools.hud.PlayerAttribute;
+import me.logwet.logmod.tools.hud.WeaponAttribute;
 import me.logwet.logmod.tools.paths.PathSet;
 import me.logwet.logmod.tools.piglins.PiglinAggroRange;
 import me.logwet.logmod.tools.spawner.SpawnerInfo;
@@ -22,6 +23,8 @@ public class LogModData {
     private static final Cache<Long, SpawnerInfo> spawnerInfoCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, PlayerAttribute> playerAttributeCache =
+            CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
+    private static final Cache<UUID, WeaponAttribute> weaponAttributeCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
     private static final Cache<UUID, Trajectory> trajectoryCache =
             CacheBuilder.newBuilder().maximumSize(64).concurrencyLevel(2).build();
@@ -76,6 +79,29 @@ public class LogModData {
     private static void resetPlayerAttributes() {
         getPlayerAttributeCache().invalidateAll();
         getPlayerAttributeCache().cleanUp();
+    }
+
+    private static Cache<UUID, WeaponAttribute> getWeaponAttributeCache() {
+        return weaponAttributeCache;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    public static WeaponAttribute getWeaponAttribute(UUID uuid) {
+        return getWeaponAttributeCache().getIfPresent(uuid);
+    }
+
+    public static void addWeaponAttribute(UUID uuid, WeaponAttribute weaponAttribute) {
+        getWeaponAttributeCache().put(uuid, weaponAttribute);
+    }
+
+    public static void removeWeaponAttribute(UUID uuid) {
+        getWeaponAttributeCache().invalidate(uuid);
+    }
+
+    private static void resetWeaponAttributes() {
+        getWeaponAttributeCache().invalidateAll();
+        getWeaponAttributeCache().cleanUp();
     }
 
     private static Cache<Long, SpawnerInfo> getSpawnerInfoCache() {
