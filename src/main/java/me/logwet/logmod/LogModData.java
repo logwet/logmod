@@ -38,6 +38,7 @@ public class LogModData {
 
     private static final AtomicBoolean renderSpawnerEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean hudEnabled = new AtomicBoolean(true);
+    private static final AtomicBoolean healthEnabled = new AtomicBoolean(true);
 
     private static final AtomicBoolean projectilesEnabled = new AtomicBoolean(true);
     private static final AtomicBoolean pathsEnabled = new AtomicBoolean(true);
@@ -226,6 +227,14 @@ public class LogModData {
 
     public static boolean isHudEnabled() {
         return hudEnabled.get();
+    }
+
+    public static boolean toggleHealthEnabled() {
+        return !healthEnabled.getAndSet(!healthEnabled.get());
+    }
+
+    public static boolean isHealthEnabled() {
+        return healthEnabled.get();
     }
 
     public static boolean toggleProjectilesEnabled() {

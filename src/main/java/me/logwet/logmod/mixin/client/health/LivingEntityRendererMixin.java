@@ -36,7 +36,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
             MultiBufferSource multiBufferSource,
             int i,
             CallbackInfo ci) {
-        if (LogModData.isHudEnabled()) {
+        if (LogModData.isHealthEnabled()) {
             if (livingEntity instanceof AbstractClientPlayer) {
                 if (!this.shouldShowName(livingEntity)) {
                     return;

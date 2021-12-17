@@ -42,6 +42,10 @@ public class LogModClient implements ClientModInitializer {
         RootCommand.registerClientCommand(
                 new ClientToggleCommand(
                         "piglins", "piglins renderer", LogModData::togglePiglinsEnabled));
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand(
+                        "health", "health renderer", LogModData::toggleHealthEnabled));
+
         RootCommand.registerClient(ClientCommandManager.DISPATCHER);
 
         KeyMapping buildPathKey =
