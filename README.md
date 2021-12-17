@@ -77,6 +77,17 @@ wool block of the corresponding colour. Control with `/paths`
 
 Sometimes I forget to document stuff on here. Check the release notes!
 
+## MaLiLib
+
+This mod uses [MaLiLib](https://github.com/maruohon/malilib)
+by [masady](https://twitter.com/maruohon) as a bundled jar in jar dependency. It is used under the
+terms of the `GPL-3.0` license. Please go check out his other work and support him, he's a really
+talented guy and is the backbone of the technical minecraft clientside modding community.
+
+I would prefer to not bundle it and instead point users towards downloading it themselves, but
+unfortunately minecraft speedrunners are pretty bad at figuring out how to download mods, especially
+library mods.
+
 ## Setup
 
 Put the `jar` file in your mods folder with Fabric Loader installed. This mod does not
