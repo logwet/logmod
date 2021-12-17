@@ -49,8 +49,10 @@ Control with `/spawner` and `/rods` (to change rod statistics variables).
 
 ### HUD
 
-Renders the player's current absolute speed and speed on each axis in the top left corner. Also
-renders the player's exact health, hunger and saturation in the top right. Toggled with `/hud`
+Renders the player's current absolute speed and speed on each axis in the top left corner. Renders
+the player's exact health, hunger and saturation in the top right. Renders the potential damage
+dealt by a weapon, it's charge percent and information about whether it is ready to crit in the
+bottom left. Toggled with `/hud`
 
 ### Pearl/Potion Trajectories
 
@@ -72,6 +74,12 @@ piglins around it that will be aggroed if you hit it. Control with `/piglins`
 
 Create paths. Use a hotkey (by default bound to `Insert`) to add a node to a path while holding a
 wool block of the corresponding colour. Control with `/paths`
+
+### Health
+
+Renders the health of any entity if it has been damaged. ie. Fully healed entities won't render
+anything, entities that have been hurt will have a red number floating above them that indicates how
+much hp they have. Toggled with `/health`
 
 ### And more
 
