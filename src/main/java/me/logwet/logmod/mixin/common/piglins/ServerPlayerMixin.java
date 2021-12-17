@@ -2,7 +2,6 @@ package me.logwet.logmod.mixin.common.piglins;
 
 import static org.apache.logging.log4j.Level.ERROR;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,9 +72,7 @@ public abstract class ServerPlayerMixin extends Player {
         PlayerTeam team = scoreboard.getPlayerTeam(teamName + "_" + index);
 
         if (team != null) {
-            for (String entity : ImmutableList.copyOf(team.getPlayers())) {
-                scoreboard.removePlayerFromTeam(entity, team);
-            }
+            scoreboard.removePlayerTeam(team);
         }
     }
 
@@ -92,11 +89,10 @@ public abstract class ServerPlayerMixin extends Player {
     }
 
     @Unique
-    private void applyGlowingToList(List<Integer> list) {
-        for (Integer id : list) {
-            Piglin piglin = (Piglin) this.level.getEntity(id);
-            assert piglin != null;
-            piglin.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60, 0, true, false));
+    private void applyGlowingToList(List<Piglin> list) {
+        for (Piglin piglin : list) {
+            piglin.removeEffect(MobEffects.GLOWING);
+            piglin.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0, true, false));
         }
     }
 
@@ -109,119 +105,121 @@ public abstract class ServerPlayerMixin extends Player {
                             shift = At.Shift.AFTER))
     private void onTick(CallbackInfo ci) {
         if (LogMod.IS_CLIENT && LogModData.isPiglinsEnabled()) {
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - this.infoUpdateTime >= 200) {
-                this.infoUpdateTime = currentTime;
+            HitResult hitResult;
+            {
+                double d = 32.0D;
 
-                HitResult hitResult;
-                {
-                    double d = 32.0D;
+                hitResult = this.pick(d, 1.0F, true);
 
-                    hitResult = this.pick(d, 1.0F, true);
+                Vec3 vec3 = this.position();
+                Vec3 vec32 = this.getViewVector(1.0F);
+                Vec3 vec33 = vec3.add(vec32.x * d, vec32.y * d, vec32.z * d);
 
-                    Vec3 vec3 = this.position();
-                    Vec3 vec32 = this.getViewVector(1.0F);
-                    Vec3 vec33 = vec3.add(vec32.x * d, vec32.y * d, vec32.z * d);
+                AABB aABB =
+                        this.getBoundingBox()
+                                .expandTowards(vec32.scale(d))
+                                .inflate(1.0D, 1.0D, 1.0D);
+                EntityHitResult entityHitResult =
+                        ProjectileUtil.getEntityHitResult(
+                                this,
+                                vec3,
+                                vec33,
+                                aABB,
+                                (entityx) -> !entityx.isSpectator() && entityx.isPickable(),
+                                d * d);
 
-                    AABB aABB =
-                            this.getBoundingBox()
-                                    .expandTowards(vec32.scale(d))
-                                    .inflate(1.0D, 1.0D, 1.0D);
-                    EntityHitResult entityHitResult =
-                            ProjectileUtil.getEntityHitResult(
-                                    this,
-                                    vec3,
-                                    vec33,
-                                    aABB,
-                                    (entityx) -> !entityx.isSpectator() && entityx.isPickable(),
-                                    d * d);
-
-                    if (entityHitResult != null) {
-                        if (entityHitResult.getEntity().getType() == EntityType.PIGLIN) {
-                            hitResult = entityHitResult;
-                        }
+                if (entityHitResult != null) {
+                    if (entityHitResult.getEntity().getType() == EntityType.PIGLIN) {
+                        hitResult = entityHitResult;
                     }
                 }
-                calculate:
-                {
-                    if (hitResult.getType() == HitResult.Type.BLOCK) {
-                        BlockHitResult blockHitResult = (BlockHitResult) hitResult;
+            }
+            calculate:
+            {
+                if (hitResult.getType() == HitResult.Type.BLOCK) {
+                    BlockHitResult blockHitResult = (BlockHitResult) hitResult;
 
-                        BlockPos blockpos = blockHitResult.getBlockPos();
-                        BlockState blockState = this.level.getBlockState(blockpos);
+                    BlockPos blockpos = blockHitResult.getBlockPos();
+                    BlockState blockState = this.level.getBlockState(blockpos);
 
-                        if (blockState.getBlock().is(BlockTags.GUARDED_BY_PIGLINS)) {
-                            boolean bl = !blockState.getBlock().is(Blocks.GOLD_BLOCK);
+                    if (blockState.getBlock().is(BlockTags.GUARDED_BY_PIGLINS)) {
+                        boolean bl = !blockState.getBlock().is(Blocks.GOLD_BLOCK);
 
-                            List<Integer> piglinList = new ArrayList<>();
+                        List<Piglin> piglinList = new ArrayList<>();
 
-                            emptyTeam(1);
-
-                            initTeam(1, ChatFormatting.GREEN);
-
-                            AABB searchBB = this.getBoundingBox().inflate(16.0D);
-
-                            List<Piglin> list =
-                                    this.level.getEntitiesOfClass(Piglin.class, searchBB);
-                            list.stream()
-                                    .filter(piglin -> piglin.getBrain().isActive(Activity.IDLE))
-                                    .filter((piglin) -> !bl || BehaviorUtils.canSee(piglin, this))
-                                    .forEach(
-                                            (piglin) -> {
-                                                addEntityToTeam(piglin, 1);
-                                                piglinList.add(piglin.getId());
-                                            });
-
-                            applyGlowingToList(piglinList);
-
-                            LogModData.addAggroRange(
-                                    this.getUUID(),
-                                    new PiglinAggroRange(blockpos, searchBB, piglinList));
-                            break calculate;
-                        }
-                    } else if (hitResult.getType() == HitResult.Type.ENTITY) {
-                        EntityHitResult entityHitResult = (EntityHitResult) hitResult;
-
-                        List<Integer> piglinList = new ArrayList<>();
-
-                        Piglin piglin = (Piglin) entityHitResult.getEntity();
-
-                        emptyTeam(0);
                         emptyTeam(1);
+                        emptyTeam(2);
 
-                        initTeam(0, ChatFormatting.RED);
-                        initTeam(1, ChatFormatting.AQUA);
+                        initTeam(1, ChatFormatting.RED);
+                        initTeam(2, ChatFormatting.GOLD);
 
-                        addEntityToTeam(piglin, 0);
-                        applyGlowingToList(Collections.singletonList(piglin.getId()));
+                        AABB searchBB = this.getBoundingBox().inflate(16.0D);
 
-                        PiglinAiInvoker.getAdultPiglins(piglin)
+                        List<Piglin> list = this.level.getEntitiesOfClass(Piglin.class, searchBB);
+                        list.stream()
+                                .filter((piglin) -> !bl || BehaviorUtils.canSee(piglin, this))
                                 .forEach(
-                                        (piglinx) -> {
-                                            Optional<LivingEntity> optional =
-                                                    PiglinAiInvoker.getAngerTarget(piglinx);
-
-                                            LivingEntity livingEntity2 =
-                                                    BehaviorUtils.getNearestTarget(
-                                                            piglinx, optional, this);
-
-                                            if (!optional.isPresent()
-                                                    || optional.get() != livingEntity2) {
-                                                addEntityToTeam(piglinx, 1);
-                                                piglinList.add(piglinx.getId());
+                                        (piglin) -> {
+                                            if (piglin.getBrain().isActive(Activity.IDLE)) {
+                                                addEntityToTeam(piglin, 1);
+                                            } else {
+                                                addEntityToTeam(piglin, 2);
                                             }
+                                            piglinList.add(piglin);
                                         });
 
                         applyGlowingToList(piglinList);
 
                         LogModData.addAggroRange(
-                                this.getUUID(), new PiglinAggroRange(piglin.getId(), piglinList));
-
+                                this.getUUID(), new PiglinAggroRange(blockpos, searchBB));
                         break calculate;
                     }
+                } else if (hitResult.getType() == HitResult.Type.ENTITY) {
+                    EntityHitResult entityHitResult = (EntityHitResult) hitResult;
 
-                    LogModData.removeAggroRange(this.getUUID());
+                    List<Piglin> piglinList = new ArrayList<>();
+
+                    Piglin piglin = (Piglin) entityHitResult.getEntity();
+
+                    emptyTeam(0);
+                    emptyTeam(1);
+                    emptyTeam(2);
+
+                    initTeam(0, ChatFormatting.GREEN);
+                    initTeam(1, ChatFormatting.RED);
+                    initTeam(2, ChatFormatting.GOLD);
+
+                    addEntityToTeam(piglin, 0);
+                    applyGlowingToList(Collections.singletonList(piglin));
+
+                    PiglinAiInvoker.getAdultPiglins(piglin)
+                            .forEach(
+                                    (piglinx) -> {
+                                        Optional<LivingEntity> optional =
+                                                PiglinAiInvoker.getAngerTarget(piglinx);
+
+                                        LivingEntity livingEntity2 =
+                                                BehaviorUtils.getNearestTarget(
+                                                        piglinx, optional, this);
+
+                                        if (!optional.isPresent()
+                                                || optional.get() != livingEntity2) {
+                                            addEntityToTeam(piglinx, 1);
+                                        } else {
+                                            addEntityToTeam(piglinx, 2);
+                                        }
+
+                                        piglinList.add(piglinx);
+                                    });
+
+                    applyGlowingToList(piglinList);
+
+                    LogModData.addAggroRange(this.getUUID(), new PiglinAggroRange(piglin.getId()));
+
+                    break calculate;
                 }
+
+                LogModData.removeAggroRange(this.getUUID());
             }
         }
     }
