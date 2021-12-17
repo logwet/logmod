@@ -4,6 +4,7 @@
   "package": "me.logwet.logmod.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "client.health.LivingEntityRendererMixin",
     "common.hud.attributes.ServerPlayerMixin",
     "common.hud.weapons.ServerPlayerMixin",
     "common.piglins.PiglinAiInvoker",
