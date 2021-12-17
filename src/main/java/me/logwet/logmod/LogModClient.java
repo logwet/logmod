@@ -2,11 +2,7 @@ package me.logwet.logmod;
 
 import com.mojang.blaze3d.platform.InputConstants.Type;
 import me.logwet.logmod.commands.RootCommand;
-import me.logwet.logmod.commands.client.HudCommand;
-import me.logwet.logmod.commands.client.PathsCommand;
-import me.logwet.logmod.commands.client.PiglinsCommand;
-import me.logwet.logmod.commands.client.ProjectilesCommand;
-import me.logwet.logmod.commands.client.RenderSpawnerCommand;
+import me.logwet.logmod.commands.client.ClientToggleCommand;
 import me.logwet.logmod.tools.hud.PlayerAttributeRenderer;
 import me.logwet.logmod.tools.hud.SpeedRenderer;
 import me.logwet.logmod.tools.hud.WeaponAttributeRenderer;
@@ -31,11 +27,21 @@ public class LogModClient implements ClientModInitializer {
         OverlayRenderer.registerRenderer(new PlayerAttributeRenderer());
         OverlayRenderer.registerRenderer(new WeaponAttributeRenderer());
 
-        RootCommand.registerClientCommand(RenderSpawnerCommand.INSTANCE);
-        RootCommand.registerClientCommand(HudCommand.INSTANCE);
-        RootCommand.registerClientCommand(ProjectilesCommand.INSTANCE);
-        RootCommand.registerClientCommand(PathsCommand.INSTANCE);
-        RootCommand.registerClientCommand(PiglinsCommand.INSTANCE);
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand(
+                        "renderSpawner", "spawner info renderer", LogModData::toggleHudEnabled));
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand("hud", "info HUD", LogModData::toggleHudEnabled));
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand(
+                        "projectiles",
+                        "projectiles renderer",
+                        LogModData::toggleProjectilesEnabled));
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand("paths", "paths renderer", LogModData::togglePathsEnabled));
+        RootCommand.registerClientCommand(
+                new ClientToggleCommand(
+                        "piglins", "piglins renderer", LogModData::togglePiglinsEnabled));
         RootCommand.registerClient(ClientCommandManager.DISPATCHER);
 
         KeyMapping buildPathKey =
