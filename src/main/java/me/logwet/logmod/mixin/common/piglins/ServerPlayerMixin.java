@@ -6,6 +6,7 @@ import com.mojang.authlib.GameProfile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import me.logwet.logmod.LogMod;
 import me.logwet.logmod.LogModData;
@@ -32,6 +33,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
@@ -40,6 +42,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -47,7 +50,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerPlayerMixin extends Player {
     private static final String teamName = LogMod.MODID + "_tpt";
     @Shadow @Final public MinecraftServer server;
-    private long infoUpdateTime;
 
     public ServerPlayerMixin(Level level, BlockPos blockPos, GameProfile gameProfile) {
         super(level, blockPos, gameProfile);
@@ -102,7 +104,7 @@ public abstract class ServerPlayerMixin extends Player {
                     @At(
                             value = "INVOKE",
                             target = "Lnet/minecraft/world/entity/player/Player;tick()V",
-                            shift = At.Shift.AFTER))
+                            shift = Shift.BEFORE))
     private void onTick(CallbackInfo ci) {
         if (LogMod.IS_CLIENT && LogModData.isPiglinsEnabled()) {
             HitResult hitResult;
@@ -134,6 +136,9 @@ public abstract class ServerPlayerMixin extends Player {
                     }
                 }
             }
+
+            if (hitResult.getType() != Type.MISS) {}
+
             calculate:
             {
                 if (hitResult.getType() == HitResult.Type.BLOCK) {
@@ -143,15 +148,26 @@ public abstract class ServerPlayerMixin extends Player {
                     BlockState blockState = this.level.getBlockState(blockpos);
 
                     if (blockState.getBlock().is(BlockTags.GUARDED_BY_PIGLINS)) {
+                        PiglinAggroRange oldAggroRange = LogModData.getAggroRange(this.getUUID());
+
+                        if (Objects.nonNull(oldAggroRange)) {
+                            BlockPos oldBlockTarget = oldAggroRange.getBlockTarget();
+                            if (Objects.nonNull(oldBlockTarget)) {
+                                if (blockpos.asLong() != oldBlockTarget.asLong()) {
+                                    emptyTeam(0);
+                                    emptyTeam(1);
+                                    emptyTeam(2);
+                                }
+                            }
+                        }
+
+                        initTeam(0, ChatFormatting.AQUA);
+                        initTeam(1, ChatFormatting.RED);
+                        initTeam(2, ChatFormatting.GOLD);
+
                         boolean bl = !blockState.getBlock().is(Blocks.GOLD_BLOCK);
 
                         List<Piglin> piglinList = new ArrayList<>();
-
-                        emptyTeam(1);
-                        emptyTeam(2);
-
-                        initTeam(1, ChatFormatting.RED);
-                        initTeam(2, ChatFormatting.GOLD);
 
                         AABB searchBB = this.getBoundingBox().inflate(16.0D);
 
@@ -181,11 +197,20 @@ public abstract class ServerPlayerMixin extends Player {
 
                     Piglin piglin = (Piglin) entityHitResult.getEntity();
 
-                    emptyTeam(0);
-                    emptyTeam(1);
-                    emptyTeam(2);
+                    PiglinAggroRange oldAggroRange = LogModData.getAggroRange(this.getUUID());
 
-                    initTeam(0, ChatFormatting.GREEN);
+                    if (Objects.nonNull(oldAggroRange)) {
+                        Integer oldEntityTarget = oldAggroRange.getEntityTarget();
+                        if (Objects.nonNull(oldEntityTarget)) {
+                            if (piglin.getId() != oldEntityTarget) {
+                                emptyTeam(0);
+                                emptyTeam(1);
+                                emptyTeam(2);
+                            }
+                        }
+                    }
+
+                    initTeam(0, ChatFormatting.AQUA);
                     initTeam(1, ChatFormatting.RED);
                     initTeam(2, ChatFormatting.GOLD);
 
