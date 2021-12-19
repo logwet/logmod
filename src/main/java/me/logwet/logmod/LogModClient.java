@@ -29,7 +29,9 @@ public class LogModClient implements ClientModInitializer {
 
         RootCommand.registerClientCommand(
                 new ClientToggleCommand(
-                        "renderSpawner", "spawner info renderer", LogModData::toggleHudEnabled));
+                        "renderSpawner",
+                        "spawner info renderer",
+                        LogModData::toggleRenderSpawnersEnabled));
         RootCommand.registerClientCommand(
                 new ClientToggleCommand("hud", "info HUD", LogModData::toggleHudEnabled));
         RootCommand.registerClientCommand(
