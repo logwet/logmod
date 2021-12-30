@@ -1,5 +1,6 @@
 package me.logwet.logmod;
 
+import me.logwet.delorean.DeLorean;
 import me.logwet.logmod.commands.RootCommand;
 import me.logwet.logmod.commands.server.RodsCommand;
 import me.logwet.logmod.commands.server.SpawnerCommand;
@@ -58,6 +59,9 @@ public class LogMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        DeLorean.ENABLED = true;
+        DeLorean.CONTROL_ENABLED = true;
+
         RootCommand.registerServerCommand(SpawnerCommand.INSTANCE);
         RootCommand.registerServerCommand(RodsCommand.INSTANCE);
         CommandRegistrationCallback.EVENT.register(RootCommand::registerServer);

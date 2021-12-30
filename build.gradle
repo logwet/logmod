@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.9-SNAPSHOT'
+    id 'fabric-loom' version '0.10-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -35,7 +35,7 @@ repositories {
         url = "https://maven.pkg.github.com/logwet/delorean"
         credentials {
             username = "logwet"
-            password = System.getenv("PACKAGES_PAT")
+            password = "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"
         }
     }
 }
@@ -119,13 +119,7 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
-            }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            from components.java
         }
     }
 
