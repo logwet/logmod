@@ -35,7 +35,7 @@ repositories {
         url = "https://maven.pkg.github.com/logwet/delorean"
         credentials {
             username = "logwet"
-            password = "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"
+            password = System.getenv("PACKAGES_PAT")
         }
     }
 }
